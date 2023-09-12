@@ -1,0 +1,30 @@
+.Code{
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.Code input{
+    border: none;
+    width: 90%;
+    height: 40px;
+    border-bottom: 1px solid #03a4ff;
+    background: transparent;
+    text-align: center;
+    font-size: 17px;
+    color: #03a4ff;
+    text-transform: uppercase;
+}
+
+.Code input:focus{
+    outline: none;
+}
+
+.Code p{
+    font-size: 12px;
+    margin-top: 10px;
+    color: #4b4b52;
+}
