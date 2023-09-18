@@ -49,7 +49,7 @@ export default function Page() {
           </form>
 
 <p>Check your email for credentials.</p>
-<p>Don't lose or share them with anyone.</p>
+<p>Do not lose or share them with anyone.</p>
 <p>Contact your admin if you forgot your password.</p>
     </div>
   )
