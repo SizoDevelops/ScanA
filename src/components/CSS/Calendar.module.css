@@ -13,6 +13,7 @@
 .calender h2{
     margin-bottom: 10px;
     color: #FFFFFF;
+    font-size: 18px;
 }
 
 .dot{
@@ -40,6 +41,6 @@
     height: 10px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    background: #016199;
+    background: #05a3ff;
     margin-bottom: 10px;
 }

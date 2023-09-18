@@ -1,0 +1,10 @@
+.Code{
+    height: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    position: relative;
+}

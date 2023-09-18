@@ -1,6 +1,6 @@
-"use client"
-import React, { useState } from 'react';
-import styles from '@/components/CSS/Calendar.module.css'
+"use client";
+import React, { useEffect, useState } from "react";
+import styles from "@/components/CSS/Calendar.module.css";
 
 const Calendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -8,6 +8,10 @@ const Calendar = () => {
   const generateCalendar = () => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
+    const locale = "en-GB"; 
+    const dayOfMonth = new Intl.DateTimeFormat(locale, {
+      day: "numeric",
+    }).format(currentDate);
 
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
@@ -28,34 +32,35 @@ const Calendar = () => {
           weekRow.push(<td key={`${week}-${weekday}`} />);
         } else {
           weekRow.push(
-            <td key={`${week}-${weekday}`} >
-
-                <div className={styles.TD}>
-                    {day}
-              <div className={styles.dot}></div>
-                </div>
-   
+            <td key={`${week}-${weekday}`}>
+              <div
+                className={styles.TD}
+                style={
+                  day === parseInt(dayOfMonth)
+                    ? { fontWeight: "700", color: "#03a4ff" }
+                    : {}
+                }
+              >
+                {day}
+                <div className={styles.dot}></div>
+              </div>
             </td>
           );
           day++;
         }
       }
 
-      calendar.push(
-        <tr key={week}>
-          {weekRow}
-        </tr>
-      );
+      calendar.push(<tr key={week}>{weekRow}</tr>);
     }
 
     return calendar;
   };
 
-  const monthOptions = { month: 'long', year: 'numeric' };
+  const monthOptions = { month: "long", year: "numeric" };
 
   return (
     <div className={styles.calender}>
-      {/* <h2>{currentDate.toLocaleDateString(undefined, monthOptions)}</h2> */}
+      <h2>{currentDate.toLocaleDateString(undefined, monthOptions)}</h2>
       <div className={styles.line}></div>
       <table>
         <thead>
@@ -69,12 +74,10 @@ const Calendar = () => {
             <th>Sat</th>
           </tr>
         </thead>
-        <tbody>
-          {generateCalendar()}
-        </tbody>
+        <tbody>{generateCalendar()}</tbody>
       </table>
     </div>
   );
-}
+};
 
 export default Calendar;

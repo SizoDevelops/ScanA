@@ -1,5 +1,5 @@
 .Code{
-    height: 200px;
+    height: 300px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -27,4 +27,8 @@
     font-size: 12px;
     margin-top: 10px;
     color: #4b4b52;
+}
+
+.Code input::placeholder{
+    font-size: 12px
 }

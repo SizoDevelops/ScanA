@@ -7,6 +7,6 @@ const withPWA = require("@ducanh2912/next-pwa").default({
   
   // Your Next config is automatically typed!
   module.exports = withPWA({
-    
+   
   });
  
