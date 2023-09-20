@@ -14,11 +14,12 @@ export default function QR(checkQR) {
   return (
     <div className={styles.Code}>
             <QrScanner
-          onDecode={(result) => signRegister(result)}
-
-          onResult={(res) => {
+          onDecode={(result) => {
+            signRegister(result)
+            alert("Scanned")
             router.refresh()
           }}
+
 
           onError={() => {
             setDisplay('none')
