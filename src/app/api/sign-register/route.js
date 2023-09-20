@@ -17,6 +17,9 @@ export async function POST(request) {
          if(!updated_user.attendance.monday.find(item => item.date === body.attend.date)){
                      updated_user.attendance.monday.push(body.attend)
             }
+            else{
+              return NextResponse.json("Already Signed")
+            }
    }
   else {
    updated_user.attendance.monday = new Array(body.attend)
@@ -28,6 +31,9 @@ export async function POST(request) {
         if(Array.isArray(updated_user.attendance.tuesday)){
             if(!updated_user.attendance.tuesday.find(item => item.date === body.attend.date)){
                 updated_user.attendance.tuesday.push(body.attend)
+            }
+            else{
+              return NextResponse.json("Already Signed")
             }
             
        }
@@ -41,6 +47,9 @@ export async function POST(request) {
              if(!updated_user.attendance.wednesday.find(item => item.date === body.attend.date)){
                 updated_user.attendance.wednesday.push(body.attend)
             }
+            else{
+              return NextResponse.json("Already Signed")
+            }
        }
       else {
        updated_user.attendance.wednesday = new Array(body.attend)
@@ -52,6 +61,9 @@ export async function POST(request) {
             if(!updated_user.attendance.thursday.find(item => item.date === body.attend.date)){
                  updated_user.attendance.thursday.push(body.attend)
             }
+            else{
+              return NextResponse.json("Already Signed")
+            }
        }
       else {
        updated_user.attendance.thursday = new Array(body.attend)
@@ -62,6 +74,9 @@ export async function POST(request) {
            
             if(!updated_user.attendance.friday.find(item => item.date === body.attend.date)){
                  updated_user.attendance.friday.push(body.attend)
+            }
+            else{
+              return NextResponse.json("Already Signed")
             }
        }
       else {

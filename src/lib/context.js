@@ -100,7 +100,7 @@ const setAttendance = async () => {
     }
 
     if(session?.user.code && userData?.key){  
-        setLoading(true)
+       
     await fetch("/api/sign-register", {
         method: "POST",
         cache: "no-cache",
@@ -109,10 +109,16 @@ const setAttendance = async () => {
         },
         body: JSON.stringify(data)
     }).then(res => res.json())
-    .then(() => {
-        setLoading(false)
+    .then((data) => {
+        
+        if(data === null){
         setErr("Successfully Scanned")
         setScreens(["Calendar"])
+        }
+        else if(data === "Already Signed"){
+            setErr("Already Signed")
+        }
+        
     })
     
     }
