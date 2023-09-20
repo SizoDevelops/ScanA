@@ -3,16 +3,23 @@ import React, { useEffect, useState } from 'react'
 import styles from '@/components/CSS/QR.module.css'
 import { QrScanner } from '@yudiel/react-qr-scanner'
 import { useDatabase } from '@/lib/context'
+import { useRouter } from 'next/navigation'
 
 export default function QR(checkQR) {
     const [display, setDisplay] = useState("block")
     const [support, setSupport] = useState("Checking..")
     const {signRegister} = useDatabase()
+    const router = useRouter()
 
   return (
     <div className={styles.Code}>
             <QrScanner
           onDecode={(result) => signRegister(result)}
+
+          onResult={(res) => {
+            router.refresh()
+          }}
+
           onError={() => {
             setDisplay('none')
             setSupport("Not Supported, Enter Code Instead.")

@@ -96,7 +96,6 @@ const setAttendance = async () => {
             day: day,
         } 
     }
-    console.log(data)
 
     if(session?.user.code && userData?.key){  
     await fetch("/api/sign-register", {
@@ -106,6 +105,9 @@ const setAttendance = async () => {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(data)
+    }).then(res => res.json())
+    .then(() => {
+        alert("Done.")
     })
     }
  
@@ -179,7 +181,7 @@ const getUser = async(data)=>{
   
                const distance = calculateDistance(userlat, userlon, schoollat, schoollon);
   
-               if(distance.toFixed(2) * 1000 <= 200){
+               if(distance.toFixed(2) * 1000 <= 300){
                      if(getCurrentDayOfWeek() === "monday" && code === userData.attendance.monday){
                         setAttendance()
                      }
@@ -197,7 +199,7 @@ const getUser = async(data)=>{
                      }
                }
                else {
-                console.log("Not Within Range Of Your School")
+                alert("Not Within Range Of Your School")
                }
             }
         }
