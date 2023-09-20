@@ -188,7 +188,7 @@ const getUser = async(data)=>{
   
                const distance = calculateDistance(userlat, userlon, schoollat, schoollon);
   
-               if(distance.toFixed(2) * 1000 > 300 ){
+               if(distance.toFixed(2) * 1000 < 300 ){
                      if(getCurrentDayOfWeek() === "monday"&& code !== null && code.toUpperCase() === userData.attendance.monday ){
                         setAttendance()
                         
