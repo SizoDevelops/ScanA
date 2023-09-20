@@ -25,7 +25,7 @@ export default function Code() {
   return (
     <div className={styles.Code}>
         
-        <input type="text" placeholder={"SCNA-ERAWFRER"} value={code.length} onChange={e => setCode( e.target.value)} disabled={loading}/>
+        <input type="text" placeholder={"SCNA-ERAWFRER"} value={code} onChange={e => setCode( e.target.value)} disabled={loading}/>
         <p>Dashes will be automatically added.</p>
         <p>Enter just the six letters after the dash(-)</p>
     </div>
