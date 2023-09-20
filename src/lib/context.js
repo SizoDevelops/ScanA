@@ -16,6 +16,8 @@ export const DataProvider = ({children}) => {
     const {data:session} = useSession()
     const [userData, setUser] = useState(null)
     const [user, setUserData] = useState(null)
+    const [err, setErr] = useState(false)
+    const [screens, setScreens] = useState(["Calendar"])
 
     useEffect(() => {
         setLoading(true)
@@ -109,8 +111,10 @@ const setAttendance = async () => {
     }).then(res => res.json())
     .then(() => {
         setLoading(false)
-        alert("Done.")
+        setErr("Successfully Scanned")
+        setScreens(["Calendar"])
     })
+    
     }
  
   }
@@ -174,6 +178,7 @@ const getUser = async(data)=>{
       
      
     const signRegister = (code) => {
+        setErr("")
         if(isGeolocationAvailable && isGeolocationEnabled){
             if(userData && coords){
                const userlat = coords.latitude
@@ -183,28 +188,36 @@ const getUser = async(data)=>{
   
                const distance = calculateDistance(userlat, userlon, schoollat, schoollon);
   
-               if(distance.toFixed(2) * 1000 < 300){
-                     if(getCurrentDayOfWeek() === "monday" && code.toUpperCase() === userData.attendance.monday){
+               if(distance.toFixed(2) * 1000 > 300 ){
+                     if(getCurrentDayOfWeek() === "monday"&& code !== null && code.toUpperCase() === userData.attendance.monday ){
+                        setAttendance()
+                        
+                     }
+                     else if(getCurrentDayOfWeek() === "tuesday"&& code !== null && code.toUpperCase() === userData.attendance.tuesday){
                         setAttendance()
                      }
-                     else if(getCurrentDayOfWeek() === "tuesday" && code.toUpperCase() === userData.attendance.tuesday){
+                     else if(getCurrentDayOfWeek() === "wednesday" && code !== null&& code.toUpperCase() === userData.attendance.wednesday){
                         setAttendance()
                      }
-                     else if(getCurrentDayOfWeek() === "wednesday" && code.toUpperCase() === userData.attendance.wednesday){
+                     else if(getCurrentDayOfWeek() === "thursday"&& code !== null && code.toUpperCase() === userData.attendance.thursday){
                         setAttendance()
                      }
-                     else if(getCurrentDayOfWeek() === "thursday" && code.toUpperCase() === userData.attendance.thursday){
-                        setAttendance()
-                     }
-                     else if(getCurrentDayOfWeek() === "friday" && code.toUpperCase() === userData.attendance.friday){
+                     else if(getCurrentDayOfWeek() === "friday"&& code !== null && code.toUpperCase() === userData.attendance.friday){
                         setAttendance()
                      }
                      else {
-                        alert("Invalid Code")
+                       
+                        setErr("Invalid Code")
+                    
+                        
                      }
                }
                else {
-                alert("Not Within Range Of Your School")
+                  
+               
+                setErr("Not within range of your school")
+                
+              
                }
             }
         }
@@ -215,7 +228,11 @@ const getUser = async(data)=>{
     const value  = {
         loading,
         signRegister,
-        user
+        user,
+        err,
+        setErr,
+        setScreens,
+        screens
     }
 
     return(

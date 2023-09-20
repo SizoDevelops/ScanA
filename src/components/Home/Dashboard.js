@@ -11,9 +11,8 @@ import { useDatabase } from '@/lib/context'
 import Loader from './Loader'
 
 export default function Dashboard() {
-    const [screens, setScreens] = useState(["Calender"])
+    const {screens, setScreens} = useDatabase()
     const {loading, user} = useDatabase()
-
 
 
 
@@ -108,6 +107,7 @@ if(loading){
                     screens.pop()
                     setScreens([...screens])
                 }
+                
                
             }} style={screens.length  > 1 ? {opacity: "1"} : {opacity: "0.2"}}>
                 <div className={styles.icon} style={{backgroundImage:"url(https://i.ibb.co/wCsH3yk/pajamas-go-back.png)"}}>

@@ -4,16 +4,32 @@ import styles from '@/components/CSS/QR.module.css'
 import { QrScanner } from '@yudiel/react-qr-scanner'
 import { useDatabase } from '@/lib/context'
 import { useRouter } from 'next/navigation'
+import QrReader from 'react-qr-scanner'
 
 export default function QR(checkQR) {
-    const [display, setDisplay] = useState("block")
+    const [display, setDisplay] = useState("none")
     const [support, setSupport] = useState("Checking..")
-    const {signRegister, loading} = useDatabase()
+    const {signRegister, setErr, err} = useDatabase()
   
+
+    useEffect(() => {
+      setErr("")
+      if(window){
+        window.addEventListener("click", () => {
+          setErr("")
+        })
+      }
+    },[])
+    useEffect(() => {
+      if(err !== ""){
+        setDisplay("flex")
+      }
+      else setDisplay('none')
+    }, [err])
 
   return (
     <div className={styles.Code}>
-            <QrScanner
+            {/* <QrScanner
           onDecode={(result) => {
             signRegister(result)
 
@@ -44,7 +60,32 @@ export default function QR(checkQR) {
             zIndex: -1,
           }}
  
-      />
+      /> */}
+
+
+
+<QrReader
+          delay={100}
+          style={{
+            height: "100%",
+            width: "80%",
+            border: "2px solid #03a4ff",
+            borderRadius: "5px",
+          
+            
+          }}
+
+          onError={(err) => {
+            setSupport("Not Supported, Enter Code Instead.")
+            setErr("")
+          }}
+          onScan={(result) => {
+            signRegister(result)
+     
+          }}
+          facingMode={"rear"}
+          />
+        <span className={styles.scanner} style={{  display: display}}>{err}</span>
       <p style={{position: 'absolute', zIndex: -3}}>{support}</p>
     </div>
   )
