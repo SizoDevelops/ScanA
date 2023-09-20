@@ -8,15 +8,21 @@ import { useRouter } from 'next/navigation'
 export default function QR(checkQR) {
     const [display, setDisplay] = useState("block")
     const [support, setSupport] = useState("Checking..")
-    const {signRegister} = useDatabase()
-    const router = useRouter()
+    const {signRegister, loading} = useDatabase()
+  
 
   return (
     <div className={styles.Code}>
             <QrScanner
           onDecode={(result) => {
             signRegister(result)
-            alert("Scanned")
+
+            setDisplay('none')
+            setSupport("Checking...")
+
+            setTimeout(() => {
+              setDisplay("block")
+            },5000)
           }}
 
 
