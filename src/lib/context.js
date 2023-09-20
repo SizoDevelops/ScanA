@@ -33,10 +33,11 @@ export const DataProvider = ({children}) => {
 const { coords, isGeolocationAvailable, isGeolocationEnabled } =
 useGeolocated({
     positionOptions: {
-        enableHighAccuracy: false,
+        enableHighAccuracy: true,
     },
     userDecisionTimeout: null,
     watchLocationPermissionChange: true,
+    watchPosition: true
 
 });
 
