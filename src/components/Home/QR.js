@@ -13,6 +13,9 @@ export default function QR(checkQR) {
   
 
     useEffect(() => {
+      navigator?.mediaDevices?.getUserMedia({ video: { facingMode: 'environment' } }).then(() => {
+	console.log('success');
+}).catch((err) => console.error(err));
       setErr("")
       if(window){
         window.addEventListener("click", () => {
@@ -83,7 +86,7 @@ export default function QR(checkQR) {
             signRegister(result)
      
           }}
-          facingMode={"rear"}
+          facingMode={"environment"}
           />
         <span className={styles.scanner} style={{  display: display}}>{err}</span>
       <p style={{position: 'absolute', zIndex: -3}}>{support}</p>
