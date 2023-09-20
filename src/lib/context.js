@@ -98,6 +98,7 @@ const setAttendance = async () => {
     }
 
     if(session?.user.code && userData?.key){  
+        setLoading(true)
     await fetch("/api/sign-register", {
         method: "POST",
         cache: "no-cache",
@@ -107,6 +108,7 @@ const setAttendance = async () => {
         body: JSON.stringify(data)
     }).then(res => res.json())
     .then(() => {
+        setLoading(false)
         alert("Done.")
     })
     }
@@ -181,21 +183,24 @@ const getUser = async(data)=>{
   
                const distance = calculateDistance(userlat, userlon, schoollat, schoollon);
   
-               if(distance.toFixed(2) * 1000 <= 300){
-                     if(getCurrentDayOfWeek() === "monday" && code === userData.attendance.monday){
+               if(distance.toFixed(2) * 1000 > 300){
+                     if(getCurrentDayOfWeek() === "monday" && code.toUpperCase() === userData.attendance.monday){
                         setAttendance()
                      }
-                     if(getCurrentDayOfWeek() === "tuesday" && code === userData.attendance.tuesday){
+                     else if(getCurrentDayOfWeek() === "tuesday" && code.toUpperCase() === userData.attendance.tuesday){
                         setAttendance()
                      }
-                     if(getCurrentDayOfWeek() === "wednesday" && code === userData.attendance.wednesday){
+                     else if(getCurrentDayOfWeek() === "wednesday" && code.toUpperCase() === userData.attendance.wednesday){
                         setAttendance()
                      }
-                     if(getCurrentDayOfWeek() === "thursday" && code === userData.attendance.thursday){
+                     else if(getCurrentDayOfWeek() === "thursday" && code.toUpperCase() === userData.attendance.thursday){
                         setAttendance()
                      }
-                     if(getCurrentDayOfWeek() === "friday" && code === userData.attendance.friday){
+                     else if(getCurrentDayOfWeek() === "friday" && code.toUpperCase() === userData.attendance.friday){
                         setAttendance()
+                     }
+                     else {
+                        alert("Invalid Code")
                      }
                }
                else {

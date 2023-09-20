@@ -17,7 +17,6 @@ export default function QR(checkQR) {
           onDecode={(result) => {
             signRegister(result)
             alert("Scanned")
-            router.refresh()
           }}
 
 
@@ -26,7 +25,7 @@ export default function QR(checkQR) {
             setSupport("Not Supported, Enter Code Instead.")
         }}
       
-          scanDelay={500}
+          scanDelay={100}
           videoStyle={{
            
             position: "absolute",

@@ -7,20 +7,15 @@ import { useDatabase } from '@/lib/context'
 import { useRouter } from 'next/navigation'
 export default function Code() {
   const [code, setCode] = useState("")
-  const [loading, setLoading] = useState(false)
+  const {loading} = useDatabase()
   const {signRegister} = useDatabase()
-  const router = useRouter()
   useEffect(() => {
     if(code.length >= 13){
-      setLoading(true)
+     
       signRegister(code)
       setCode("")
-      router.refresh()
     }
-    else{
-      setLoading(false)
-  
-    }
+
   }, [code])
   return (
     <div className={styles.Code}>
