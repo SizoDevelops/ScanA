@@ -10,12 +10,12 @@ export default function QR(checkQR) {
     const [display, setDisplay] = useState("none")
     const [support, setSupport] = useState("Checking..")
     const {signRegister, setErr, err} = useDatabase()
-  
+    const constraints = {
+      facingMode: { exact: "environment" },
+    };
 
     useEffect(() => {
-      navigator?.mediaDevices?.getUserMedia({ video: { facingMode: 'environment' } }).then(() => {
-	console.log('success');
-}).catch((err) => console.error(err));
+      
       setErr("")
       if(window){
         window.addEventListener("click", () => {
@@ -86,7 +86,9 @@ export default function QR(checkQR) {
             signRegister(result)
      
           }}
-          facingMode={"environment"}
+          constraints={
+            constraints
+          }
           />
         <span className={styles.scanner} style={{  display: display}}>{err}</span>
       <p style={{position: 'absolute', zIndex: -3}}>{support}</p>
