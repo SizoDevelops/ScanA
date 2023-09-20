@@ -11,7 +11,7 @@ export default function QR(checkQR) {
     const [support, setSupport] = useState("Checking..")
     const {signRegister, setErr, err} = useDatabase()
     const constraints = {
-      facingMode: { exact: "environment" },
+      facingMode: "user",
     };
 
     useEffect(() => {
@@ -32,22 +32,17 @@ export default function QR(checkQR) {
 
   return (
     <div className={styles.Code}>
-            {/* <QrScanner
+            <QrScanner
           onDecode={(result) => {
             signRegister(result)
 
-            setDisplay('none')
-            setSupport("Checking...")
-
-            setTimeout(() => {
-              setDisplay("block")
-            },5000)
           }}
 
 
           onError={() => {
-            setDisplay('none')
             setSupport("Not Supported, Enter Code Instead.")
+            setErr("")
+            console.log(err)
         }}
       
           scanDelay={100}
@@ -59,19 +54,17 @@ export default function QR(checkQR) {
           }}
           containerStyle={{
             borderRadius: "5px",
-            display: display,
-            zIndex: -1,
           }}
  
-      /> */}
+      />
 
 
 
-<QrReader
+{/* <QrReader
           delay={100}
           style={{
             height: "100%",
-            width: "80%",
+            width: "min(300px, 90vw)",
             border: "2px solid #03a4ff",
             borderRadius: "5px",
           
@@ -81,15 +74,19 @@ export default function QR(checkQR) {
           onError={(err) => {
             setSupport("Not Supported, Enter Code Instead.")
             setErr("")
+            console.log(err)
           }}
           onScan={(result) => {
             signRegister(result)
      
           }}
           constraints={
-            constraints
+            {
+              video: true,
+              facingMode: "environment"
+            }
           }
-          />
+          /> */}
         <span className={styles.scanner} style={{  display: display}}>{err}</span>
       <p style={{position: 'absolute', zIndex: -3}}>{support}</p>
     </div>
