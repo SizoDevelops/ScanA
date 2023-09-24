@@ -21,7 +21,7 @@
 }
 
 .container input{
-    width: 80% ;
+    width: 95% ;
     margin: 20px 0;
     border: none;
     outline: none;
@@ -40,7 +40,7 @@
 }
 
 .Main p{
-    font-size: 11px;
+    font-size: 10px;
     color: #707070;
     margin-bottom: 10px;
 }
@@ -52,6 +52,7 @@
     width: 30%;
     margin-bottom: 20px;
     cursor: pointer;
+    color: #ffffff;
 }
 
 .submit:active{

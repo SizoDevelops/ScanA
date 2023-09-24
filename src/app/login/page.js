@@ -37,16 +37,17 @@ export default function Page() {
     <div className={styles.Main}>
           <form className={styles.container} onSubmit={submitForm}>
             <label htmlFor='Company Code'>Company Code</label>
-            <input type='text' name="Company Code" value={school_code} onChange={(e) => setSchooCode(e.target.value)}/>
+            <input type='text' name="Company Code" required value={school_code} onChange={(e) => setSchooCode(e.target.value)}/>
            
             <label htmlFor='Code'>Enter Your Code</label>
-            <input type="text" name="Code" value={code} onChange={(e) => setCode(e.target.value)}/>
+            <input type="text" name="Code" value={code} required onChange={(e) => setCode(e.target.value)}/>
             <label htmlFor='Password'>Password</label>
-               <input type="password" name="Password" value={password} onChange={e => setPassword(e.target.value)}/>
+               <input type="password" name="Password" value={password} required onChange={e => setPassword(e.target.value)}/>
            
 
             <button type='submit' className={styles.submit}>Login</button>
           </form>
+
 
 <p>Check your email for credentials.</p>
 <p>Do not lose or share them with anyone.</p>
