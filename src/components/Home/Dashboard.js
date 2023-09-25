@@ -11,7 +11,7 @@ import { useDatabase } from '@/lib/context'
 import Loader from './Loader'
 
 export default function Dashboard() {
-    const {screens, setScreens} = useDatabase()
+    const {screens, setScreens, getCurrentMilitaryTime} = useDatabase()
     const {loading, user} = useDatabase()
 
 
@@ -28,7 +28,7 @@ if(loading){
         </header>
 
         <div className={styles.greeting}>
-            <h1>GOOD MORNING</h1>
+            <h1>{getCurrentMilitaryTime().hours < 12 ? "GOOD MORNING" : "GOOD EVENING"}</h1>
             <p>{user.title} {user.initial} {user.last_name}</p>
         </div>
 
@@ -78,7 +78,18 @@ if(loading){
         <div className={styles.buttons}>
     
             <div className={styles.btn} onClick={() => {
-                setScreens(prep => [...prep, "Code"])
+                
+                if(!screens.find(item => item === "Code")){
+                    setScreens(prep => [...prep, "Code"])
+                 }
+                 else if(screens[1] === "Code"){
+                     
+                     setScreens([...screens.slice(0, 1).concat(screens.slice(2)), "Code"])
+                     
+                 }
+                 else {
+                    return
+                 }
             }}>
                 <div className={styles.icon} style={{backgroundImage:"url(https://i.ibb.co/gMsbF0q/vaadin-password.png)"}}>
                     {/* <Image src={codeImage} fill alt="Image"/> */}
@@ -87,7 +98,17 @@ if(loading){
             </div>
 
             <div className={styles.btn} onClick={() => {
-                setScreens(prep => [...prep, "QR"])
+                   if(!screens.find(item => item === "QR")){
+                    setScreens(prep => [...prep, "QR"])
+                 }
+                 else if(screens[1] === "QR"){
+                    
+                    setScreens([...screens.slice(0, 1).concat(screens.slice(2)), "QR"])
+                    
+                }
+                else {
+                   return
+                }
             }}>
                 <div className={styles.icon} style={{backgroundImage:"url(https://i.ibb.co/QJNy7K5/mdi-qrcode.png)"}}>
                 {/* <Image src={scanImage} fill alt="Image"/> */}
@@ -116,12 +137,12 @@ if(loading){
                 <p>Back</p>
             </div>
          
-            <div className={styles.btn}>
+            {/* <div className={styles.btn}>
                 <div className={styles.icon} style={{backgroundImage:"url(https://i.ibb.co/Ps2ctv6/carbon-review.png)"}}>
-                    {/* <Image src={rateImage} fill alt="Image"/> */}
+                    <Image src={rateImage} fill alt="Image"/>
                 </div>
                 <p>Feedback</p>
-            </div>
+            </div> */}
         </div>
     </div>
   )

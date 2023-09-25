@@ -26,17 +26,28 @@
   }
   
 .cont span {
-    height: 150%;
-    width: 30px;
-    background: #00a2ff50;
+    height: 120%;
+    width: 40px;
+    background: #0096ecaf;
     position: absolute;
-    border-radius: 5px;
-    animation: scan 1.5s ease-in-out infinite alternate;
+    border-radius: 3px;
+    animation: scan 1s ease-in-out infinite alternate;
+}
+.dashProfile{
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    margin-top: 11px;
+    background-image: url("https://i.ibb.co/q5yfsdC/Frame-170.png");
+    background-size:contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    
 }
 
 .cont{
-    width: 50%;
-    height: fit-content;
+    width: fit-content;
+    height: 100px;
     border: 1px solid #00c3ff42;
     display: flex;
     justify-content: center;
@@ -47,7 +58,7 @@
 
 @keyframes scan{
     0%{
-        left: 10%;
+        left: 0%;
     }
     100%{
         left: 90%;

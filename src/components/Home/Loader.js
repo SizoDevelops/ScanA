@@ -6,7 +6,7 @@ export default function Loader() {
     <div className={styles.container}>
         <div className={styles.cont}>
             <span></span>
-           <h1>ScanA</h1> 
+            <div className={styles.dashProfile} ></div>
         </div>
         
 

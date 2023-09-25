@@ -239,7 +239,8 @@ const getUser = async(data)=>{
         err,
         setErr,
         setScreens,
-        screens
+        screens,
+        getCurrentMilitaryTime
     }
 
     return(
