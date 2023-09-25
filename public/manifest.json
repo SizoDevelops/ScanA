@@ -1,6 +1,6 @@
 {
-    "name": "",
-    "short_name": "",
+    "name": "ScanA",
+    "short_name": "ScanA",
     "icons": [
       {
         "src": "/icons/android-chrome-512x512.png",
@@ -24,4 +24,5 @@
     "start_url": "/",
     "display": "standalone",
     "orientation": "portrait"
+    
   }
