@@ -27,7 +27,7 @@ const handler = NextAuth({
             code: credentials?.code,
             password: credentials?.password,
           }),
-        })
+        }) 
 
        let user = await res.json()
        if(user){
