@@ -56,8 +56,8 @@ function getCurrentWeek() {
     const today = new Date();
     const dayOfWeek = today.getDay();
     const currentDay = daysOfWeek[dayOfWeek];
-    // return currentDay;
-    return "tuesday"
+    return currentDay;
+    // return "tuesday"
   }
 
   function getCurrentDate() {
