@@ -7,10 +7,11 @@ export default function Absent() {
     const [reason, setReason] = useState("")
     const [display, setDisplay] = useState("none")
     const [daysArray, setDays] = useState([])
-    const [daysAbsent, setAbsent] = useState([])
+    const [daysAbsent, setAbsent] = useState(["monday", "tuesday", "wednesday", "thurday", "friday"])
 
 
     useEffect(() => {
+        setDays(["monday", "tuesday", "wednesday", "thurday", "friday"])
         if(err !== ""){
           setDisplay("flex")
         }

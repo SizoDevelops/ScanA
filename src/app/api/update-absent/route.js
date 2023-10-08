@@ -85,9 +85,9 @@ export async function POST(request) {
 
       
     }
-    if(body.current_day === "saturday" || body.current_day === "sunday") {
-      return NextResponse.json("Only Available on Weekdays")
-    }
+    // if(body.current_day === "saturday" || body.current_day === "sunday") {
+    //   return NextResponse.json("Only Available on Weekdays")
+    // }
    // Remove the original member
     const members = getSchool.members.filter(item => item.code !== body.id)
 
