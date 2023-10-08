@@ -3,17 +3,13 @@ import React, { useEffect, useState } from 'react'
 import styles from '@/components/CSS/QR.module.css'
 import { QrScanner } from '@yudiel/react-qr-scanner'
 import { useDatabase } from '@/lib/context'
-import { useRouter } from 'next/navigation'
-import QrReader from 'react-qr-scanner'
+
 
 export default function QR(checkQR) {
     const [display, setDisplay] = useState("none")
     const [support, setSupport] = useState("Checking..")
     const {signRegister, setErr, err} = useDatabase()
-    const constraints = {
-      facingMode: "user",
-    };
-
+   
     useEffect(() => {
       
       setErr("")
@@ -42,7 +38,6 @@ export default function QR(checkQR) {
           onError={() => {
             setSupport("Not Supported, Enter Code Instead.")
             setErr("")
-            console.log(err)
         }}
       
           scanDelay={100}

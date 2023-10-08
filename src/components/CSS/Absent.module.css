@@ -1,0 +1,109 @@
+.Code{
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding-top: 20px;
+    text-align: center;
+}
+
+.Code input{
+    border: none;
+    width: 90%;
+    height: 40px;
+    border-bottom: 1px solid #03a4ff;
+    background: transparent;
+    text-align: center;
+    font-size: 12px;
+    color: #d8f1ff;
+    text-transform: uppercase;
+    margin-top: 30px;
+}
+
+.date{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+
+}
+.dateRange{
+    width: 60%;
+    margin: auto;
+}
+.dateRange input{
+    font-size: 10px;
+}
+.Code input:focus{
+    outline: none;
+}
+
+.Code p{
+    font-size: 10px;
+    margin-top: 10px;
+    color: #4b4b52;
+}
+
+.Code input::placeholder{
+    font-size: 12px
+}
+
+
+.submit{
+    width: 40%;
+    padding: 10px;
+    border-radius: 5px;
+    background: #03a4ff;
+    margin: auto;
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 13px;
+    cursor: pointer;
+    border: none;
+    
+}
+
+.submit:active{
+    background: #4b4b52;
+    outline: 1px solid #fff;
+}
+
+.scanner{
+    position: absolute;
+    z-index: 2;
+    border: 1px solid #03a4ff;
+    width: 80%;
+    height: 20%;
+    background: #03a3ff5e;
+    color: #fff;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 800;
+
+    border-radius: 5px;
+}
+
+.days{
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-evenly;
+    height: 50px;
+    margin-bottom: 40px;
+}
+
+.days label{
+    width: 40px;
+}
+
+.days label input{
+    width: 20px;
+}

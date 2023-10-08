@@ -153,3 +153,17 @@
     display: block;
     filter: brightness(50%)
 }
+
+.footer {
+    display: inline-flex;
+    justify-content: space-evenly;
+    width: 100%;
+    align-items: center;
+    font-size: 10px;
+    text-align: center;
+    color: #7e8183;
+}
+
+.footer p{
+    width: 40%;
+}

@@ -26,7 +26,7 @@ const handler = NextAuth({
             school_code: credentials?.school_code,
             code: credentials?.code,
             password: credentials?.password,
-          }),
+          })
         }) 
 
        let user = await res.json()

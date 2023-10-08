@@ -1,14 +1,15 @@
 "use client"
 
-import React, { useEffect, useState } from 'react'
+import React  from 'react'
 import styles from "@/components/CSS/Dashboard.module.css"
 import Calendar from './Calender'
 import Code from './Code'
 import QR from './QR'
-import { useGeolocated } from 'react-geolocated'
-import { signOut, useSession } from 'next-auth/react'
+
+import { signOut } from 'next-auth/react'
 import { useDatabase } from '@/lib/context'
 import Loader from './Loader'
+import Absent from './Absent'
 
 export default function Dashboard() {
     const {screens, setScreens, getCurrentMilitaryTime} = useDatabase()
@@ -28,8 +29,8 @@ if(loading){
         </header>
 
         <div className={styles.greeting}>
-            <h1>{getCurrentMilitaryTime().hours < 12 ? "GOOD MORNING" : "GOOD EVENING"}</h1>
-            <p>{user.title} {user.initial} {user.last_name}</p>
+            <h1>{getCurrentMilitaryTime().hours < 12 ? "GOOD MORNING" : getCurrentMilitaryTime().hours >= 12 && getCurrentMilitaryTime().hours < 18 ? "GOOD AFTERNOON" : "GOOD EVENING"}</h1>
+            <p>{user.title.toUpperCase()} {user.initial.toUpperCase()} {user.last_name.toUpperCase()}</p>
         </div>
 
         <div className={styles.calendarHolder}>
@@ -40,6 +41,8 @@ if(loading){
                 </>
                 : screens[screens.length - 1] === "QR" 
                 ? <QR/>
+                : screens[screens.length - 1] === "Absent"
+                ? <Absent/>
                 :
                 <>
                      <div className={styles.schoolLogo}></div>
@@ -143,6 +146,30 @@ if(loading){
                 </div>
                 <p>Feedback</p>
             </div> */}
+
+            <div className={styles.btn} onClick={() => {
+                
+                if(!screens.find(item => item === "Absent")){
+                    setScreens(prep => [...prep, "Absent"])
+                 }
+                 else if(screens[1] === "Absent"){
+                     
+                     setScreens([...screens.slice(0, 1).concat(screens.slice(2)), "Absent"])
+                     
+                 }
+                 else {
+                    return
+                 }}}>
+                <div className={styles.icon} style={{backgroundImage:"url(https://i.ibb.co/Ps2ctv6/carbon-review.png)"}}>
+              
+                </div>
+                <p>Report Absent</p>
+            </div>
+        </div>
+        <div className={styles.footer}>
+            <p>copyright &copy; 2023 All rights reserved.</p>
+
+            <p>Designed and Created by Sizo Develops.</p>
         </div>
     </div>
   )

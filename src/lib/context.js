@@ -1,6 +1,6 @@
 "use client"
 
-import { useSession } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 import { useGeolocated } from "react-geolocated"
 
 const { createContext, useContext, useState, useEffect } = require("react")
@@ -56,7 +56,8 @@ function getCurrentWeek() {
     const today = new Date();
     const dayOfWeek = today.getDay();
     const currentDay = daysOfWeek[dayOfWeek];
-    return currentDay;
+    // return currentDay;
+    return "tuesday"
   }
 
   function getCurrentDate() {
@@ -65,7 +66,7 @@ function getCurrentWeek() {
     const month = String(today.getMonth() + 1).padStart(2, '0'); // Get the month (months are 0-based) and pad with leading zeros if necessary
     const year = today.getFullYear(); // Get the year
   
-    return `${day}/${month}/${year}`;
+    return `${year}-${month}-${day}`;
   }
   function getCurrentMilitaryTime() {
     const now = new Date();
@@ -114,7 +115,6 @@ const setAttendance = async () => {
         
         if(data === null){
         setErr("Successfully Scanned")
-        setScreens(["Calendar"])
         }
         else if(data === "Already Signed"){
             setErr("Already Signed")
@@ -124,6 +124,50 @@ const setAttendance = async () => {
     
     }
  
+  }
+
+// iiiiiiiiiiiiiiiiiiiiiiiii
+
+  const markAbsent = async(reason, days) => {
+    const day = getCurrentDayOfWeek()
+    const date = getCurrentDate()
+    const week = getCurrentWeek()
+    const data = {
+        key: userData?.key,
+        id: session?.user.code,
+        current_day: day,
+        days: days,
+        attend: {
+            week: week,
+            timein: "-",
+            timeout: "-",
+            initial: session?.user.initial,
+            absent: true,
+            reason: reason,
+            date : date,
+            day: day,
+        } 
+    }
+    await fetch("/api/update-absent", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    }).then(res => res.json())
+    .then((data) => {
+        
+        if(data === null){
+        setErr("Successfully Submitted")
+        }
+        else if(data === "Already Signed"){
+            setErr("Already Signed")
+        }
+        else if (data === "Only Available on Weekdays"){
+            setErr("Only Available On Weekdays.")
+        }
+        
+    })
   }
 
 
@@ -161,8 +205,8 @@ function toRadians(degrees) {
 // const lonLA = 30.426443955067636
 
 
-// ;llllllllllllllllllllllllllll
-
+// ..............
+// ..............
 const getUser = async(data)=>{
 
     await fetch("api/get-school", {
@@ -175,7 +219,8 @@ const getUser = async(data)=>{
     
       }).then(data => data.json())
       .then(data => {
-          setUser(data)
+        setUser(data)
+        // else signOut()
       })
       
      
@@ -195,7 +240,7 @@ const getUser = async(data)=>{
   
                const distance = calculateDistance(userlat, userlon, schoollat, schoollon);
   
-               if(distance.toFixed(2) * 1000 < 300 ){
+               if(distance.toFixed(2) * 1000 < userData?.coordinates.distance ){
                      if(getCurrentDayOfWeek() === "monday"&& code !== null && code.toUpperCase() === userData.attendance.monday ){
                         setAttendance()
                         
@@ -222,7 +267,7 @@ const getUser = async(data)=>{
                else {
                   
                
-                setErr("Not within range of your school")
+                setErr("Not within range.")
                 
               
                }
@@ -240,7 +285,10 @@ const getUser = async(data)=>{
         setErr,
         setScreens,
         screens,
-        getCurrentMilitaryTime
+        getCurrentMilitaryTime,
+        getCurrentDayOfWeek,
+        markAbsent,
+        getCurrentWeek
     }
 
     return(
