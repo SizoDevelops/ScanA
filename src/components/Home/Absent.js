@@ -6,11 +6,12 @@ export default function Absent() {
     const {err, setErr, markAbsent,  getCurrentDayOfWeek, getCurrentWeek} = useDatabase()
     const [reason, setReason] = useState("")
     const [display, setDisplay] = useState("none")
-    const [daysArray, setDays] = useState([])
-    const [daysAbsent, setAbsent] = useState(["monday", "tuesday", "wednesday", "thurday", "friday"])
+    const [daysArray, setDays] = useState(["monday", "tuesday", "wednesday", "thurday", "friday"])
+    const [daysAbsent, setAbsent] = useState([])
 
 
     useEffect(() => {
+        setAbsent([])
         setDays(["monday", "tuesday", "wednesday", "thurday", "friday"])
         if(err !== ""){
           setDisplay("flex")
