@@ -240,7 +240,7 @@ const getUser = async(data)=>{
   
                const distance = calculateDistance(userlat, userlon, schoollat, schoollon);
   
-               if(distance.toFixed(2) * 1000 < userData?.coordinates.distance ){
+               if(distance.toFixed(2) * 1000 < parseInt(userData?.coordinates.distance )){
                      if(getCurrentDayOfWeek() === "monday"&& code !== null && code.toUpperCase() === userData.attendance.monday ){
                         setAttendance()
                         
@@ -267,7 +267,7 @@ const getUser = async(data)=>{
                else {
                   
                
-                setErr("Not within range.")
+                setErr("You are out of range.")
                 
               
                }
