@@ -65,8 +65,9 @@ export default function Absent() {
         }}>
             
             
-            <input type="text" placeholder={"Sick"} value={reason} onChange={e => setReason(e.target.value)} maxLength={15}/>
+            <input type="text" placeholder={"Enter Reason"} value={reason} onChange={e => setReason(e.target.value)} maxLength={15}/>
             <p>Enter the reason you are absent e.g(Sick, Workshop, Leave, etc.)</p>
+            <p>The reason can only be 15 characters long (appr. two words).</p>
            
 
             {/* .................................... */}
