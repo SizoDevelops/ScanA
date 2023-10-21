@@ -38,10 +38,10 @@ export default function Page() {
     <div className={styles.Main}>
           <form className={styles.container} onSubmit={submitForm}>
             <label htmlFor='Company Code'>Company Code</label>
-            <input type='text' name="Company Code" required value={school_code} defaultValue={params.code ? params.code : ""} onChange={(e) => setSchooCode(e.target.value)}/>
+            <input type='text' name="Company Code" required value={params.code ? params.code : school_code} defaultValue={params.code ? params.code : ""} onChange={(e) => setSchooCode(e.target.value)}/>
            
             <label htmlFor='Code'>Enter Your Code</label>
-            <input type="text" name="Code" value={code} required defaultValue={params.usercode ? params.usercode : ""} onChange={(e) => setCode(e.target.value)}/>
+            <input type="text" name="Code" value={params.usercode ? params.usercode : code} required defaultValue={params.usercode ? params.usercode : ""} onChange={(e) => setCode(e.target.value)}/>
             <label htmlFor='Password'>Password</label>
                <input type="password" name="Password" value={password} required onChange={e => setPassword(e.target.value)}/>
            
