@@ -3,15 +3,23 @@
 import React, { useEffect, useState } from 'react'
 import styles from '../../components/CSS/Login.module.css'
 import { signIn, useSession } from 'next-auth/react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 
 
 export default function Page() {
-  const [school_code, setSchooCode] = useState("")
-  const [code, setCode] = useState("")
+  const searchParams = useSearchParams()
+  const url = searchParams.get("callbackUrl")
+  const parsedUrl = new URL(url)
+  const newUrl = new URLSearchParams(parsedUrl.search)
+  
+  const schoolCode = newUrl.get('code')
+  const userCode = newUrl.get('usercode')
+
+  const [school_code, setSchooCode] = useState(schoolCode)
+  const [code, setCode] = useState(userCode)
   const [password, setPassword] = useState("")
   const router = useRouter()
-  const params = useParams()
+  
 
   const {data: session} = useSession()
 
@@ -19,10 +27,6 @@ export default function Page() {
     if(session && session?.user){
       router.push("/")
     }
-
-    setCode(params.usercode)
-    setSchooCode(params.code)
-    
   },[session])
 
 
@@ -41,7 +45,7 @@ export default function Page() {
     <div className={styles.Main}>
           <form className={styles.container} onSubmit={submitForm}>
             <label htmlFor='Company Code'>Company Code</label>
-            <input type='text' name="Company Code" required value={school_code} defaultValue={""} onChange={(e) => setSchooCode(e.target.value)}/>
+            <input type='text' name="Company Code" required value={school_code} onChange={(e) => setSchooCode(e.target.value)}/>
            
             <label htmlFor='Code'>Enter Your Code</label>
             <input type="text" name="Code" value={code} required onChange={(e) => setCode(e.target.value)}/>
