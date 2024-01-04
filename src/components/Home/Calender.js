@@ -1,14 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import styles from "@/components/CSS/Calendar.module.css";
-import { useDatabase } from "@/lib/context";
+import { useSelector } from "react-redux";
 
 
 let objData = []
 const Calendar = () => {
   const currentDate = new Date()
   
-  const {user} = useDatabase()
+ const user = useSelector(state => state.User.value)
   const [AttendanceData, setAttendance] = useState([])
   
 

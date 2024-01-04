@@ -2,6 +2,8 @@
 
 import { signOut, useSession } from "next-auth/react"
 import { useGeolocated } from "react-geolocated"
+import { useDispatch } from "react-redux"
+import { updateAttendance, userReducer } from "./Slice"
 
 const { createContext, useContext, useState, useEffect } = require("react")
 
@@ -18,7 +20,7 @@ export const DataProvider = ({children}) => {
     const [user, setUserData] = useState(null)
     const [err, setErr] = useState(false)
     const [screens, setScreens] = useState(["Calendar"])
-
+    const dispatch = useDispatch()
     useEffect(() => {
         setLoading(true)
        if(session && session.user){
@@ -139,7 +141,8 @@ const setAttendance = async () => {
         reason: reason,
         initial: session?.user.initial
     }
-    await fetch("/api/update-absent", {
+    
+    fetch("/api/update-absent", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -159,6 +162,7 @@ const setAttendance = async () => {
         }
         
     })
+    dispatch(updateAttendance(data))
   }
 
 
@@ -211,6 +215,8 @@ const getUser = async(data)=>{
       }).then(data => data.json())
       .then(data => {
         setUser(data)
+        
+        dispatch(userReducer(data.members.find(member => member.id === session?.user.id)))
         // else signOut()
       })
       

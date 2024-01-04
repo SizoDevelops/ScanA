@@ -2,13 +2,15 @@
 import React, { useEffect, useState } from 'react'
 import styles from "../CSS/Absent.module.css"
 import { useDatabase } from '@/lib/context'
+import { updateAttendance } from '@/lib/Slice'
+import { useDispatch } from 'react-redux'
 export default function Absent() {
     const {err, setErr, markAbsent,  getCurrentDayOfWeek, getCurrentWeek} = useDatabase()
     const [reason, setReason] = useState("")
     const [display, setDisplay] = useState("none")
     const [daysArray, setDays] = useState(["monday", "tuesday", "wednesday", "thurday", "friday"])
     const [daysAbsent, setAbsent] = useState([])
-
+    const dispatch = useDispatch()
 
   
 
@@ -64,6 +66,7 @@ export default function Absent() {
             }
             else {
                 markAbsent(reason.toUpperCase(), daysAbsent)
+                
             }
         }}>
             
