@@ -15,7 +15,8 @@ export default function Dashboard() {
     const {screens, setScreens, getCurrentMilitaryTime} = useDatabase()
     const {loading, user} = useDatabase()
 
-
+    
+    
 
 if(loading){
     return <Loader/>

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import styles from '../../components/CSS/Login.module.css'
 import { signIn, useSession } from 'next-auth/react';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 
 export default function Page() {

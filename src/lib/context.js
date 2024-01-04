@@ -57,7 +57,7 @@ function getCurrentWeek() {
     const dayOfWeek = today.getDay();
     const currentDay = daysOfWeek[dayOfWeek];
     return currentDay;
-    // return "tuesday"
+    // return "saturday"
   }
 
   function getCurrentDate() {
@@ -130,23 +130,14 @@ const setAttendance = async () => {
 
   const markAbsent = async(reason, days) => {
     const day = getCurrentDayOfWeek()
-    const date = getCurrentDate()
-    const week = getCurrentWeek()
+   
     const data = {
         key: userData?.key,
         id: session?.user.code,
         current_day: day,
         days: days,
-        attend: {
-            week: week,
-            timein: "-",
-            timeout: "-",
-            initial: session?.user.initial,
-            absent: true,
-            reason: reason,
-            date : date,
-            day: day,
-        } 
+        reason: reason,
+        initial: session?.user.initial
     }
     await fetch("/api/update-absent", {
         method: "POST",
@@ -160,11 +151,11 @@ const setAttendance = async () => {
         if(data === null){
         setErr("Successfully Submitted")
         }
-        else if(data === "Already Signed"){
+        else if(data.includes("Already Signed")){
             setErr("Already Signed")
         }
-        else if (data === "Only Available on Weekdays"){
-            setErr("Only Available On Weekdays.")
+        else if (data.includes("Not Available On Saturday")){
+            setErr("Opps!! Not available on saturday.")
         }
         
     })
@@ -288,7 +279,8 @@ const getUser = async(data)=>{
         getCurrentMilitaryTime,
         getCurrentDayOfWeek,
         markAbsent,
-        getCurrentWeek
+        getCurrentWeek,
+        userData
     }
 
     return(

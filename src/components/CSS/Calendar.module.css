@@ -23,6 +23,21 @@
     background: #4CAF50;
     margin-left: 5px;
 }
+.dotRed{
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #ff6b72;
+    margin-left: 5px;
+}
+.dotBlue{
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #6b9fff;
+    margin-left: 5px;
+}
+
 
 .TD{
     margin: auto;
@@ -33,7 +48,29 @@
     align-items: center;
     font-size: 12px;
     cursor: pointer;
-    color: #FFFFFF;
+    color: #4CAF50;
+}
+.TDR{
+    margin: auto;
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    cursor: pointer;
+    color: #ff6b72;
+}
+.TDB{
+    margin: auto;
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    cursor: pointer;
+    color: #6b9fff;
 }
 
 .line{

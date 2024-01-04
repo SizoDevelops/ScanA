@@ -10,8 +10,10 @@ export default function Absent() {
     const [daysAbsent, setAbsent] = useState([])
 
 
+  
+
     useEffect(() => {
-        setAbsent([])
+     
         setDays(["monday", "tuesday", "wednesday", "thurday", "friday"])
         if(err !== ""){
           setDisplay("flex")
@@ -20,6 +22,7 @@ export default function Absent() {
       }, [err])
 
       useEffect(() => {
+        setAbsent([])
         setErr("")
         if(window){
           window.addEventListener("click", () => {
@@ -31,19 +34,19 @@ export default function Absent() {
            setDays(["monday", "tuesday", "wednesday", "thurday", "friday"])
 
         }
-         if(getCurrentDayOfWeek() == "tuesday") {
+        else if(getCurrentDayOfWeek() == "tuesday") {
             setDays(["tuesday", "wednesday", "thurday", "friday"])
 
         }
-         if(getCurrentDayOfWeek() == "wednesday") {
+        else if(getCurrentDayOfWeek() == "wednesday") {
             setDays(["wednesday", "thurday", "friday"])
 
         }
-         if(getCurrentDayOfWeek() == "thursday") {
+        else if(getCurrentDayOfWeek() == "thursday") {
             setDays(["thurday", "friday"])
 
         }
-         if(getCurrentDayOfWeek() == "friday") {
+         else if(getCurrentDayOfWeek() == "friday") {
             setDays(["friday"])
 
         }
@@ -60,7 +63,7 @@ export default function Absent() {
                 setErr("Select at least one day.")
             }
             else {
-                markAbsent(reason, daysAbsent)
+                markAbsent(reason.toUpperCase(), daysAbsent)
             }
         }}>
             

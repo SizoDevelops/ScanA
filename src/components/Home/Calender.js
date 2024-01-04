@@ -1,14 +1,42 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import styles from "@/components/CSS/Calendar.module.css";
+import { useDatabase } from "@/lib/context";
 
+
+let objData = []
 const Calendar = () => {
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const currentDate = new Date()
+  
+  const {user} = useDatabase()
+  const [AttendanceData, setAttendance] = useState([])
+  
 
-  const generateCalendar = () => {
+
+  useEffect(() => {
+    setAttendance([])
+    const days = []
+    if(Array.isArray(user.attendance.monday)){
+      days.push(...user.attendance.monday)
+    }
+    if(Array.isArray(user.attendance.tuesday)){
+      days.push(...user.attendance.tuesday)
+    }
+    if(Array.isArray(user.attendance.wednesday)){
+      days.push(...user.attendance.wednesday)
+    }
+    if(Array.isArray(user.attendance.thursday)){
+      days.push(...user.attendance.thursday)
+    }
+    if(Array.isArray(user.attendance.friday)){
+      days.push(...user.attendance.friday)
+    }
+    setAttendance(days)
+  },[user])
+  const generateCalendar = (objectData) => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
-    const locale = "en-GB"; 
+    const locale = "en-GB";
     const dayOfMonth = new Intl.DateTimeFormat(locale, {
       day: "numeric",
     }).format(currentDate);
@@ -29,23 +57,25 @@ const Calendar = () => {
 
       for (let weekday = 0; weekday < 7; weekday++) {
         if ((week === 0 && weekday < firstDayOfWeek) || day > daysInMonth) {
-          weekRow.push(<td key={`${week}-${weekday}`} />);
-        } else {
           weekRow.push(
             <td key={`${week}-${weekday}`}>
-              <div
-                className={styles.TD}
-                style={
-                  day === parseInt(dayOfMonth)
-                    ? { fontWeight: "700", color: "#03a4ff" }
-                    : {}
-                }
-              >
+              {/* Empty cell for days before the 1st and after the last day */}
+            </td>
+          );
+        } else {
+          const currentDate = new Date(year, month, day + 1);
+          const isDateAvailable = objectData.some(obj => obj.date === currentDate.toISOString().split('T')[0] && obj.absent === false)
+          const isDateAbsent = objectData.some(obj => obj.date === currentDate.toISOString().split('T')[0] && obj.absent === true)
+          
+          weekRow.push(
+            <td key={`${week}-${weekday}`}>
+              <div className={isDateAvailable ? styles.TD : isDateAbsent ? styles.TDR : styles.TDB} style={day === parseInt(dayOfMonth) ? { fontWeight: "700" } : {}}>
                 {day}
-                <div className={styles.dot}></div>
+                <div className={isDateAvailable ? styles.dot : isDateAbsent ? styles.dotRed : styles.dotBlue}></div>
               </div>
             </td>
           );
+
           day++;
         }
       }
@@ -55,6 +85,7 @@ const Calendar = () => {
 
     return calendar;
   };
+
 
   const monthOptions = { month: "long", year: "numeric" };
 
@@ -74,7 +105,7 @@ const Calendar = () => {
             <th>Sat</th>
           </tr>
         </thead>
-        <tbody>{generateCalendar()}</tbody>
+        <tbody>{generateCalendar( AttendanceData)}</tbody>
       </table>
     </div>
   );
