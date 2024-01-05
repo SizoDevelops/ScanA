@@ -17,8 +17,8 @@ export async function POST(request) {
     const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
   
     const currentYear = new Date().getFullYear();
-    const firstDayOfYear = new Date(currentYear, 0, 1);
-    const dayIndex = dayNames.indexOf(dayName.toLowerCase()) + 1;
+    const firstDayOfYear = new Date(Date.UTC(currentYear, 0, 1));
+    const dayIndex = dayNames.indexOf(dayName.toLowerCase());
   
     // Calculate the first day of the specified weekday in week 1, starting with Monday
     const daysToFirstWeek = (dayIndex - firstDayOfYear.getDay() + 7) % 7;
