@@ -87,7 +87,7 @@ export default function Absent() {
                             else{
                                 setAbsent(daysAbsent.filter(item => item !== "monday"))
                             }
-                        }} disabled={!daysArray.find(elem => elem === "monday") ? true : false}/>
+                        }} />
                         <p>Mon</p>
                     </label>
                     <label >
@@ -98,7 +98,7 @@ export default function Absent() {
                             else{
                                 setAbsent(daysAbsent.filter(item => item !== "tuesday"))
                             }
-                        }}  disabled={!daysArray.find(elem => elem === "tuesday")  ? true : false}/>
+                        }} />
                         <p>Tue</p>
                     </label>
                     <label>
@@ -109,7 +109,7 @@ export default function Absent() {
                             else{
                                 setAbsent(daysAbsent.filter(item => item !== "wednesday"))
                             }
-                        }}  disabled={!daysArray.find(elem => elem === "wednesday")  ? true : false}/>
+                        }}  />
                         <p>Wed</p>
                     </label>
                     <label>
@@ -120,7 +120,7 @@ export default function Absent() {
                             else{
                                 setAbsent(daysAbsent.filter(item => item !== "thursday"))
                             }
-                        }}  disabled={!daysArray.find(elem => elem === "thurday")  ? true : false}/>
+                        }}  />
                         <p>Thu</p>
                     </label>
                     <label>
@@ -131,7 +131,7 @@ export default function Absent() {
                             else{
                                 setAbsent( daysAbsent.filter(item => item !== "friday"))
                             }
-                        }}  disabled={!daysArray.find(elem => elem === "friday")  ? true : false}/>
+                        }}  />
                         <p>Fri</p>
                     </label>
                     
