@@ -8,7 +8,36 @@
 
     position: relative;
 }
+.finder{
+    width: 60%;
+    height: 60%;
 
+    border: 1px solid #00c3ff42;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border-radius: 5px;
+}
+
+@keyframes scan{
+    0%{
+        left: 0%;
+    }
+    100%{
+        left: 90%;
+    }
+
+}
+
+.finder span {
+    height: 120%;
+    width: 40px;
+    background: #0096ecaf;
+    position: absolute;
+    border-radius: 3px;
+    animation: scan 1s ease-in-out infinite alternate;
+}
 .scanner{
     position: absolute;
     z-index: 2;
@@ -23,4 +52,17 @@
     font-weight: 800;
     background: #03a3ff5e;
     border-radius: 5px;
+}
+.try{
+    height: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    position: relative;
+}
+@media(min-width: 455px){
+    .try{display:none}
 }

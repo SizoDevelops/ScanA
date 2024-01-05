@@ -32,10 +32,11 @@ export default function QR(checkQR) {
 
   return (
     <div className={styles.Code}>
-       <QrScanner
+      <div  className={styles.try}>
+    <QrScanner
   onDecode={(result) => signRegister(result)}
   onError={(e) => {
-    setSupport(e.message);
+    setSupport("Video not supported, Enter code.");
     setErr("");
   }}
   scanDelay={100}
@@ -50,44 +51,21 @@ export default function QR(checkQR) {
     width: "100%", // Set fixed width for mobile browsers
     height: "300px", // Set fixed height for mobile browsers
   }}
+  viewFinder={() => <div className={styles.finder}><span></span></div>}
   containerStyle={{
     borderRadius: "5px",
     width: "100%", // Set fixed width for mobile browsers
     height: "300px", // Set fixed height for mobile browsers
     aspectRatio: "unset,",
     position: "relative",
+    
   }}
 />
+      </div>
+   
 
 
 
-{/* <QrReader
-          delay={100}
-          style={{
-            height: "100%",
-            width: "min(300px, 90vw)",
-            border: "2px solid #03a4ff",
-            borderRadius: "5px",
-          
-            
-          }}
-
-          onError={(err) => {
-            setSupport("Not Supported, Enter Code Instead.")
-            setErr("")
-            console.log(err)
-          }}
-          onScan={(result) => {
-            signRegister(result)
-     
-          }}
-          constraints={
-            {
-              video: true,
-              facingMode: "environment"
-            }
-          }
-          /> */}
         <span className={styles.scanner} style={{  display: display}}>{err}</span>
       <p style={{position: 'absolute', zIndex: -3}}>{support}</p>
     </div>
