@@ -31,28 +31,6 @@ export default function Absent() {
             setErr("")
           })
         }
-
-        if(getCurrentDayOfWeek() == "monday") {
-           setDays(["monday", "tuesday", "wednesday", "thurday", "friday"])
-
-        }
-        else if(getCurrentDayOfWeek() == "tuesday") {
-            setDays(["tuesday", "wednesday", "thurday", "friday"])
-
-        }
-        else if(getCurrentDayOfWeek() == "wednesday") {
-            setDays(["wednesday", "thurday", "friday"])
-
-        }
-        else if(getCurrentDayOfWeek() == "thursday") {
-            setDays(["thurday", "friday"])
-
-        }
-         else if(getCurrentDayOfWeek() == "friday") {
-            setDays(["friday"])
-
-        }
-
       },[])
 
     return (
@@ -66,7 +44,6 @@ export default function Absent() {
             }
             else {
                 markAbsent(reason.toUpperCase(), daysAbsent)
-                
             }
         }}>
             

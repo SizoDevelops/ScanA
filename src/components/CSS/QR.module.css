@@ -14,9 +14,9 @@
     z-index: 2;
     border: 1px solid #03a4ff;
     width: 80%;
+    text-align: center;
     height: 40%;
     color: #fff;
-    text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;

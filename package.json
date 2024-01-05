@@ -11,7 +11,7 @@
   "dependencies": {
     "@ducanh2912/next-pwa": "^9.5.0",
     "@reduxjs/toolkit": "^2.0.1",
-    "@yudiel/react-qr-scanner": "^1.1.10",
+    "@yudiel/react-qr-scanner": "^1.2.4",
     "bcrypt": "^5.1.1",
     "deta": "^2.0.0",
     "eslint": "8.42.0",

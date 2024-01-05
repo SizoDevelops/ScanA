@@ -36,7 +36,7 @@ export async function POST(request) {
   let errors = []; // Array to collect any errors encountered
 
   body.days.forEach(day => {
-    if (body.current_day !== "saturday") {
+    if (body.current_day !== "sunday") {
       updated_user.attendance[day] = updated_user.attendance[day] || []; // Ensure attendance array exists
 
       const calculatedDate = getAbsentDate(day, week);
@@ -56,7 +56,7 @@ export async function POST(request) {
         errors.push("Already Signed" );
       }
     } else {
-      errors.push( "Not Available On Saturday!");
+      errors.push( "Not Available On Sunday!");
     }
   });
 

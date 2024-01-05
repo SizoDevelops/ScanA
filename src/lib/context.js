@@ -157,8 +157,8 @@ const setAttendance = async () => {
         else if(data.includes("Already Signed")){
             setErr("Already Signed")
         }
-        else if (data.includes("Not Available On Saturday")){
-            setErr("Opps!! Not available on saturday.")
+        else if (data.includes("Not Available On Sunday!")){
+            setErr("Opps!! Not available on sunday.")
         }
         
     })

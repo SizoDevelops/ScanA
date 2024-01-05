@@ -9,7 +9,11 @@ export default function QR(checkQR) {
     const [display, setDisplay] = useState("none")
     const [support, setSupport] = useState("Checking..")
     const {signRegister, setErr, err} = useDatabase()
-   
+    useEffect(() => {
+      if(navigator in window){
+        navigator.mediaDevices.getUserMedia({ video: true })
+      }
+    }, [])
     useEffect(() => {
       
       setErr("")
@@ -28,30 +32,32 @@ export default function QR(checkQR) {
 
   return (
     <div className={styles.Code}>
-            <QrScanner
-          onDecode={(result) => {
-            signRegister(result)
+       <QrScanner
+  onDecode={(result) => signRegister(result)}
+  onError={(e) => {
+    setSupport(e.message);
+    setErr("");
+  }}
+  scanDelay={100}
 
-          }}
-
-
-          onError={() => {
-            setSupport("Not Supported, Enter Code Instead.")
-            setErr("")
-        }}
-      
-          scanDelay={100}
-          videoStyle={{
-           
-            position: "absolute",
-            border: "2px solid #03a4ff",
-            padding: "0"
-          }}
-          containerStyle={{
-            borderRadius: "5px",
-          }}
- 
-      />
+  videoStyle={{
+    top: "50%",
+    left: "50%",
+    position: "absolute",
+    border: "2px solid #03a4ff",
+    padding: "0",
+    transform: "translate(-50%, -50%)",
+    width: "100%", // Set fixed width for mobile browsers
+    height: "300px", // Set fixed height for mobile browsers
+  }}
+  containerStyle={{
+    borderRadius: "5px",
+    width: "100%", // Set fixed width for mobile browsers
+    height: "300px", // Set fixed height for mobile browsers
+    aspectRatio: "unset,",
+    position: "relative",
+  }}
+/>
 
 
 

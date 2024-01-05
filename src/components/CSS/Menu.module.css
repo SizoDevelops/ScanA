@@ -1,0 +1,28 @@
+.Menu{
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.MenuBtns{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 20px;
+}
+
+.btn{
+    display: flex; 
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 80px;
+    background: #3b3b3b3f;
+    border-radius: 5px;
+    border: 1px solid #8d8d8d;
+    font-size: 12px;
+    gap: 10px;
+}

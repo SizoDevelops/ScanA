@@ -58,7 +58,7 @@ const UserSlice = createSlice({
               const week = getCurrentWeek()
             
               action.payload.days.forEach(day => {
-                if (action.payload.current_day !== "saturday") {
+                if (action.payload.current_day !== "sunday") {
                   state.value.attendance[day] =  state.value.attendance[day] || []; // Ensure attendance array exists
             
                   const calculatedDate = getAbsentDate(day, week);
