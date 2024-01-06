@@ -1,0 +1,70 @@
+.Meetings{
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    overflow-y: scroll;
+}
+
+.Meet{
+    width: 100%;
+    min-height: 150px;
+    display: flex; 
+    flex-direction: column;
+    background: #3b3b3b3f;
+    border-radius: 5px;
+    border: 1px solid #8d8d8d;
+    font-size: 12px;
+    gap: 10px;
+    position: relative;
+    user-select: none;
+    color: #cac9c9;
+    overflow-y: hidden;
+    margin-bottom: 5px;
+}
+.header{
+    padding-left: 5px;
+}
+.header h4{
+    margin-bottom: 5px;
+    font-size: 10px;
+    position: absolute;
+    right: 5px;
+    top: 2px;
+    color: #03a4ff;
+}
+
+.header div{
+    margin-top: 5px;
+}
+
+.header div h3{
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+.header div p {
+    margin-bottom: 4px;
+    font-size: 9px;
+}
+.des{
+    width: 100%;
+    border-top: 1px solid #414141;
+    padding-top: 5px;
+    padding-left: 5px;
+    line-height: 15px;
+}
+
+.pdf{
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 5px
+}
+
+.pdf:active{
+    color: #03a4ff;
+}

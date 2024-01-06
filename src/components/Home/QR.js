@@ -51,7 +51,7 @@ export default function QR(checkQR) {
     width: "100%", // Set fixed width for mobile browsers
     height: "300px", // Set fixed height for mobile browsers
   }}
-  viewFinder={() => <div className={styles.finder}><span></span></div>}
+  
   containerStyle={{
     borderRadius: "5px",
     width: "100%", // Set fixed width for mobile browsers

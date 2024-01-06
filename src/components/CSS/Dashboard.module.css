@@ -113,7 +113,20 @@
     height: 150px;
     justify-content: space-evenly;
 }
-
+.notify{
+    position: absolute;
+    top: -5px;
+    right: 30px;
+    background: #3cfa75;
+    color: #fff;
+    font-size: 10px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .icon{
     position: relative;
     width:20px;
@@ -136,6 +149,7 @@
     user-select: none; 
     height: fit-content;
     gap: 15px;
+    position: relative;
 }
 .btn p{
     font-size: 12px;
