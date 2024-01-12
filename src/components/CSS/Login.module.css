@@ -12,6 +12,22 @@
     
 }
 
+.scanner{
+    position: absolute;
+    z-index: 2;
+    border: 1px solid #03a4ff;
+    width: 80%;
+    height: 20%;
+    background: #03a3ff5e;
+    color: #fff;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-weight: 800;
+
+    border-radius: 5px;
+}
+
 .container{
     display: flex;
     flex-direction: column;

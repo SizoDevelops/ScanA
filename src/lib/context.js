@@ -18,7 +18,7 @@ export const DataProvider = ({children}) => {
     const {data:session} = useSession()
     const [userData, setUser] = useState(null)
     const [user, setUserData] = useState(null)
-    const [err, setErr] = useState(false)
+    const [err, setErr] = useState("")
     const [screens, setScreens] = useState(["Calendar"])
     const dispatch = useDispatch()
     useEffect(() => {

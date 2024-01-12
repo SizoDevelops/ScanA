@@ -10,7 +10,7 @@ export default function Code() {
   const [display, setDisplay] = useState("none")
   const {signRegister, err, setErr} = useDatabase()
   useEffect(() => {
-    if(code.length >= 8){
+    if(code.length >= 4){
 
         signRegister("SCNA-" + code)
       
@@ -39,9 +39,8 @@ export default function Code() {
   return (
     <div className={styles.Code}>
         
-        <input type="text" placeholder={"ERAWFRER"} value={code} onChange={e => setCode(e.target.value.toUpperCase().replace("SCNA-", ""))} />
-        <p>Dashes will be automatically added.</p>
-        <p>Enter just the 8 letters after the dash(-)</p>
+        <input type="text" placeholder={"R3DW"} value={code} onChange={e => setCode(e.target.value.toUpperCase().replace("SCNA-", ""))} />
+        <p>Enter just the 4 letters after the dash(-)</p>
         <span className={styles.scanner} style={{  display: display}}>{err}</span>
     </div>
   )

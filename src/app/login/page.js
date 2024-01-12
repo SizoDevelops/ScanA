@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import styles from '../../components/CSS/Login.module.css'
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useDatabase } from '@/lib/context';
 
 
 export default function Page() {
@@ -11,10 +12,11 @@ export default function Page() {
   const url = searchParams.get("callbackUrl")
   const parsedUrl = new URL(url)
   const newUrl = new URLSearchParams(parsedUrl.search)
-  
+  const { err, setErr} = useDatabase()
+  const [submitting, setSubmitting] = useState(false)
   const schoolCode = newUrl.get('code')
   const userCode = newUrl.get('usercode')
-
+  const [display, setDisplay] = useState("none")
   const [school_code, setSchooCode] = useState(schoolCode)
   const [code, setCode] = useState(userCode)
   const [password, setPassword] = useState("")
@@ -28,18 +30,36 @@ export default function Page() {
       router.push("/")
     }
   },[session])
-
-
+  useEffect(() => {
+    if(err !== ""){
+      setDisplay("flex")
+    }
+    else setDisplay('none')
+  }, [err])
+  useEffect(() => {
+    setErr("")
+    if(window){
+      window.addEventListener("click", () => {
+        setErr("")
+      })
+    }
+  },[])
 
   const submitForm = async (e) => {
     e.preventDefault()
+    setSubmitting(true)
     await signIn("credentials", {
-      school_code,
-      code,
-      password,
-      redirect: true,
-      callbackUrl: "/"
-    })
+      school_code: school_code.trim(),
+      code: code.trim(),
+      password: password,
+      redirect: false
+    }).then(err => {
+      setSubmitting(false)
+      if(err.error){
+        setErr("Invalid Credentials");
+      }
+      
+     })
   }
   return (
     <div className={styles.Main}>
@@ -53,9 +73,9 @@ export default function Page() {
                <input type="password" name="Password" value={password} required onChange={e => setPassword(e.target.value)}/>
            
 
-            <button type='submit' className={styles.submit}>Login</button>
+            <button type='submit' className={styles.submit}>{submitting ? "Checking..." : "Login"}</button>
           </form>
-
+ <span className={styles.scanner} style={{  display: display}}>{err}</span>
 
 <p>Check your email for credentials.</p>
 <p>Do not lose or share them with anyone.</p>

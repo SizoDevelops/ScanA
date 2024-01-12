@@ -8,11 +8,12 @@
 }
 
 .MenuBtns{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-direction: row;
     column-gap: 20px;
     justify-content: center;
     margin: auto;
+    align-items: center;
 }
 
 .btn{
