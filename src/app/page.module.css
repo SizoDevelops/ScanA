@@ -1,7 +1,7 @@
 .main{
-  width: min(600px, 95vw);
+  width: min(500px, 95vw);
   margin: auto;
   position: relative;
   padding-bottom: 20px;
-  font-size: #a5a5a5;
+
 }

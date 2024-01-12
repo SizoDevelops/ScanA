@@ -12,18 +12,19 @@ import Loader from './Loader'
 import Absent from './Absent'
 import Menu from './Menu'
 import Meetings from './Meetings/Meetings'
+import { useSelector } from 'react-redux'
 
 export default function Dashboard() {
     const {screens, setScreens, getCurrentMilitaryTime, userData} = useDatabase()
     const {loading, user} = useDatabase()
+    const userDa = useSelector(state => state.User.value)
     const [meetings, setMeetings] = useState([])
     useEffect(() => {
         setMeetings([])
-        userData?.school_meetings.forEach(meeting => {
-            if(meeting.date > Date.now()){
-                setMeetings(prep => [...prep, meeting])
-            }
-        })
+      
+        setMeetings(userData?.school_meetings.filter(items => {
+            return items.participants.some(item => userDa.position.includes(item))
+        }))
     }, [userData])
 
     
@@ -60,7 +61,7 @@ if(loading){
                 ? <Meetings/>
                 :
                 <>
-                     <div className={styles.schoolLogo}></div>
+                     {/* <div className={styles.schoolLogo}></div> */}
             <div className={styles.calendar}>
                 <Calendar/>
                 
@@ -112,9 +113,9 @@ if(loading){
                 if(!screens.find(item => item === "Code")){
                     setScreens(prep => [...prep, "Code"])
                  }
-                 else if(screens[1] === "Code"){
+                 else if(screens.includes("Code")){
                      
-                     setScreens([...screens.slice(0, 1).concat(screens.slice(2)), "Code"])
+                     setScreens([...screens.filter(item => item !== "Code"), "Code"])
                      
                  }
                  else {
@@ -128,14 +129,14 @@ if(loading){
             </div>
 
             <div className={styles.btn} onClick={() => {
-                   if(!screens.find(item => item === "QR")){
+                  if(!screens.find(item => item === "QR")){
                     setScreens(prep => [...prep, "QR"])
                  }
-                 else if(screens[1] === "QR"){
-                    
-                    setScreens([...screens.slice(0, 1).concat(screens.slice(2)), "QR"])
-                    
-                }
+                 else if(screens.includes("QR")){
+                     
+                     setScreens([...screens.filter(item => item !== "QR"), "QR"])
+                     
+                 }
                 else {
                    return
                 }
@@ -160,9 +161,9 @@ if(loading){
                 if(!screens.find(item => item === "Absent")){
                     setScreens(prep => [...prep, "Absent"])
                  }
-                 else if(screens[1] === "Absent"){
+                 else if(screens.includes("Absent")){
                      
-                     setScreens([...screens.slice(0, 1).concat(screens.slice(2)), "Absent"])
+                     setScreens([...screens.filter(item => item !== "Absent"), "Absent"])
                      
                  }
                  else {
@@ -180,15 +181,15 @@ if(loading){
                 if(!screens.find(item => item === "Menu")){
                     setScreens(prep => [...prep, "Menu"])
                  }
-                 else if(screens[1] === "Menu"){
+                 else if(screens.includes("Menu")){
                      
-                     setScreens([...screens.slice(0, 1).concat(screens.slice(2)), "Menu"])
+                     setScreens([...screens.filter(item => item !== "Menu"), "Menu"])
                      
                  }
                  else {
                     return
                  }}}>
-                     <span className={styles.notify} style={meetings.length > 0 ? {display: "block"} : {display: "none"} }></span>
+                     <span className={styles.notify} style={meetings?.length > 0 ? {display: "block"} : {display: "none"} }></span>
                 <svg className={styles.icon} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"  viewBox="0 0 16 16">
   <path d="M0 1.5A1.5 1.5 0 0 1 1.5 0h2A1.5 1.5 0 0 1 5 1.5v2A1.5 1.5 0 0 1 3.5 5h-2A1.5 1.5 0 0 1 0 3.5zM1.5 1a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5zM0 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm1 3v2a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2zm14-1V8a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2zM2 8.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0 4a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5"/>
 </svg>
