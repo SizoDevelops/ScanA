@@ -301,10 +301,21 @@ const getUser = async(data)=>{
                   setErr("Invalid Code")
                 }
               }
+              else {
+                if(getCurrentDayOfWeek() === "saturday" || getCurrentDayOfWeek() === "sunday"){
+                    setErr("Not available on weekends")
+                }
+                else{
+                    setErr("Wrong Day! Sign for "+ getCurrentDayOfWeek())
+                }
+              }
             } else {
               setErr("You are out of range.")
             }
           }
+        }
+        else {
+            setErr("Please Allow Location Access")
         }
       }
 
