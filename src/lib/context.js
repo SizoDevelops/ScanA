@@ -232,7 +232,10 @@ const getUser = async(data)=>{
     
       }).then(data => data.json())
       .then(async data => {
-        await preSign(data)
+        if(data){
+           await preSign(data) 
+        }
+        
         setUser(data)
         dispatch(userReducer(data.members.find(member => member.id === session?.user.id)))
         // else signOut()
@@ -290,8 +293,8 @@ const getUser = async(data)=>{
           
       
               // Handle any explicit code input for the current day:
-              if (getCurrentDayOfWeek() in userData.attendance && code !== null) {
-                const expectedCode = userData.attendance[getCurrentDayOfWeek()].toUpperCase();
+              if (getCurrentDayOfWeek() in userData?.attendance && code !== null) {
+                const expectedCode = userData?.attendance[getCurrentDayOfWeek()].toUpperCase();
                 if (code.toUpperCase() === expectedCode) {
                   setAttendance(getCurrentDayOfWeek()) // Set attendance if code matches
                 } else {
