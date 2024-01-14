@@ -5,17 +5,18 @@ import { useDatabase } from '@/lib/context'
 import { updateAttendance } from '@/lib/Slice'
 import { useDispatch } from 'react-redux'
 export default function Absent() {
-    const {err, setErr, markAbsent, getCurrentWeek} = useDatabase()
+    const {err, setErr, markAbsent,   absentLoading, getCurrentWeek} = useDatabase()
     const [reason, setReason] = useState("")
     const [display, setDisplay] = useState("none")
+    const [daysArray, setDays] = useState(["monday", "tuesday", "wednesday", "thurday", "friday"])
     const [daysAbsent, setAbsent] = useState([])
-
     const dispatch = useDispatch()
 
   
 
     useEffect(() => {
      
+        setDays(["monday", "tuesday", "wednesday", "thurday", "friday"])
         if(err !== ""){
           setDisplay("flex")
         }
@@ -33,7 +34,7 @@ export default function Absent() {
       },[])
 
     return (
-        <form className={styles.Code} onSubmit={async(e) => {
+        <form className={styles.Code} onSubmit={(e) => {
             e.preventDefault()
             if(reason.length < 3){
                 setErr("Enter a valid Reason")
@@ -42,9 +43,7 @@ export default function Absent() {
                 setErr("Select at least one day.")
             }
             else {
-                
-               markAbsent(reason.toUpperCase(), daysAbsent)
-                
+                markAbsent(reason.toUpperCase(), daysAbsent)
             }
         }}>
             
@@ -125,7 +124,9 @@ export default function Absent() {
                 <p>If you mark as absent on a particular day, you will not be able to sign the register on that day.</p>
 
             {/* ......................................................................... */}
-            <button type="submit" className={styles.submit} >{"Send Request"}</button>
+            <button type="submit" className={styles.submit} disabled={absentLoading ? true : false} onClick={() => {
+               
+            }}>{ absentLoading ? "Sending..." : "Send Request"}</button>
             <span className={styles.scanner} style={{  display: display }}>{err}</span>
         </form>
       )

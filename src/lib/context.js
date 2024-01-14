@@ -15,6 +15,7 @@ export const useDatabase = () => {
 
 export const DataProvider = ({children}) => {
     const [loading, setLoading] = useState(true)
+    const [absentLoading, setAbsentLoading] = useState(false)
     const {data:session} = useSession()
     const [userData, setUser] = useState(null)
     const [user, setUserData] = useState(null)
@@ -24,9 +25,11 @@ export const DataProvider = ({children}) => {
     useEffect(() => {
         setLoading(true)
        if(session && session.user){
+       
         setUserData(session?.user)
         getUser(session?.user.code.slice(0, session?.user.code.lastIndexOf("-")))
-        setLoading(false)
+        
+       
        }
     }, [session])
 
@@ -81,12 +84,27 @@ function getCurrentWeek() {
 
 // lllllll
 
-const setAttendance = async () => {
-    const day = getCurrentDayOfWeek()
-    const date = getCurrentDate()
+ function getAbsentDate(dayName, weekNumber) {
+    const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  
+    const currentYear = new Date().getFullYear();
+    const firstDayOfYear = new Date(Date.UTC(currentYear, 0, 1));
+    const dayIndex = dayNames.indexOf(dayName.toLowerCase());
+  
+    // Calculate the first day of the specified weekday in week 1, starting with Monday
+    const daysToFirstWeek = (dayIndex - firstDayOfYear.getDay() + 7) % 7;
+    const firstDayOfWeekOne = new Date(firstDayOfYear.getTime() + daysToFirstWeek * 24 * 60 * 60 * 1000);
+  
+    // Adjust for the desired week number
+    const targetDate = new Date(firstDayOfWeekOne.getTime() + (weekNumber - 1) * 7 * 24 * 60 * 60 * 1000);
+  
+    return targetDate.toISOString().split("T")[0];
+  }
+
+const setAttendance = async (day) => {
     const week = getCurrentWeek()
     const time = getCurrentMilitaryTime()
-
+    const date =  getAbsentDate(day, week)
 
     const data = {
         key: userData?.key,
@@ -132,7 +150,7 @@ const setAttendance = async () => {
 
   const markAbsent = async(reason, days) => {
     const day = getCurrentDayOfWeek()
-   
+    setAbsentLoading(true)
     const data = {
         key: userData?.key,
         id: session?.user.code,
@@ -150,7 +168,7 @@ const setAttendance = async () => {
         body: JSON.stringify(data)
     }).then(res => res.json())
     .then((data) => {
-        
+        setAbsentLoading(false)
         if(data === null){
         setErr("Successfully Submitted")
         }
@@ -203,7 +221,7 @@ function toRadians(degrees) {
 // ..............
 // ..............
 const getUser = async(data)=>{
-
+    
     await fetch("api/get-school", {
           method: "POST",
           headers: {
@@ -213,65 +231,79 @@ const getUser = async(data)=>{
     
     
       }).then(data => data.json())
-      .then(data => {
+      .then(async data => {
+        await preSign(data)
         setUser(data)
-        
         dispatch(userReducer(data.members.find(member => member.id === session?.user.id)))
         // else signOut()
+      }).then(() => {
+        setLoading(false)
       })
       
      
     
      
     }
+    
+    const preSign = async(userData) => {
+        try {
+          setErr("")
+          if (isGeolocationAvailable && isGeolocationEnabled) {
+            if (userData && coords) {
+              const userlat = coords.latitude
+              const userlon = coords.longitude
+              const schoollat = parseFloat(userData?.coordinates.latitude)
+              const schoollon = parseFloat(userData?.coordinates.longitude)
       
+              const distance = calculateDistance(userlat, userlon, schoollat, schoollon);
+      
+              if (distance.toFixed(2) * 1000 < parseInt(userData?.coordinates.distance)) {
+                // Automatically sign for days with null attendance:
+                const days = ["monday", "tuesday", "wednesday", "thursday", "friday"]
+                for (const day of days) { // Use a "for...of" loop to ensure complete iteration
+                  if (userData?.attendance && userData?.attendance[day] === null) { // Stricter null check
+                    await setAttendance(day); // Await each attendance setting
+                  }
+                }
+              }
+             
+            }
+          }
+        } catch (error) {
+          console.error("Error during pre-signing:", error); // Handle potential errors
+        }
+      }
      
     const signRegister = (code) => {
-        setErr("")
-        if(isGeolocationAvailable && isGeolocationEnabled){
-            if(userData && coords){
-               const userlat = coords.latitude
-               const userlon = coords.longitude
-               const schoollat = parseFloat(userData?.coordinates.latitude)
-               const schoollon = parseFloat(userData?.coordinates.longitude)
-  
-               const distance = calculateDistance(userlat, userlon, schoollat, schoollon);
-  
-               if(distance.toFixed(2) * 1000 < parseInt(userData?.coordinates.distance )){
-                     if(getCurrentDayOfWeek() === "monday"&& code !== null && code.toUpperCase() === userData.attendance.monday ){
-                        setAttendance()
-                        
-                     }
-                     else if(getCurrentDayOfWeek() === "tuesday"&& code !== null && code.toUpperCase() === userData.attendance.tuesday){
-                        setAttendance()
-                     }
-                     else if(getCurrentDayOfWeek() === "wednesday" && code !== null&& code.toUpperCase() === userData.attendance.wednesday){
-                        setAttendance()
-                     }
-                     else if(getCurrentDayOfWeek() === "thursday"&& code !== null && code.toUpperCase() === userData.attendance.thursday){
-                        setAttendance()
-                     }
-                     else if(getCurrentDayOfWeek() === "friday"&& code !== null && code.toUpperCase() === userData.attendance.friday){
-                        setAttendance()
-                     }
-                     else {
-                       
-                        setErr("Invalid Code")
-                    
-                        
-                     }
-               }
-               else {
-                  
-               
-                setErr("You are out of range.")
-                
-              
-               }
+        setErr("") // Reset any previous error
+      
+        if (isGeolocationAvailable && isGeolocationEnabled) {
+          if (userData && coords) {
+            const userlat = coords.latitude
+            const userlon = coords.longitude
+            const schoollat = parseFloat(userData?.coordinates.latitude)
+            const schoollon = parseFloat(userData?.coordinates.longitude)
+      
+            const distance = calculateDistance(userlat, userlon, schoollat, schoollon);
+      
+            if (distance.toFixed(2) * 1000 < parseInt(userData?.coordinates.distance)) {
+          
+      
+              // Handle any explicit code input for the current day:
+              if (getCurrentDayOfWeek() in userData.attendance && code !== null) {
+                const expectedCode = userData.attendance[getCurrentDayOfWeek()].toUpperCase();
+                if (code.toUpperCase() === expectedCode) {
+                  setAttendance(getCurrentDayOfWeek()) // Set attendance if code matches
+                } else {
+                  setErr("Invalid Code")
+                }
+              }
+            } else {
+              setErr("You are out of range.")
             }
+          }
         }
-    }
-
+      }
 
 
     const value  = {
@@ -286,7 +318,8 @@ const getUser = async(data)=>{
         getCurrentDayOfWeek,
         markAbsent,
         getCurrentWeek,
-        userData
+        userData,
+        absentLoading
     }
 
     return(

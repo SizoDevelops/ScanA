@@ -18,7 +18,7 @@ export default function Page() {
   const userCode = newUrl.get('usercode')
   const [display, setDisplay] = useState("none")
   const [school_code, setSchooCode] = useState(schoolCode)
-  const [code, setCode] = useState(userCode)
+  const [code, setCode] = useState(userCode ? userCode : "")
   const [password, setPassword] = useState("")
   const router = useRouter()
   
