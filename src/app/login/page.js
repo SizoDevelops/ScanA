@@ -54,8 +54,9 @@ export default function Page() {
       password: password,
       redirect: false
     }).then(err => {
-      setSubmitting(false)
+      
       if(err.error){
+        setSubmitting(false)
         setErr("Invalid Credentials");
       }
       

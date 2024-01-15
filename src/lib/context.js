@@ -23,7 +23,7 @@ export const DataProvider = ({children}) => {
     const [screens, setScreens] = useState(["Calendar"])
     const dispatch = useDispatch()
     useEffect(() => {
-        setLoading(true)
+        // setLoading(true)
        if(session && session.user){
        
         setUserData(session?.user)

@@ -23,7 +23,7 @@ export default function Dashboard() {
         setMeetings([])
       
         setMeetings(userData?.school_meetings.filter(items => {
-            return items.participants.some(item => userDa.position.includes(item))
+            return (items.participants.some(item => userDa.position.includes(item)) && items.date > Date.now())
         }))
     }, [userData])
 
