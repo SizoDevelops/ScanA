@@ -49,7 +49,7 @@ export default function Meeting({meeting}) {
           // Remove the link from the document (optional)
           document.body.removeChild(downloadLink);
         } else {
-          alert("Failed to fetch file. Retry.");
+          alert("Network Issue. Retry.");
         }
       } catch (error) {
         console.error("Fetch error:", error);

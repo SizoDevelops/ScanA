@@ -82,7 +82,7 @@ if(loading){
                 <div className={styles.image} style={{backgroundImage:"url(https://i.ibb.co/Wgw6bLq/mingcute-phone-fill.png)"}}>
                 {/* <Image src={phoneImage} fill alt="Image"/> */}
                 </div>
-                <p>{user.phone_number}</p>
+                <p>{user.phone_number || "Not Provided"}</p>
             </div>
             <div className={styles.holder}>
                 <div className={styles.image} style={{backgroundImage:"url(https://i.ibb.co/C8gwzSp/mdi-email.png)"}}>
