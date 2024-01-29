@@ -16,20 +16,20 @@ const Calendar = () => {
   useEffect(() => {
     setAttendance([])
     const days = []
-    if(Array.isArray(user.attendance.monday)){
-      days.push(...user.attendance.monday)
+    if(Array.isArray(user?.attendance.monday)){
+      days.push(...user?.attendance.monday)
     }
-    if(Array.isArray(user.attendance.tuesday)){
-      days.push(...user.attendance.tuesday)
+    if(Array.isArray(user?.attendance.tuesday)){
+      days.push(...user?.attendance.tuesday)
     }
-    if(Array.isArray(user.attendance.wednesday)){
-      days.push(...user.attendance.wednesday)
+    if(Array.isArray(user?.attendance.wednesday)){
+      days.push(...user?.attendance.wednesday)
     }
-    if(Array.isArray(user.attendance.thursday)){
-      days.push(...user.attendance.thursday)
+    if(Array.isArray(user?.attendance.thursday)){
+      days.push(...user?.attendance.thursday)
     }
-    if(Array.isArray(user.attendance.friday)){
-      days.push(...user.attendance.friday)
+    if(Array.isArray(user?.attendance.friday)){
+      days.push(...user?.attendance.friday)
     }
     setAttendance(days)
   },[user])

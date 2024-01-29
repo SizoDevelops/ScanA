@@ -8,6 +8,7 @@ const db = deta.Base("schools_db")
 
 
 export async function POST(request) {
+  try{
     const body = await request.json();
     
     const user = await db.fetch({
@@ -46,5 +47,9 @@ export async function POST(request) {
         }
       else  return NextResponse.json(null);
     } else return NextResponse.json(null);
+  }catch(error){
+    throw new Error("Connection Failed!")
+  }
+    
   }
 

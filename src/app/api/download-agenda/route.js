@@ -22,7 +22,7 @@ export async function POST(request) {
     // Return the binary data with appropriate headers
     return new Response(data, { headers });
   } catch (error) {
-    console.error("Error:", error);
+    
     return NextResponse.json({ error: "An error occurred." }, { status: 500 });
   }
 }

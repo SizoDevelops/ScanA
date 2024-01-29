@@ -5,7 +5,8 @@ const deta = Deta(process.env.DETA_PROJECT_KEY);
 const db = deta.Base("schools_db");
 
 export async function POST(request) {
-  const body = await request.json();
+  try{
+    const body = await request.json();
   function getCurrentWeek() {
     const today = new Date();
     const firstDayOfYear = new Date(today.getFullYear(), 0, 1);
@@ -69,5 +70,8 @@ export async function POST(request) {
     return NextResponse.json(errors);
   } else {
     return NextResponse.json(updateUser);
+  }
+  }catch(error){
+    throw new Error("Connection Failed!")
   }
 }

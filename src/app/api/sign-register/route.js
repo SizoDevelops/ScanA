@@ -5,6 +5,7 @@ const deta = Deta(process.env.DETA_PROJECT_KEY)
 const db = deta.Base("schools_db")
 
 export async function POST(request) {
+   try{
     const body = await request.json();
 
     const getSchool = await db.get(body.key)
@@ -92,4 +93,7 @@ export async function POST(request) {
     const updateUser = await  db.update({members: newM}, body.key)
 
     return NextResponse.json(updateUser)
+   }catch(error){
+    throw new Error("Connection Failed!")
+   }
   }

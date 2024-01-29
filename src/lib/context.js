@@ -235,9 +235,9 @@ const getUser = async(data)=>{
         if(data){
            await preSign(data) 
         }
-        
+        console.log(data)
         setUser(data)
-        dispatch(userReducer(data.members.find(member => member.id === session?.user.id)))
+        dispatch(userReducer(data?.members.find(member => member.id === session?.user.id)))
         // else signOut()
       }).then(() => {
         setLoading(false)
