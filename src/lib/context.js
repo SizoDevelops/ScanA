@@ -16,19 +16,43 @@ export const useDatabase = () => {
 export const DataProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [absentLoading, setAbsentLoading] = useState(false);
-  const { data: session } = useSession();
+  const { data: session, status} = useSession();
   const [userData, setUser] = useState(null);
   const [user, setUserData] = useState(null);
   const [err, setErr] = useState("");
   const [screens, setScreens] = useState(["Calendar"]);
+  const [onLines, setIsOnline] = useState(true)
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const handleOnlineStatusChange = () => {
+      setIsOnline(navigator.onLine);
+    };
+
+    // Add event listeners for online/offline status changes
+    window.addEventListener('online', handleOnlineStatusChange);
+    window.addEventListener('offline', handleOnlineStatusChange);
+
+    // Initial check for online status
+    setIsOnline(navigator.onLine);
+
+    // Remove event listeners when the component is unmounted
+    return () => {
+      window.removeEventListener('online', handleOnlineStatusChange);
+      window.removeEventListener('offline', handleOnlineStatusChange);
+    };
+  }, []);
+
   useEffect(() => {
     // setLoading(true)
-    if (session && session.user) {
-      setUserData(session?.user);
-      getUser(session?.user.code.slice(0, session?.user.code.lastIndexOf("-")));
-    }
-    console.log(session)
+
+      if (session && session.user) {
+          setUserData(session?.user);
+          getUser(session?.user.code.slice(0, session?.user.code.lastIndexOf("-")));
+        }
+    
+  
+    
   }, [session]);
 
   // lllllllllllllllllllllllllllllll
@@ -375,6 +399,7 @@ export const DataProvider = ({ children }) => {
     getCurrentWeek,
     userData,
     absentLoading,
+    onLines
   };
 
   return <Database.Provider value={value}>{children}</Database.Provider>;

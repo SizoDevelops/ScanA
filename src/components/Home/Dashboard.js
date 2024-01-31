@@ -15,14 +15,16 @@ import Meetings from './Meetings/Meetings'
 import { useSelector } from 'react-redux'
 
 export default function Dashboard() {
-    const {screens, setScreens, getCurrentMilitaryTime, userData} = useDatabase()
+    const {screens, setScreens, getCurrentMilitaryTime, userData, onLines,loading, user} = useDatabase()
     const {data:session} = useSession()
-    const {loading, user} = useDatabase()
     const userDa = useSelector(state => state.User.value)
     const [meetings, setMeetings] = useState([])
     useEffect(() => {
         setMeetings([])
-      try{
+    if(!onLines){
+          throw new Error("Offline!")
+    }
+    else try{
            setMeetings(userData?.school_meetings.filter(items => {
             return (items.participants.some(item => userDa.position.includes(item)) && items.date > Date.now())
         }))
@@ -30,7 +32,7 @@ export default function Dashboard() {
         throw new Error("Incorrect Data Received")
       }
      
-    }, [userData])
+    }, [userData,  onLines])
 
     
 
