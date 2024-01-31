@@ -14,7 +14,7 @@ export const useDatabase = () => {
 }
 
 export const DataProvider = ({children}) => {
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     const [absentLoading, setAbsentLoading] = useState(false)
     const {data:session} = useSession()
     const [userData, setUser] = useState(null)
@@ -23,9 +23,8 @@ export const DataProvider = ({children}) => {
     const [screens, setScreens] = useState(["Calendar"])
     const dispatch = useDispatch()
     useEffect(() => {
-        // setLoading(true)
+        setLoading(true)
        if(session && session.user){
-       
         setUserData(session?.user)
         getUser(session?.user.code.slice(0, session?.user.code.lastIndexOf("-")))
         
@@ -221,7 +220,7 @@ function toRadians(degrees) {
 // ..............
 // ..............
 const getUser = async(data)=>{
-    
+  setLoading(true)
     await fetch("api/get-school", {
           method: "POST",
           headers: {
@@ -234,6 +233,7 @@ const getUser = async(data)=>{
       .then(async data => {
         if(data){
            await preSign(data) 
+
         }
         setUser(data)
         dispatch(userReducer(data?.members.find(member => member.id === session?.user.id)))
