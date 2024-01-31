@@ -6,7 +6,7 @@ import Calendar from './Calender'
 import Code from './Code'
 import QR from './QR'
 
-import { signOut, useSession } from 'next-auth/react'
+import { getSession, signOut, useSession } from 'next-auth/react'
 import { useDatabase } from '@/lib/context'
 import Loader from './Loader'
 import Absent from './Absent'
@@ -224,3 +224,20 @@ else if (!session) {
     </div>
   )
 }
+
+export async function getServerSideProps(context) {
+    try {
+      const session = await getSession(context);
+  
+      // Pass the session data as a prop to the component
+      return {
+        props: {
+          session: session || null,
+        },
+      };
+    } catch (error) {
+      // Handle the fetch error gracefully
+      throw new Error("Offline.")
+    }
+  }
+  
