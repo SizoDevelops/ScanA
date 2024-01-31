@@ -265,12 +265,7 @@ export const DataProvider = ({ children }) => {
       },
       body: JSON.stringify({ key: data }),
     })
-      .then((data) => {
-        if (data) return data.json();
-        else {
-          setLoading(false);
-        }
-      })
+      .then((data) => data.json())
       .then(async (data) => {
         if (data) {
           await preSign(data);
