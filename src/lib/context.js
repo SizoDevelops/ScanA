@@ -242,7 +242,7 @@ const getUser = async(data)=>{
         setLoading(false)
       }).catch(err => {
         setLoading(false)
-       
+       throw new Error("Offline")
       })
       
      
