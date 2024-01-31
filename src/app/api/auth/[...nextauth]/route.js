@@ -15,33 +15,36 @@ const handler = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        // Add logic here to look up the user from the credentials supplied
-        try{
-          let res = await fetch(process.env.NEXTAUTH_URL+"/api/login", {
-          method: "POST",
-          cache: 'no-cache',
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            school_code: credentials?.school_code,
-            code: credentials?.code,
-            password: credentials?.password,
-          })
-        }) 
-       let user = await res.json()
-       console.log(user)
-       if(user){
-        return user
-       }
-       else {
-        return null
-       }
-     
-        }catch(err){
-          throw new Error("Error")
+        try {
+          let res = await fetch(process.env.NEXTAUTH_URL + "/api/login", {
+            method: "POST",
+            cache: 'no-cache',
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              school_code: credentials?.school_code,
+              code: credentials?.code,
+              password: credentials?.password,
+            })
+          });
+      
+          if (!res.ok) {
+            // Handle non-successful HTTP responses (e.g., 4xx or 5xx errors)
+            throw new Error(`Error! Status: ${res.status}`);
+          }
+      
+          let user = await res.json();
+          if (user) {
+            return user;
+          } else {
+            return null;
+          }
+        } catch (error) {
+          // Handle network errors, failed API requests, or other unexpected errors
+          console.error("Authentication error:", error.message);
+          throw new Error("Authentication failed");
         }
-    
       }
     }),
   ],
