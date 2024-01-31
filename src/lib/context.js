@@ -28,6 +28,7 @@ export const DataProvider = ({ children }) => {
       setUserData(session?.user);
       getUser(session?.user.code.slice(0, session?.user.code.lastIndexOf("-")));
     }
+    console.log(session)
   }, [session]);
 
   // lllllllllllllllllllllllllllllll

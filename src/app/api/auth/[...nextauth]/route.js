@@ -41,8 +41,6 @@ const handler = NextAuth({
             return null;
           }
         } catch (error) {
-          // Handle network errors, failed API requests, or other unexpected errors
-          console.error("Authentication error:", error.message);
           throw new Error("Authentication failed");
         }
       }

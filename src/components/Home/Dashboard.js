@@ -6,7 +6,7 @@ import Calendar from './Calender'
 import Code from './Code'
 import QR from './QR'
 
-import { signOut } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import { useDatabase } from '@/lib/context'
 import Loader from './Loader'
 import Absent from './Absent'
@@ -16,6 +16,7 @@ import { useSelector } from 'react-redux'
 
 export default function Dashboard() {
     const {screens, setScreens, getCurrentMilitaryTime, userData} = useDatabase()
+    const {data:session} = useSession()
     const {loading, user} = useDatabase()
     const userDa = useSelector(state => state.User.value)
     const [meetings, setMeetings] = useState([])
@@ -36,6 +37,9 @@ export default function Dashboard() {
 if(loading){
     return <Loader/>
 }
+else if (!session) {
+    throw new Error('User is not authenticated. Please sign in.');
+  }
 
  else return (
     <div className={styles.dashboardCont}>
