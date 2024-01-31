@@ -29,7 +29,7 @@ export default function Dashboard() {
             return (items.participants.some(item => userDa.position.includes(item)) && items.date > Date.now())
         }))
       }catch(error){
-        throw new Error("Incorrect Data Received")
+        return
       }
      
     }, [userData,  onLines])
