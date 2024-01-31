@@ -21,10 +21,14 @@ export default function Dashboard() {
     const [meetings, setMeetings] = useState([])
     useEffect(() => {
         setMeetings([])
-      
-        setMeetings(userData?.school_meetings.filter(items => {
+      try{
+           setMeetings(userData?.school_meetings.filter(items => {
             return (items.participants.some(item => userDa.position.includes(item)) && items.date > Date.now())
         }))
+      }catch(error){
+        throw new Error("Incorrect Data Received")
+      }
+     
     }, [userData])
 
     

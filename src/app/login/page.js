@@ -48,7 +48,8 @@ export default function Page() {
   const submitForm = async (e) => {
     e.preventDefault()
     setSubmitting(true)
-    await signIn("credentials", {
+    try{
+      await signIn("credentials", {
       school_code: school_code.trim(),
       code: code.trim(),
       password: password,
@@ -61,6 +62,12 @@ export default function Page() {
       }
       
      })
+    }
+    catch(error){
+      setSubmitting(false)
+      throw new Error("Network Problem Occured.")
+    }
+    
   }
   return (
     <div className={styles.Main}>

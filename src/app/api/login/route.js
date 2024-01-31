@@ -48,7 +48,7 @@ export async function POST(request) {
       else  return NextResponse.json(null);
     } else return NextResponse.json(null);
   }catch(error){
-    throw new Error("Connection Failed!")
+    return NextResponse.json({ error: "An error occurred." }, { status: 500 });
   }
     
   }

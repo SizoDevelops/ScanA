@@ -2,7 +2,7 @@
 import React from "react";
 
 import Image from "next/image";
-export default function GlobalError({ error, reset }) {
+export default function Error({ error, reset }) {
   return (
     <html>
       <body className={"container"}>

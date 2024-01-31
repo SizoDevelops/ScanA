@@ -94,6 +94,6 @@ export async function POST(request) {
 
     return NextResponse.json(updateUser)
    }catch(error){
-    throw new Error("Connection Failed!")
+    return NextResponse.json({ error: "An error occurred." }, { status: 500 });
    }
   }
