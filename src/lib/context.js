@@ -18,7 +18,6 @@ export const DataProvider = ({ children }) => {
   const [absentLoading, setAbsentLoading] = useState(false);
   const { data: session, status} = useSession();
   const [userData, setUser] = useState(null);
-  const [user, setUserData] = useState(null);
   const [err, setErr] = useState("");
   const [screens, setScreens] = useState(["Calendar"]);
   const [onLines, setIsOnline] = useState(true)
@@ -47,7 +46,8 @@ export const DataProvider = ({ children }) => {
     // setLoading(true)
 
       if (session && session.user) {
-          setUserData(session?.user);
+        console.log(session.user)
+
           getUser(session?.user.code.slice(0, session?.user.code.lastIndexOf("-")));
         }
     
@@ -177,7 +177,7 @@ export const DataProvider = ({ children }) => {
         .then((res) => res.json())
         .then((data) => {
           if (data === null) {
-            setErr("Successfully Scanned");
+            setErr("Successfully Signed!");
           } else if (data === "Already Signed") {
             setErr("Already Signed");
           }
@@ -383,7 +383,6 @@ export const DataProvider = ({ children }) => {
   const value = {
     loading,
     signRegister,
-    user,
     err,
     setErr,
     setScreens,

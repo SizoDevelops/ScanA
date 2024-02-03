@@ -15,7 +15,7 @@ import Meetings from './Meetings/Meetings'
 import { useSelector } from 'react-redux'
 
 export default function Dashboard() {
-    const {screens, setScreens, getCurrentMilitaryTime, userData, onLines,loading, user} = useDatabase()
+    const {screens, setScreens, getCurrentMilitaryTime, userData, onLines,loading} = useDatabase()
     const {data:session} = useSession()
     const userDa = useSelector(state => state.User.value)
     const [meetings, setMeetings] = useState([])
@@ -52,7 +52,7 @@ else if (!session) {
 
         <div className={styles.greeting}>
             <h1>{getCurrentMilitaryTime().hours < 12 ? "GOOD MORNING" : getCurrentMilitaryTime().hours >= 12 && getCurrentMilitaryTime().hours < 18 ? "GOOD AFTERNOON" : "GOOD EVENING"}</h1>
-            <p>{user?.title.toUpperCase()} {user?.initial.toUpperCase()} {user?.last_name.toUpperCase()}</p>
+            <p>{userDa?.title.toUpperCase()} {userDa?.initial.toUpperCase()} {userDa?.last_name.toUpperCase()}</p>
         </div>
 
         <div className={styles.calendarHolder}>
@@ -92,13 +92,13 @@ else if (!session) {
                 <div className={styles.image} style={{backgroundImage:"url(https://i.ibb.co/Wgw6bLq/mingcute-phone-fill.png)"}}>
                 {/* <Image src={phoneImage} fill alt="Image"/> */}
                 </div>
-                <p>{user?.phone_number || "Not Provided"}</p>
+                <p>{userDa?.phone_number || "Not Provided"}</p>
             </div>
             <div className={styles.holder}>
                 <div className={styles.image} style={{backgroundImage:"url(https://i.ibb.co/C8gwzSp/mdi-email.png)"}}>
                 {/* <Image src={emailImage} fill alt="Image"/> */}
                 </div>
-                <p>{user?.email}</p>
+                <p>{userDa?.email}</p>
             </div>
         </div>
 

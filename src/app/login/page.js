@@ -50,8 +50,8 @@ export default function Page() {
     setSubmitting(true)
     try{
       await signIn("credentials", {
-      school_code: school_code.trim(),
-      code: code.trim(),
+      school_code: school_code?.trim(),
+      code: code?.trim(),
       password: password,
       redirect: false
     }).then(err => {
@@ -65,7 +65,7 @@ export default function Page() {
     }
     catch(error){
       setSubmitting(false)
-      throw new Error("Network Problem Occured.")
+      throw new Error(error)
     }
     
   }
