@@ -1,0 +1,57 @@
+.Code{
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+}
+
+.Code textarea{
+    border: none;
+    width: min(450px, 95vw);
+    min-height: 200px;
+    resize: vertical;
+    border: 1px solid #03a4ff;
+    background: transparent;
+    text-align: left;
+    font-size: 15px;
+    line-height: 25px;
+    color: #ffffff;
+    border-radius: 5px;
+    outline: none;
+    padding: 10px;
+    max-width: 450px;
+}
+
+.Code p{
+    font-size: 12px;
+    margin-top: 10px;
+    color: #6e6e6e;
+}
+.Code h2{
+    font-size: min(30px, 7vw);
+    margin-bottom: 20px;
+    color: #d8d8d8;
+}
+.Code input::placeholder{
+    font-size: 12px
+}
+
+.scanner{
+    position: absolute;
+    z-index: 2;
+    border: 1px solid #03a4ff;
+    width: 80%;
+    height: 20%;
+    background: #03a3ff5e;
+    color: #fff;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 800;
+
+    border-radius: 5px;
+}
