@@ -43,20 +43,40 @@
 .scanner{
     position: absolute;
     z-index: 2;
-    border: 1px solid #03a4ff;
     width: 80%;
-    height: 20%;
-    background: #03a3ff5e;
-    color: #fff;
+    background: #fff;
+    height: 200px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 10px;
+    color: #111115;
+    border-radius: 5px;
+    font-weight: 600;
     text-align: center;
+    gap: 30px;
+    cursor: pointer;
+}
+
+.scanner i {
+    width: 70%;
+    font-style: normal;
+}
+.scanner svg{
+    width: 25px;
+    height: 25px;
+}
+
+.icon{
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    background: #03a4ff;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-weight: 800;
-    flex-direction: column;
-    border-radius: 5px;
+    
 }
-
 .btn {
     background: #03a4ff;
     color: #ffffff;
