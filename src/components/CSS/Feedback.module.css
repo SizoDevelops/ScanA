@@ -6,13 +6,14 @@
     align-items: center;
     width: 100%;
     padding: 10px;
+    position: relative;
 }
 
 .Code textarea{
     border: none;
     width: min(450px, 95vw);
     min-height: 200px;
-    resize: vertical;
+    resize: none;
     border: 1px solid #03a4ff;
     background: transparent;
     text-align: left;
@@ -32,7 +33,7 @@
 }
 .Code h2{
     font-size: min(30px, 7vw);
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     color: #d8d8d8;
 }
 .Code input::placeholder{
@@ -52,6 +53,21 @@
     justify-content: center;
     align-items: center;
     font-weight: 800;
-
+    flex-direction: column;
     border-radius: 5px;
+}
+
+.btn {
+    background: #03a4ff;
+    color: #ffffff;
+    padding: 10px 14px;
+    border-radius: 5px;
+    margin-top: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.btn:active{
+    background: #0078bd;
 }
