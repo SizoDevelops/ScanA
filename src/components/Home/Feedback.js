@@ -69,14 +69,13 @@ export default function Feedback() {
     }
   return (
     <div className={styles.Code}>
-        <h2>How can we Improve?</h2>
         <Rating
         onClick={handleRating}
         initialValue={stars}
         allowFraction
         fillColor={"#03a4ff"}
         showTooltip
-        tooltipStyle={{width: "110px", background: "#03a4ff", textAlign: "center", fontSize: "12px", borderRadius: "5px"}}
+        tooltipStyle={{maxWidth: "110px", background: "#03a4ff", textAlign: "center", fontSize: "min(12px, 2vw)", borderRadius: "5px"}}
         tooltipArray={tooltip}
       />
         <textarea type="text" value={message} placeholder='Tell us what you think about our app' onChange={(e) => {
