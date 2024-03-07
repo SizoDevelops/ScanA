@@ -311,6 +311,8 @@ export default function FaceRecognition() {
 const db = await indexDb.load()
     if (await indexDb.count() === 0) {
       saveRecords()
+      okContainerRef.current.style.display = "none"
+      // retryButtonRef.current.style.display = "block"
       console.log("Nothing to compare with");
       return false;
     }
@@ -332,6 +334,8 @@ const db = await indexDb.load()
           currentFace.record.id
         } | similarity: ${Math.round(1000 * res.similarity) / 10}%`
       );
+      okContainerRef.current.style.display = "none"
+      // retryButtonRef.current.style.display = "block"
       // sourceCanvasRef.current.style.display = '';
       // sourceCanvasRef.current.getContext('2d')?.putImageData(currentFace.record.image, 0, 0);
     }
@@ -375,8 +379,8 @@ const mainFunc = async () => {
   await detectVideo(); // start detection loop
   startTime = faceRecognition.now();
   currentFace.face = await validationLoop(); // start validation loop
-  canvasRef.current.width = currentFace.face?.tensor?.shape[1] || recognitionSettings.minSize;
-  canvasRef.current.height = currentFace.face?.tensor?.shape[0] || recognitionSettings.minSize;
+  // canvasRef.current.width = currentFace.face?.tensor?.shape[1] || recognitionSettings.minSize;
+  // canvasRef.current.height = currentFace.face?.tensor?.shape[0] || recognitionSettings.minSize;
   canvasRef.current.style.zIndex = 1
   canvasRef.current.style.width = '';
 
@@ -406,6 +410,7 @@ const mainFunc = async () => {
       if (mediaStream) {
         mediaStream.getTracks().forEach((track) => track.stop());
         setMediaStream(null); // Clear the reference
+        recognitionStatus.timeout.status = false
       }
     };
   }, [mediaStream]);
@@ -422,7 +427,7 @@ const mainFunc = async () => {
     <div id="ok" ref={okContainerRef} className={styles.over1}>
 
     </div>
-      <div onClick={mainFunc} ref={retryButtonRef}>RETRY</div>
+      <div onClick={mainFunc} ref={retryButtonRef} className={styles.retry}>RETRY</div>
      </div>
 
     </div>
