@@ -5601,9 +5601,7 @@ if (A().get("IS_BROWSER")) {
 var sK = { importFetch: () => f1() };
 var jw;
 var Xw = class {
-  constructor() {
-    this.util = h1(), this.textEncoder = new this.util.TextEncoder();
-  }
+
   fetch(e, t10) {
     return A().global.fetch != null ? A().global.fetch(e, t10) : (jw == null && (jw = sK.importFetch()), jw(e, t10));
   }
