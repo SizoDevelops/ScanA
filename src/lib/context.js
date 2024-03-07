@@ -46,7 +46,7 @@ export const DataProvider = ({ children }) => {
     // setLoading(true)
 
       if (session && session.user) {
-        console.log(session.user)
+      
 
           getUser(session?.user.code.slice(0, session?.user.code.lastIndexOf("-")));
         }

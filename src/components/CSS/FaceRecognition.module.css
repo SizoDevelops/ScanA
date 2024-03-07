@@ -1,0 +1,67 @@
+.Code{
+    height: 450px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    position: relative;
+}
+
+.cont{
+    height: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    position: relative;
+}
+
+.cutout{
+    position: absolute;
+    border: 15px solid #083b58;
+    z-index: 0;
+    height: 350px;
+    width: min(400px, 100vw);
+}
+
+.over{
+    position: absolute;
+    z-index: 2;
+    /* height: 350px;
+    width: min(400px, 100vw); */
+}
+
+.secondPart{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: min(400px, 100vw);
+    margin-top: 10px;
+}
+.over1{
+    z-index: 1;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 10px;
+}
+.ok{
+    background-color: lightgreen;
+}
+
+.fail{
+    background-color: lightcoral;
+}
+.Okay{
+    padding: 1px;
+    border-radius: 1px;
+    -webkit-border-radius: 1px;
+    -moz-border-radius: 1px;
+    -ms-border-radius: 1px;
+    -o-border-radius: 1px;
+}

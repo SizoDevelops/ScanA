@@ -14,6 +14,7 @@ import Menu from './Menu'
 import Meetings from './Meetings/Meetings'
 import { useSelector } from 'react-redux'
 import Feedback from './Feedback'
+import FaceRecognition from './FaceRecognition'
 
 export default function Dashboard() {
     const {screens, setScreens, getCurrentMilitaryTime, userData, onLines,loading} = useDatabase()
@@ -35,6 +36,26 @@ export default function Dashboard() {
      
     }, [userData,  onLines])
 
+    
+    // useEffect(() => {
+    //     const handleBackButton = (event) => {
+    //       // Your custom logic here
+     
+    //       // Uncomment the line below to allow the default back button behavior
+    //     //   history.goBack();
+    
+    //       // Prevent the default back button behavior
+    //       event.preventDefault();
+    //     };
+    
+    //     // Add event listener for the popstate event (back/forward button press)
+    //     window.addEventListener('beforeunload', handleBackButton);
+    
+    //     // Cleanup the event listener when the component unmounts
+    //     return () => {
+    //       window.removeEventListener('beforeunload', handleBackButton);
+    //     };
+    //   }, [history]);
     
 
 if(loading){
@@ -68,6 +89,8 @@ else if (!session) {
                 ? <Absent/>
                 : screens[screens.length - 1] === "Menu" 
                 ? <Menu/>
+                : screens[screens.length - 1] === "FaceRecognition" 
+                ? <FaceRecognition/>
                 : screens[screens.length - 1] === "Meetings" 
                 ? <Meetings/>
                 :screens[screens.length - 1] === "Feedback" 
@@ -117,29 +140,10 @@ else if (!session) {
                
             }} style={screens.length  > 1 ? {opacity: "1"} : {opacity: "0.2"}}>
                 <div className={styles.icon} style={{backgroundImage:"url(https://i.ibb.co/wCsH3yk/pajamas-go-back.png)"}}>
-                {/* <Image src={attendImage} fill alt="Image"/> */}
+                 {/* <Image src={attendImage} fill alt="Image"/>  */}
                 </div>
                 <p>Back</p>
-            </div>
-            <div className={styles.btn} onClick={() => {
-                
-                if(!screens.find(item => item === "Code")){
-                    setScreens(prep => [...prep, "Code"])
-                 }
-                 else if(screens.includes("Code")){
-                     
-                     setScreens([...screens.filter(item => item !== "Code"), "Code"])
-                     
-                 }
-                 else {
-                    return
-                 }
-            }}>
-          <svg className={styles.icon} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"  viewBox="0 0 16 16">
-  <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5M3 4.5a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0z"/>
-</svg>
-                <p>Enter Code</p>
-            </div>
+            </div> 
 
             <div className={styles.btn} onClick={() => {
                   if(!screens.find(item => item === "QR")){
@@ -163,12 +167,56 @@ else if (!session) {
 </svg>
                 <p>Scan QR</p>
              </div>
+
+
+            <div className={styles.btn} onClick={() => {
+                
+                if(!screens.find(item => item === "FaceRecognition")){
+                    setScreens(prep => [...prep, "FaceRecognition"])
+                 }
+                 else if(screens.includes("FaceRecognition")){
+                     
+                     setScreens([...screens.filter(item => item !== "FaceRecognition"), "FaceRecognition"])
+                     
+                 }
+                 else {
+                    return
+                 }
+            }}>
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"  viewBox="0 0 16 16">
+  <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4z"/>
+  <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5m0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
+</svg>
+                <p>Facial Scan</p>
+            </div>
+
+
         </div>
 
 
 
         <div className={styles.buttons}>
          
+        <div className={styles.btn} onClick={() => {
+                
+                if(!screens.find(item => item === "Code")){
+                    setScreens(prep => [...prep, "Code"])
+                 }
+                 else if(screens.includes("Code")){
+                     
+                     setScreens([...screens.filter(item => item !== "Code"), "Code"])
+                     
+                 }
+                 else {
+                    return
+                 }
+            }}>
+          <svg className={styles.icon} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"  viewBox="0 0 16 16">
+  <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5M3 4.5a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0z"/>
+</svg>
+                <p>Enter Code</p>
+            </div>
+
             <div className={styles.btn} onClick={() => {
                 
                 if(!screens.find(item => item === "Absent")){
@@ -208,25 +256,7 @@ else if (!session) {
 </svg>
                 <p>Menu</p>
             </div>
-            <div className={styles.btn} onClick={() => {
-                
-                if(!screens.find(item => item === "Feedback")){
-                    setScreens(prep => [...prep, "Feedback"])
-                 }
-                 else if(screens.includes("Feedback")){
-                     
-                     setScreens([...screens.filter(item => item !== "Feedback"), "Feedback"])
-                     
-                 }
-                 else {
-                    return
-                 }
-            }}>
-            <svg className={styles.icon} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"  viewBox="0 0 16 16">
-        <path d="M5.354 5.119 7.538.792A.52.52 0 0 1 8 .5c.183 0 .366.097.465.292l2.184 4.327 4.898.696A.54.54 0 0 1 16 6.32a.55.55 0 0 1-.17.445l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256a.5.5 0 0 1-.146.05c-.342.06-.668-.254-.6-.642l.83-4.73L.173 6.765a.55.55 0 0 1-.172-.403.6.6 0 0 1 .085-.302.51.51 0 0 1 .37-.245zM8 12.027a.5.5 0 0 1 .232.056l3.686 1.894-.694-3.957a.56.56 0 0 1 .162-.505l2.907-2.77-4.052-.576a.53.53 0 0 1-.393-.288L8.001 2.223 8 2.226z"/>
-        </svg>
-                <p>Feedback</p>
-            </div>
+  
         </div>
 
 
