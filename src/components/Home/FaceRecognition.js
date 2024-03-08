@@ -105,14 +105,7 @@ export default function FaceRecognition() {
       audio: false,
       video: {
         facingMode: "user",
-        width: {
-          min: 200,
-          max: 400,
-          
-        },
-        height: {
-          ideal: 350,
-        },
+  
       },
     };
 
@@ -124,10 +117,10 @@ export default function FaceRecognition() {
     videoRef.current.srcObject = videoSrc;
     await isReady;
     videoRef.current.play();
-    canvasRef.current.width = videoRef.current.videoWidth - 30;
-    canvasRef.current.height = videoRef.current.videoHeight - 30;
-    canvasRef.current.style.width = videoRef.current.videoWidth - 30;
-    canvasRef.current.style.height = videoRef.current.videoHeight -30;
+    canvasRef.current.width = videoRef.current.videoWidth;
+    canvasRef.current.height = videoRef.current.videoHeight;
+    // canvasRef.current.style.width = videoRef.current.videoWidth - 30;
+    // canvasRef.current.style.height = videoRef.current.videoHeight -30;
     canvasRef.current.style.zIndex = 1
     canvasRef.current.onclick = () => {
       videoRef.current.paused
@@ -418,10 +411,8 @@ const mainFunc = async () => {
   return (
     <div className={styles.Code}>
       <div className={styles.cont}>
-         <canvas id="canvas" ref={canvasRef} className={styles.over}></canvas>
-       <video id="video" ref={videoRef} autoPlay playsInline></video>
-
-        <div className={styles.cutout}></div>
+      <canvas id="canvas" ref={canvasRef} className={styles.over}></canvas>
+       <video id="video" className={styles.video} ref={videoRef} autoPlay playsInline></video>
       </div>
      <div className={styles.secondPart}>
     <div id="ok" ref={okContainerRef} className={styles.over1}>
