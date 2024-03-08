@@ -1,7 +1,7 @@
 "use client";
 
 import * as Human from "@/lib/face-id";
-import * as indexDb from '@/lib/Human'
+import * as indexDb from "@/lib/Human";
 import React, { useEffect, useRef, useState } from "react";
 import styles from "@/components/CSS/FaceRecognition.module.css";
 // Face recognition configuration
@@ -74,9 +74,7 @@ const blinking = {
 const allOk = () =>
   recognitionStatus.faceCount.status &&
   recognitionStatus.faceSize.status &&
- 
   recognitionStatus.facingCenter.status &&
- 
   recognitionStatus.faceConfidence.status &&
   recognitionStatus.antispoofCheck.status &&
   recognitionStatus.livenessCheck.status &&
@@ -105,7 +103,10 @@ export default function FaceRecognition() {
       audio: false,
       video: {
         facingMode: "user",
-  
+        width: {
+          min: 250,
+          max: 400,
+        },
       },
     };
 
@@ -121,7 +122,7 @@ export default function FaceRecognition() {
     canvasRef.current.height = videoRef.current.videoHeight;
     // canvasRef.current.style.width = videoRef.current.videoWidth - 30;
     // canvasRef.current.style.height = videoRef.current.videoHeight -30;
-    canvasRef.current.style.zIndex = 1
+    canvasRef.current.style.zIndex = 1;
     canvasRef.current.onclick = () => {
       videoRef.current.paused
         ? videoRef.current.play()
@@ -284,8 +285,16 @@ export default function FaceRecognition() {
   //  Detect Faces
 
   const detectFaces = async () => {
-    canvasRef.current.getContext('2d')?.clearRect(0, 0, recognitionSettings.minSize, recognitionSettings.minSize);
-    if (!currentFace?.face?.tensor || !currentFace?.face?.embedding) return false;
+    canvasRef.current
+      .getContext("2d")
+      ?.clearRect(
+        0,
+        0,
+        recognitionSettings.minSize,
+        recognitionSettings.minSize
+      );
+    if (!currentFace?.face?.tensor || !currentFace?.face?.embedding)
+      return false;
 
     console.log("face record", currentFace.face);
 
@@ -301,10 +310,10 @@ export default function FaceRecognition() {
       currentFace.face.tensor,
       canvasRef.current
     );
-const db = await indexDb.load()
-    if (await indexDb.count() === 0) {
-      saveRecords()
-      okContainerRef.current.style.display = "none"
+    const db = await indexDb.load();
+    if ((await indexDb.count()) === 0) {
+      saveRecords();
+      okContainerRef.current.style.display = "none";
       // retryButtonRef.current.style.display = "block"
       console.log("Nothing to compare with");
       return false;
@@ -327,7 +336,7 @@ const db = await indexDb.load()
           currentFace.record.id
         } | similarity: ${Math.round(1000 * res.similarity) / 10}%`
       );
-      okContainerRef.current.style.display = "none"
+      okContainerRef.current.style.display = "none";
       // retryButtonRef.current.style.display = "block"
       // sourceCanvasRef.current.style.display = '';
       // sourceCanvasRef.current.getContext('2d')?.putImageData(currentFace.record.image, 0, 0);
@@ -337,73 +346,85 @@ const db = await indexDb.load()
 
   // Save Faces to DB
   async function saveRecords() {
-
-      const image = canvasRef.current.getContext('2d')?.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
-      const rec = { id: 0, name: "Sizo's Face", descriptor: currentFace.face?.embedding, image };
-      await indexDb.save(rec);
-      console.log('saved face record:', rec.name, 'descriptor length:', currentFace.face?.embedding?.length);
-      console.log('known face records:', await indexDb.count());
- 
+    const image = canvasRef.current
+      .getContext("2d")
+      ?.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
+    const rec = {
+      id: 0,
+      name: "Sizo's Face" + Date.now(),
+      descriptor: currentFace.face?.embedding,
+      image,
+    };
+    await indexDb.save(rec);
+    console.log(
+      "saved face record:",
+      rec.name,
+      "descriptor length:",
+      currentFace.face?.embedding?.length
+    );
+    console.log("known face records:", await indexDb.count());
   }
-// Delete Faces
+  // Delete Faces
 
-async function deleteRecord() {
-  if (currentFace.record && currentFace.record.id > 0) {
-    await indexDb.remove(currentFace.record);
+  async function deleteRecord() {
+    if (currentFace.record && currentFace.record.id > 0) {
+      await indexDb.remove(currentFace.record);
+    }
   }
-}
 
-// MainFunc 
+  // MainFunc
 
-const mainFunc = async () => {
-  recognitionStatus.faceCount.status = false;
-  recognitionStatus.faceConfidence.status = false;
-  recognitionStatus.facingCenter.status = false;
-  // recognitionStatus.blinkDetected.status = false;
-  recognitionStatus.faceSize.status = false;
-  recognitionStatus.antispoofCheck.status = false;
-  recognitionStatus.livenessCheck.status = false;
-  recognitionStatus.age.status = false;
-  recognitionStatus.gender.status = false;
-  recognitionStatus.elapsedMs.val = 0;
-  retryButtonRef.current.style.display = "none"
-  okContainerRef.current.style.display = "flex"
-  await webCamStart();
-  await detectVideo(); // start detection loop
-  startTime = faceRecognition.now();
-  currentFace.face = await validationLoop(); // start validation loop
-  // canvasRef.current.width = currentFace.face?.tensor?.shape[1] || recognitionSettings.minSize;
-  // canvasRef.current.height = currentFace.face?.tensor?.shape[0] || recognitionSettings.minSize;
-  canvasRef.current.style.zIndex = 1
-  canvasRef.current.style.width = '';
+  const mainFunc = async () => {
+    recognitionStatus.faceCount.status = false;
+    recognitionStatus.faceConfidence.status = false;
+    recognitionStatus.facingCenter.status = false;
+    // recognitionStatus.blinkDetected.status = false;
+    recognitionStatus.faceSize.status = false;
+    recognitionStatus.antispoofCheck.status = false;
+    recognitionStatus.livenessCheck.status = false;
+    recognitionStatus.age.status = false;
+    recognitionStatus.gender.status = false;
+    recognitionStatus.elapsedMs.val = 0;
+    retryButtonRef.current.style.display = "none";
+    okContainerRef.current.style.display = "flex";
+    await webCamStart();
+    await detectVideo(); // start detection loop
+    startTime = faceRecognition.now();
+    currentFace.face = await validationLoop(); // start validation loop
+    canvasRef.current.width =
+      currentFace.face?.tensor?.shape[1] || recognitionSettings.minSize;
+    canvasRef.current.height =
+      currentFace.face?.tensor?.shape[0] || recognitionSettings.minSize;
+    canvasRef.current.style.zIndex = 1;
+    canvasRef.current.style.width = "";
 
-  if (!allOk()) { // is all criteria met?
-    okContainerRef.current.style.display = "none"
-    retryButtonRef.current.style.display = "block"
+    if (!allOk()) {
+      // is all criteria met?
+      okContainerRef.current.style.display = "none";
+      retryButtonRef.current.style.display = "block";
 
-    console.log('did not find valid face');
-    return false;
-  }
-  return detectFaces();
-}
+      console.log("did not find valid face");
+      return false;
+    }
+    return detectFaces();
+  };
   // Effects
-  const init = async() => {
-      await faceRecognition.load();
-      await faceRecognition.warmup();
-      await mainFunc()
-  }
+  const init = async () => {
+    await faceRecognition.load();
+    await faceRecognition.warmup();
+    await mainFunc();
+  };
 
   useEffect(() => {
-
     if (!mediaStream) {
-      init()
+      init();
     }
 
     return () => {
       if (mediaStream) {
         mediaStream.getTracks().forEach((track) => track.stop());
         setMediaStream(null); // Clear the reference
-        recognitionStatus.timeout.status = false
+        recognitionStatus.timeout.status = false;
       }
     };
   }, [mediaStream]);
@@ -411,16 +432,21 @@ const mainFunc = async () => {
   return (
     <div className={styles.Code}>
       <div className={styles.cont}>
-      <canvas id="canvas" ref={canvasRef} className={styles.over}></canvas>
-       <video id="video" className={styles.video} ref={videoRef} autoPlay playsInline></video>
+        <canvas id="canvas" ref={canvasRef} className={styles.over}></canvas>
+        <video
+          id="video"
+          className={styles.video}
+          ref={videoRef}
+          autoPlay
+          playsInline
+        ></video>
       </div>
-     <div className={styles.secondPart}>
-    <div id="ok" ref={okContainerRef} className={styles.over1}>
-
-    </div>
-      <div onClick={mainFunc} ref={retryButtonRef} className={styles.retry}>RETRY</div>
-     </div>
-
+      <div className={styles.secondPart}>
+        <div id="ok" ref={okContainerRef} className={styles.over1}></div>
+        <div onClick={mainFunc} ref={retryButtonRef} className={styles.retry}>
+          RETRY
+        </div>
+      </div>
     </div>
   );
 }
