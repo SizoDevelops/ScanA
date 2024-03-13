@@ -93,7 +93,7 @@ export default function FaceRecognition() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const matchRef = useRef(null);
-  const nameInputRef = useRef(null);
+  const [outcome, setOutcome] = useState({type: "", name: ""})
   const saveButtonRef = useRef(null);
   const deleteButtonRef = useRef(null);
   const retryButtonRef = useRef(null);
@@ -352,9 +352,11 @@ export default function FaceRecognition() {
       // retryButtonRef.current.style.display = "block"
       // sourceCanvasRef.current.style.display = '';
       // sourceCanvasRef.current.getContext('2d')?.putImageData(currentFace.record.image, 0, 0);
+      setOutcome({type:"Success", name:currentFace.record.name})
       return res.similarity > recognitionSettings.threshold;
     }
     else {
+      setOutcome({type:"Fail", name:currentFace.record.name})
       console.log("This is " + currentFace.record.name + `| similarity: ${Math.round(1000 * res.similarity) / 10}%`)
       return false;
     }
@@ -471,6 +473,7 @@ export default function FaceRecognition() {
     <div className={styles.Code}>
       <div className={styles.cont}>
         <canvas id="canvas" ref={canvasRef} className={styles.over}></canvas>
+        {Modal(outcome)}
         <video
           id="video"
           className={styles.video}
@@ -488,3 +491,42 @@ export default function FaceRecognition() {
     </div>
   );
 }
+
+
+const Modal = (outcome) => {
+  const nameInputRef = useRef(null);
+
+  if(outcome.type === "Fail"){
+    return (
+      <div className={styles.modal2}>
+        <i className={styles.icon2}> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+    <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5"/>
+    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+  </svg></i>
+        <h2>{outcome.name}</h2>
+        <p>{`Hello ${outcome.name.split(" ")[0]} please enter your user code below to confirm`}</p>
+        <input ref={nameInputRef} className={styles.usercode} placeholder="CONFIRM USER CODE"/>
+        <div>Sign Register</div>
+      </div>
+    )
+  }
+  else if(outcome.type === "Success"){
+    return (
+      <div className={styles.modal}>
+        <i className={styles.icon}> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+    <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5"/>
+    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+  </svg></i>
+        <h2>Successfully Signed</h2>
+        <p>You have successfully signed for today.</p>
+      
+        <div>Ok</div>
+      </div>
+    )
+  }
+ else return (
+    <></>
+  )
+}
+
+
