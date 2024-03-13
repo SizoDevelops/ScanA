@@ -3886,7 +3886,7 @@ var Nw = class {
         m += `${d}: ${g}D ${g > 0 ? h : ""} `;
       }
     }
-    console.log(`%c${p}	%c${i}	%c${u}D ${c}	%c${l}	%c${m}	%c${a}`, "font-weight:bold", "color:red", "color:blue", "color: orange", "color: green", "color: steelblue");
+    // console.log(`%c${p}	%c${i}	%c${u}D ${c}	%c${l}	%c${m}	%c${a}`, "font-weight:bold", "color:red", "color:blue", "color: orange", "color: green", "color: steelblue");
   }
 };
 function Dk(r16, e, t10) {
@@ -5641,7 +5641,7 @@ function iK(r16) {
 }
 var Xr = N({ clone_: iK });
 function wd(r16, e = false) {
-  console.log(r16.toString(e));
+  // console.log(r16.toString(e));
 }
 Ow();
 var uK = { buffer: ie, cast: Ue, clone: Xr, print: wd };
@@ -10944,9 +10944,9 @@ var k_ = (r16, e, t10, o = et) => {
       return [o.scalar(1)];
     case "Print":
       let a = I("x", r16, e, t10), i = I("data", r16, e, t10), p = I("message", r16, e, t10), u = I("summarize", r16, e, t10);
-      console.warn("The graph has a tf.print() operation,usually used for debugging, which slows down performance."), console.log(p);
+      // console.warn("The graph has a tf.print() operation,usually used for debugging, which slows down performance."), console.log(p);
       for (let l = 0; l < i.length; l++)
-        console.log(Array.prototype.slice.call(i[l].dataSync()).slice(0, u));
+        // console.log(Array.prototype.slice.call(i[l].dataSync()).slice(0, u));
       return [a];
     default:
       throw TypeError(`Node type ${r16.op} is not implemented`);
@@ -34598,8 +34598,7 @@ var qtr = void 0;
 function log(...msg) {
   const dt2 = /* @__PURE__ */ new Date();
   const ts2 = `${dt2.getHours().toString().padStart(2, "0")}:${dt2.getMinutes().toString().padStart(2, "0")}:${dt2.getSeconds().toString().padStart(2, "0")}.${dt2.getMilliseconds().toString().padStart(3, "0")}`;
-  if (msg)
-    console.log(ts2, "Human:", ...msg);
+  // if (msg) console.log(ts2, "Human:", ...msg);
 }
 function join(folder, file) {
   const separator = folder.endsWith("/") ? "" : "/";

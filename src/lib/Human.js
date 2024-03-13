@@ -51,7 +51,7 @@ export async function count() {
 
 export async function save(faceRecord) {
   if (!db) await open(); // open or create if not already done
-  const newRecord = { name: faceRecord.name, descriptor: faceRecord.descriptor, image: faceRecord.image }; // omit id as it's autoincrement
+  const newRecord = { name: faceRecord.name, descriptor: faceRecord.descriptor, image: faceRecord.image }; // omit id as it's autoincrement 
   db.transaction([table], 'readwrite').objectStore(table).put(newRecord);
   log('save:', newRecord);
 }

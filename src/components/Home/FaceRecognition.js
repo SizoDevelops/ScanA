@@ -4,6 +4,9 @@ import * as Human from "@/lib/face-id";
 import * as indexDb from "@/lib/Human";
 import React, { useEffect, useRef, useState } from "react";
 import styles from "@/components/CSS/FaceRecognition.module.css";
+import { useDatabase } from "@/lib/context";
+import { useSelector } from "react-redux";
+
 // Face recognition configuration
 const faceRecognitionConfig = {
   cacheSensitivity: 0,
@@ -97,6 +100,14 @@ export default function FaceRecognition() {
   const sourceCanvasRef = useRef(null);
   const okContainerRef = useRef(null);
   const [mediaStream, setMediaStream] = useState(null);
+  const {userData} = useDatabase()
+  const user = useSelector(state => state.User.value);
+  const faces = userData.user_faces
+  // Database Manipulation
+// useEffect(() => {
+//   console.log(faces)
+// },[])
+
   //  Camera Start
   const webCamStart = async () => {
     let videoConfig = {
@@ -106,6 +117,7 @@ export default function FaceRecognition() {
         width: {
           min: 250,
           max: 400,
+          ideal: 350
         },
       },
     };
@@ -123,11 +135,7 @@ export default function FaceRecognition() {
     // canvasRef.current.style.width = videoRef.current.videoWidth - 30;
     // canvasRef.current.style.height = videoRef.current.videoHeight -30;
     canvasRef.current.style.zIndex = 1;
-    canvasRef.current.onclick = () => {
-      videoRef.current.paused
-        ? videoRef.current.play()
-        : videoRef.current.pause();
-    };
+
   };
 
   // Detect Video
@@ -310,27 +318,31 @@ export default function FaceRecognition() {
       currentFace.face.tensor,
       canvasRef.current
     );
-    const db = await indexDb.load();
-    if ((await indexDb.count()) === 0) {
+    const db = faces;
+    const descriptors = db
+    .map((rec) => rec.descriptor)
+    .filter((desc) => desc.length > 0);
+
+  const res = faceRecognition.match.find(
+    currentFace.face.embedding,
+    descriptors,
+    recognitionThresholds
+  );
+  currentFace.record = db[res.index] || null;
+
+    if (!db.find(elem => elem.id === user.code) && !currentFace.record) {
       saveRecords();
       okContainerRef.current.style.display = "none";
       // retryButtonRef.current.style.display = "block"
       console.log("Nothing to compare with");
       return false;
     }
-    const descriptors = db
-      .map((rec) => rec.descriptor)
-      .filter((desc) => desc.length > 0);
 
-    const res = faceRecognition.match.find(
-      currentFace.face.embedding,
-      descriptors,
-      recognitionThresholds
-    );
 
-    currentFace.record = db[res.index] || null;
+    
 
-    if (currentFace.record) {
+    else if (currentFace.record && currentFace.record.id === user.code ) {
+      
       console.log(
         `best match: ${currentFace.record.name} | id: ${
           currentFace.record.id
@@ -340,8 +352,13 @@ export default function FaceRecognition() {
       // retryButtonRef.current.style.display = "block"
       // sourceCanvasRef.current.style.display = '';
       // sourceCanvasRef.current.getContext('2d')?.putImageData(currentFace.record.image, 0, 0);
+      return res.similarity > recognitionSettings.threshold;
     }
-    return res.similarity > recognitionSettings.threshold;
+    else {
+      console.log("This is " + currentFace.record.name + `| similarity: ${Math.round(1000 * res.similarity) / 10}%`)
+      return false;
+    }
+    
   };
 
   // Save Faces to DB
@@ -350,25 +367,46 @@ export default function FaceRecognition() {
       .getContext("2d")
       ?.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
     const rec = {
-      id: 0,
-      name: "Sizo's Face" + Date.now(),
+      id: user?.code,
+      name: `${user?.first_name} ${user?.last_name}`,
       descriptor: currentFace.face?.embedding,
-      image,
+      
     };
-    await indexDb.save(rec);
-    console.log(
-      "saved face record:",
-      rec.name,
-      "descriptor length:",
-      currentFace.face?.embedding?.length
-    );
-    console.log("known face records:", await indexDb.count());
+    // Save Face to DB
+    await fetch("/api/faces", {
+      method: "POST",
+      cache: "no-cache",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        key: userData.school_code,
+        faceRecord: rec,
+        methods: "update"
+      })
+    }).then(data => data.json())
+      .then(d => console.log(d))
+      .catch(e => {
+        console.log(e)
+      })
+    // await indexDb.save(rec);
+    console.log("known face records:", userData.user_faces.length + 1);
   }
   // Delete Faces
 
   async function deleteRecord() {
     if (currentFace.record && currentFace.record.id > 0) {
-      await indexDb.remove(currentFace.record);
+      // await fetch("/api/faces", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json"
+      //   },
+      //   body: JSON.stringify({
+      //     key: userData.school_code,
+      //     faceRecord: rec,
+      //     method: "delete"
+      //   })
+      // })
     }
   }
 

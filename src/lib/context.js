@@ -393,7 +393,8 @@ export const DataProvider = ({ children }) => {
     getCurrentWeek,
     userData,
     absentLoading,
-    onLines
+    onLines,
+    getUser
   };
 
   return <Database.Provider value={value}>{children}</Database.Provider>;
