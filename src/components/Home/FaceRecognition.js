@@ -574,7 +574,7 @@ const Modal = (outcome, setOutcome, user, faces, saveRecords) => {
           <div
             onClick={async() => {
               let code = faces.find(
-                (item) => item.id === nameInputRef.current.value.trim()
+                (item) => item.id === nameInputRef.current.value.trim().toUpperCase()
               );
               if (code && code.name === currentFace.record.name) {
                 await signRegister(userData.attendance[getCurrentDayOfWeek()], {code: nameInputRef.current.value.trim(), initial: currentFace.record.initial})
@@ -620,7 +620,7 @@ const Modal = (outcome, setOutcome, user, faces, saveRecords) => {
           <div
             onClick={async() => {
             
-              if (nameInputRef.current.value === user.code) {
+              if (nameInputRef.current.value.trim().toUpperCase() === user.code) {
                 await saveRecords()
                 await signRegister(userData.attendance[getCurrentDayOfWeek()])
                 setOutcome({type: "Success", name: outcome.name})
