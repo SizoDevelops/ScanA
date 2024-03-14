@@ -536,7 +536,7 @@ const Modal = (outcome, setOutcome, user, faces, saveRecords) => {
             onClick={() => {
               setOutcome({});
               getUser(userData.school_code)
-              if (screens.length > 1) {
+              if (screens.length > 1 && err !== "") {
                 screens.pop();
                 setScreens([...screens]);
               }
@@ -574,10 +574,10 @@ const Modal = (outcome, setOutcome, user, faces, saveRecords) => {
           <div
             onClick={async() => {
               let code = faces.find(
-                (item) => item.id === nameInputRef.current.value
+                (item) => item.id === nameInputRef.current.value.trim()
               );
               if (code && code.name === currentFace.record.name) {
-                await signRegister(userData.attendance[getCurrentDayOfWeek()], {code: nameInputRef.current.value, initial: currentFace.record.initial})
+                await signRegister(userData.attendance[getCurrentDayOfWeek()], {code: nameInputRef.current.value.trim(), initial: currentFace.record.initial})
                 setOutcome({type: "Success", name: outcome.name})
              
             
@@ -586,6 +586,7 @@ const Modal = (outcome, setOutcome, user, faces, saveRecords) => {
                 //   setScreens([...screens]);
                 // }
               }
+              else alert("Invalid Code!")
             }}
           >
             Sign Register
