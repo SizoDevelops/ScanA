@@ -142,14 +142,14 @@ export const DataProvider = ({ children }) => {
     return targetDate.toISOString().split("T")[0];
   }
 
-  const setAttendance = async (day) => {
+  const setAttendance = async (day, user=session?.user) => {
     const week = getCurrentWeek();
     const time = getCurrentMilitaryTime();
     const date = getAbsentDate(day, week);
 
     const data = {
       key: userData?.key,
-      id: session?.user.code,
+      id: user?.code,
       current_day: day,
       attend: {
         week: week,
@@ -158,7 +158,7 @@ export const DataProvider = ({ children }) => {
             ? `${time.hours}:${time.minutes}`
             : `7:${time.minutes}`,
         timeout: "14:40",
-        initial: session?.user.initial,
+        initial: user?.initial,
         absent: false,
         date: date,
         day: day,
@@ -331,7 +331,7 @@ export const DataProvider = ({ children }) => {
     }
   };
 
-  const signRegister = (code) => {
+  const signRegister = (code, user=session?.user) => {
     setErr(""); // Reset any previous error
 
     if (isGeolocationAvailable && isGeolocationEnabled) {
@@ -357,7 +357,7 @@ export const DataProvider = ({ children }) => {
             const expectedCode =
               userData?.attendance[getCurrentDayOfWeek()].toUpperCase();
             if (code.toUpperCase() === expectedCode) {
-              setAttendance(getCurrentDayOfWeek()); // Set attendance if code matches
+              setAttendance(getCurrentDayOfWeek(), user); // Set attendance if code matches
             } else {
               setErr("Invalid Code");
             }

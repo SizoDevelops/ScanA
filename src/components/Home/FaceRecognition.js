@@ -73,7 +73,22 @@ const blinking = {
   time: 0,
   end: 0,
 };
-
+function getCurrentDayOfWeek() {
+  const daysOfWeek = [
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+  ];
+  const today = new Date();
+  const dayOfWeek = today.getDay();
+  const currentDay = daysOfWeek[dayOfWeek];
+  return currentDay;
+  // return "saturday"
+}
 const allOk = () =>
   recognitionStatus.faceCount.status &&
   recognitionStatus.faceSize.status &&
@@ -93,20 +108,16 @@ export default function FaceRecognition() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const matchRef = useRef(null);
-  const [outcome, setOutcome] = useState({type: "", name: ""})
+  const [outcome, setOutcome] = useState({ type: "", name: "" });
   const saveButtonRef = useRef(null);
   const deleteButtonRef = useRef(null);
   const retryButtonRef = useRef(null);
   const sourceCanvasRef = useRef(null);
   const okContainerRef = useRef(null);
   const [mediaStream, setMediaStream] = useState(null);
-  const {userData} = useDatabase()
-  const user = useSelector(state => state.User.value);
-  const faces = userData.user_faces
-  // Database Manipulation
-// useEffect(() => {
-//   console.log(faces)
-// },[])
+  const { userData, getUser, signRegister } = useDatabase();
+  const user = useSelector((state) => state.User.value);
+  const faces = userData.user_faces;
 
   //  Camera Start
   const webCamStart = async () => {
@@ -117,7 +128,7 @@ export default function FaceRecognition() {
         width: {
           min: 250,
           max: 400,
-          ideal: 350
+          ideal: 350,
         },
       },
     };
@@ -135,7 +146,6 @@ export default function FaceRecognition() {
     // canvasRef.current.style.width = videoRef.current.videoWidth - 30;
     // canvasRef.current.style.height = videoRef.current.videoHeight -30;
     canvasRef.current.style.zIndex = 1;
-
   };
 
   // Detect Video
@@ -320,29 +330,29 @@ export default function FaceRecognition() {
     );
     const db = faces;
     const descriptors = db
-    .map((rec) => rec.descriptor)
-    .filter((desc) => desc.length > 0);
+      .map((rec) => rec.descriptor)
+      .filter((desc) => desc.length > 0);
 
-  const res = faceRecognition.match.find(
-    currentFace.face.embedding,
-    descriptors,
-    recognitionThresholds
-  );
-  currentFace.record = db[res.index] || null;
+    const res = faceRecognition.match.find(
+      currentFace.face.embedding,
+      descriptors,
+      recognitionThresholds
+    );
+    currentFace.record = db[res.index] || null;
 
-    if (!db.find(elem => elem.id === user.code) && !currentFace.record) {
-      saveRecords();
+    if (!db.find((elem) => elem.id === user.code) && !currentFace.record) {
+      setOutcome({
+        type: "New",
+        name: `${user?.first_name} ${user?.last_name}`,
+        apply: " ",
+      });
       okContainerRef.current.style.display = "none";
       // retryButtonRef.current.style.display = "block"
-      console.log("Nothing to compare with");
+
+      console.log(outcome);
+
       return false;
-    }
-
-
-    
-
-    else if (currentFace.record && currentFace.record.id === user.code ) {
-      
+    } else if (currentFace.record && currentFace.record.id === user.code) {
       console.log(
         `best match: ${currentFace.record.name} | id: ${
           currentFace.record.id
@@ -352,45 +362,53 @@ export default function FaceRecognition() {
       // retryButtonRef.current.style.display = "block"
       // sourceCanvasRef.current.style.display = '';
       // sourceCanvasRef.current.getContext('2d')?.putImageData(currentFace.record.image, 0, 0);
-      setOutcome({type:"Success", name:currentFace.record.name})
+
+      await signRegister(userData.attendance[getCurrentDayOfWeek()])
+      setOutcome({ type: "Success", name: currentFace.record.name });
+      
       return res.similarity > recognitionSettings.threshold;
-    }
-    else {
-      setOutcome({type:"Fail", name:currentFace.record.name})
-      console.log("This is " + currentFace.record.name + `| similarity: ${Math.round(1000 * res.similarity) / 10}%`)
+    } else {
+      setOutcome({ type: "Fail", name: currentFace.record.name });
+      console.log(
+        "This is " +
+          currentFace.record.name +
+          `| similarity: ${Math.round(1000 * res.similarity) / 10}%`
+      );
       return false;
     }
-    
   };
 
   // Save Faces to DB
   async function saveRecords() {
-    const image = canvasRef.current
-      .getContext("2d")
-      ?.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
+    // const image = canvasRef.current
+    //   .getContext("2d")
+    //   ?.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
     const rec = {
       id: user?.code,
       name: `${user?.first_name} ${user?.last_name}`,
       descriptor: currentFace.face?.embedding,
-      
+      initial: user?.initial
     };
     // Save Face to DB
     await fetch("/api/faces", {
       method: "POST",
       cache: "no-cache",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         key: userData.school_code,
         faceRecord: rec,
-        methods: "update"
+        methods: "update",
+      }),
+    })
+      .then((data) => data.json())
+      .then(async (d) => {
+        await getUser(userData.school_code);
       })
-    }).then(data => data.json())
-      .then(d => console.log(d))
-      .catch(e => {
-        console.log(e)
-      })
+      .catch((e) => {
+        console.log(e);
+      });
     // await indexDb.save(rec);
     console.log("known face records:", userData.user_faces.length + 1);
   }
@@ -473,7 +491,7 @@ export default function FaceRecognition() {
     <div className={styles.Code}>
       <div className={styles.cont}>
         <canvas id="canvas" ref={canvasRef} className={styles.over}></canvas>
-        {Modal(outcome)}
+        {Modal(outcome, setOutcome, user, faces, saveRecords)}
         <video
           id="video"
           className={styles.video}
@@ -492,41 +510,133 @@ export default function FaceRecognition() {
   );
 }
 
-
-const Modal = (outcome) => {
+const Modal = (outcome, setOutcome, user, faces, saveRecords) => {
   const nameInputRef = useRef(null);
+  const { screens, setScreens, signRegister, err, getUser, userData } = useDatabase();
 
-  if(outcome.type === "Fail"){
-    return (
-      <div className={styles.modal2}>
-        <i className={styles.icon2}> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-    <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5"/>
-    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-  </svg></i>
-        <h2>{outcome.name}</h2>
-        <p>{`Hello ${outcome.name.split(" ")[0]} please enter your user code below to confirm`}</p>
-        <input ref={nameInputRef} className={styles.usercode} placeholder="CONFIRM USER CODE"/>
-        <div>Sign Register</div>
-      </div>
-    )
+  switch (outcome.type) {
+    case "Success":
+      return (
+        <div className={styles.modal}>
+          <i className={styles.icon}>
+            {" "}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+            >
+              <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z" />
+            </svg>
+          </i>
+          <h2>{ err || "Signing..." }</h2>
+          <p>Hi {outcome.name.split(" ")[0]} you have successfully signed for today.</p>
+
+          <div
+            onClick={() => {
+              setOutcome({});
+              getUser(userData.school_code)
+              if (screens.length > 1) {
+                screens.pop();
+                setScreens([...screens]);
+              }
+            }}
+          >
+            Ok
+          </div>
+         
+        </div>
+      );
+    case "Fail":
+      return (
+        <div className={styles.modal2}>
+          <i className={styles.icon2}>
+            {" "}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+            >
+              <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5" />
+              <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+            </svg>
+          </i>
+          <h2>{outcome.name}</h2>
+          <p>{`Hello ${
+            outcome.name.split(" ")[0]
+          } please enter your user code below to confirm`}</p>
+          <input
+            ref={nameInputRef}
+            className={styles.usercode}
+            placeholder="CONFIRM USER CODE"
+          />
+          <div
+            onClick={async() => {
+              let code = faces.find(
+                (item) => item.id === nameInputRef.current.value
+              );
+              if (code && code.name === currentFace.record.name) {
+                await signRegister(userData.attendance[getCurrentDayOfWeek()], {code: nameInputRef.current.value, initial: currentFace.record.initial})
+                setOutcome({type: "Success", name: outcome.name})
+             
+            
+                // if (screens.length > 1) {
+                //   screens.pop();
+                //   setScreens([...screens]);
+                // }
+              }
+            }}
+          >
+            Sign Register
+          </div>
+        </div>
+      );
+    case "New":
+      return (
+        <div className={styles.modal3}>
+          <i className={styles.icon3}>
+            {" "}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+            >
+              <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5" />
+              <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+            </svg>
+          </i>
+          <h2>Record Facial Data</h2>
+          <p>{`Hello ${
+            outcome.name.split(" ")[0]
+          } please enter your user code below to confirm`}</p>
+          <input
+            ref={nameInputRef}
+            className={styles.usercode2}
+            placeholder="CONFIRM USER CODE"
+          />
+          <div
+            onClick={async() => {
+            
+              if (nameInputRef.current.value === user.code) {
+                await saveRecords()
+                await signRegister(userData.attendance[getCurrentDayOfWeek()])
+                setOutcome({type: "Success", name: outcome.name})
+             
+            
+                // if (screens.length > 1) {
+                //   screens.pop();
+                //   setScreens([...screens]);
+                // }
+              }
+            }}
+          >
+            Register
+          </div>
+        </div>
+      );
+    default:
+      return <></>;
   }
-  else if(outcome.type === "Success"){
-    return (
-      <div className={styles.modal}>
-        <i className={styles.icon}> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-    <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5"/>
-    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-  </svg></i>
-        <h2>Successfully Signed</h2>
-        <p>You have successfully signed for today.</p>
-      
-        <div>Ok</div>
-      </div>
-    )
-  }
- else return (
-    <></>
-  )
-}
-
-
+};
