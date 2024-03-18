@@ -267,9 +267,9 @@ export const DataProvider = ({ children }) => {
     })
       .then((data) => data.json())
       .then(async (data) => {
-        if (data) {
-          await preSign(data);
-        }
+        // if (data) {
+        //   await preSign(data);
+        // }
         setUser(data);
         dispatch(
           userReducer(
@@ -368,7 +368,7 @@ export const DataProvider = ({ children }) => {
             ) {
               setErr("Not available on weekends");
             } else {
-              setErr("Wrong Day! Sign for " + getCurrentDayOfWeek());
+              setErr("No codes for this week.");
             }
           }
         } else {

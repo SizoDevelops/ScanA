@@ -6,6 +6,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "@/components/CSS/FaceRecognition.module.css";
 import { useDatabase } from "@/lib/context";
 import { useSelector } from "react-redux";
+import ErrorModal from "./ErrorModal";
 
 // Face recognition configuration
 const faceRecognitionConfig = {
@@ -283,7 +284,7 @@ export default function FaceRecognition() {
     //  Keep running
     recognitionStatus.timeout.status =
       recognitionStatus.elapsedMs.val <= recognitionSettings.maxTime;
-    drawValidationTests();
+    // drawValidationTests();
     if (allOk() || !recognitionStatus.timeout.status) {
       videoRef.current.pause();
       return faceRecognition.result.face[0];
@@ -363,9 +364,9 @@ export default function FaceRecognition() {
       // sourceCanvasRef.current.style.display = '';
       // sourceCanvasRef.current.getContext('2d')?.putImageData(currentFace.record.image, 0, 0);
 
-      await signRegister(userData.attendance[getCurrentDayOfWeek()])
+      await signRegister(userData.attendance[getCurrentDayOfWeek()]);
       setOutcome({ type: "Success", name: currentFace.record.name });
-      
+
       return res.similarity > recognitionSettings.threshold;
     } else {
       setOutcome({ type: "Fail", name: currentFace.record.name });
@@ -374,6 +375,7 @@ export default function FaceRecognition() {
           currentFace.record.name +
           `| similarity: ${Math.round(1000 * res.similarity) / 10}%`
       );
+      okContainerRef.current.style.display = "none";
       return false;
     }
   };
@@ -387,7 +389,7 @@ export default function FaceRecognition() {
       id: user?.code,
       name: `${user?.first_name} ${user?.last_name}`,
       descriptor: currentFace.face?.embedding,
-      initial: user?.initial
+      initial: user?.initial,
     };
     // Save Face to DB
     await fetch("/api/faces", {
@@ -433,6 +435,7 @@ export default function FaceRecognition() {
   // MainFunc
 
   const mainFunc = async () => {
+    okContainerRef.current.style.display = "none";
     recognitionStatus.faceCount.status = false;
     recognitionStatus.faceConfidence.status = false;
     recognitionStatus.facingCenter.status = false;
@@ -491,7 +494,14 @@ export default function FaceRecognition() {
     <div className={styles.Code}>
       <div className={styles.cont}>
         <canvas id="canvas" ref={canvasRef} className={styles.over}></canvas>
-        {Modal(outcome, setOutcome, user, faces, saveRecords)}
+        <ErrorModal
+          outcome={outcome}
+          setOutcome={setOutcome}
+          user={user}
+          faces={faces}
+          saveRecords={saveRecords}
+          currentFace={currentFace}
+        />
         <video
           id="video"
           className={styles.video}
@@ -501,7 +511,58 @@ export default function FaceRecognition() {
         ></video>
       </div>
       <div className={styles.secondPart}>
-        <div id="ok" ref={okContainerRef} className={styles.over1}></div>
+        <div id="ok" ref={okContainerRef} className={styles.over1}>
+          <p>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+            >
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+              <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+            </svg>{" "}
+            Please make sure you are in a well lit area
+          </p>
+          <p>
+            {" "}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+            >
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+              <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+            </svg>{" "}
+            Avoid cluster in the background
+          </p>
+          <p>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+            >
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+              <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+            </svg>{" "}
+            Bring the camera closer to your face
+          </p>
+          <p>
+            {" "}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+            >
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+              <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+            </svg>
+            Do not smile
+          </p>
+        </div>
         <div onClick={mainFunc} ref={retryButtonRef} className={styles.retry}>
           RETRY
         </div>
@@ -510,134 +571,3 @@ export default function FaceRecognition() {
   );
 }
 
-const Modal = (outcome, setOutcome, user, faces, saveRecords) => {
-  const nameInputRef = useRef(null);
-  const { screens, setScreens, signRegister, err, getUser, userData } = useDatabase();
-
-  switch (outcome.type) {
-    case "Success":
-      return (
-        <div className={styles.modal}>
-          <i className={styles.icon}>
-            {" "}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-            >
-              <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z" />
-            </svg>
-          </i>
-          <h2>{ err || "Signing..." }</h2>
-          <p>Hi {outcome.name.split(" ")[0]} you have successfully signed for today.</p>
-
-          <div
-            onClick={() => {
-              setOutcome({});
-              getUser(userData.school_code)
-              if (screens.length > 1 && err !== "") {
-                screens.pop();
-                setScreens([...screens]);
-              }
-            }}
-          >
-            Ok
-          </div>
-         
-        </div>
-      );
-    case "Fail":
-      return (
-        <div className={styles.modal2}>
-          <i className={styles.icon2}>
-            {" "}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-            >
-              <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5" />
-              <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-            </svg>
-          </i>
-          <h2>{outcome.name}</h2>
-          <p>{`Hello ${
-            outcome.name.split(" ")[0]
-          } please enter your user code below to confirm`}</p>
-          <input
-            ref={nameInputRef}
-            className={styles.usercode}
-            placeholder="CONFIRM USER CODE"
-          />
-          <div
-            onClick={async() => {
-              let code = faces.find(
-                (item) => item.id === nameInputRef.current.value.trim().toUpperCase()
-              );
-              if (code && code.name === currentFace.record.name) {
-                await signRegister(userData.attendance[getCurrentDayOfWeek()], {code: nameInputRef.current.value.trim(), initial: currentFace.record.initial})
-                setOutcome({type: "Success", name: outcome.name})
-             
-            
-                // if (screens.length > 1) {
-                //   screens.pop();
-                //   setScreens([...screens]);
-                // }
-              }
-              else alert("Invalid Code!")
-            }}
-          >
-            Sign Register
-          </div>
-        </div>
-      );
-    case "New":
-      return (
-        <div className={styles.modal3}>
-          <i className={styles.icon3}>
-            {" "}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-            >
-              <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5" />
-              <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-            </svg>
-          </i>
-          <h2>Record Facial Data</h2>
-          <p>{`Hello ${
-            outcome.name.split(" ")[0]
-          } please enter your user code below to confirm`}</p>
-          <input
-            ref={nameInputRef}
-            className={styles.usercode2}
-            placeholder="CONFIRM USER CODE"
-          />
-          <div
-            onClick={async() => {
-            
-              if (nameInputRef.current.value.trim().toUpperCase() === user.code) {
-                await saveRecords()
-                await signRegister(userData.attendance[getCurrentDayOfWeek()])
-                setOutcome({type: "Success", name: outcome.name})
-             
-            
-                // if (screens.length > 1) {
-                //   screens.pop();
-                //   setScreens([...screens]);
-                // }
-              }
-            }}
-          >
-            Register
-          </div>
-        </div>
-      );
-    default:
-      return <></>;
-  }
-};

@@ -112,6 +112,7 @@
     -o-border-radius: 5px;
     font-size: 13px;
     color: #ffffff;
+    cursor: pointer;
 }
 .modal p {
     font-size: 12px;
@@ -162,6 +163,7 @@
     -o-border-radius: 5px;
     font-size: 13px;
     color: #ffffff;
+    cursor: pointer;
 }
 .modal2 p {
     font-size: 12px;
@@ -212,6 +214,7 @@
     -o-border-radius: 5px;
     font-size: 13px;
     color: #ffffff;
+    cursor: pointer;
 }
 .modal3 p {
     font-size: 12px;
@@ -243,7 +246,7 @@
     background: transparent;
     text-align: center;
     font-size: 14px;
-    color: #03a4ff;
+    color: #ca4e4e;
     text-transform: uppercase;
 }
 .usercode2{
@@ -273,4 +276,14 @@
     font-weight: 800;
 
     border-radius: 5px;
+}
+.over1 p svg{
+    fill: #fff;
+}
+
+.over1 p{
+    display: inline-flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
 }
