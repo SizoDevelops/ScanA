@@ -1,7 +1,6 @@
 "use client";
 
 import * as Human from "@/lib/face-id";
-import * as indexDb from "@/lib/Human";
 import React, { useEffect, useRef, useState } from "react";
 import styles from "@/components/CSS/FaceRecognition.module.css";
 import { useDatabase } from "@/lib/context";
@@ -36,7 +35,7 @@ const recognitionSettings = {
   maxTime: 30000,
   blinkMin: 10,
   blinkMax: 800,
-  threshold: 0.5,
+  threshold: 0.6,
   distanceMin: 0.2,
   distanceMax: 1,
   mask: faceRecognitionConfig.face.detector.mask,
@@ -341,7 +340,7 @@ export default function FaceRecognition() {
     );
     currentFace.record = db[res.index] || null;
 
-    if (!db.find((elem) => elem.id === user.code) && !currentFace.record) {
+    if (currentFace.record && !db.find((elem) => elem.id === user.code) && res.similarity < recognitionSettings.threshold) {
       setOutcome({
         type: "New",
         name: `${user?.first_name} ${user?.last_name}`,
@@ -350,15 +349,16 @@ export default function FaceRecognition() {
       okContainerRef.current.style.display = "none";
       // retryButtonRef.current.style.display = "block"
 
-      console.log(outcome);
+    
 
       return false;
-    } else if (currentFace.record && currentFace.record.id === user.code) {
+    } else if (currentFace.record && currentFace.record.id === user.code && res.similarity > recognitionSettings.threshold) {
       console.log(
         `best match: ${currentFace.record.name} | id: ${
           currentFace.record.id
         } | similarity: ${Math.round(1000 * res.similarity) / 10}%`
       );
+      console.log(res);
       okContainerRef.current.style.display = "none";
       // retryButtonRef.current.style.display = "block"
       // sourceCanvasRef.current.style.display = '';
@@ -367,8 +367,8 @@ export default function FaceRecognition() {
       await signRegister(userData.attendance[getCurrentDayOfWeek()]);
       setOutcome({ type: "Success", name: currentFace.record.name });
 
-      return res.similarity > recognitionSettings.threshold;
-    } else {
+      return true;
+    } else if(currentFace.record && currentFace.record.id !== user.code && res.similarity > recognitionSettings.threshold) {
       setOutcome({ type: "Fail", name: currentFace.record.name });
       console.log(
         "This is " +
@@ -376,6 +376,10 @@ export default function FaceRecognition() {
           `| similarity: ${Math.round(1000 * res.similarity) / 10}%`
       );
       okContainerRef.current.style.display = "none";
+      return false;
+    }
+    else {
+      setOutcome({ type: "Error", name: "Not Found" });
       return false;
     }
   };
@@ -570,4 +574,3 @@ export default function FaceRecognition() {
     </div>
   );
 }
-
