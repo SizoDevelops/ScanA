@@ -14,9 +14,10 @@
     border-bottom: 1px solid #03a4ff;
     background: transparent;
     text-align: center;
-    font-size: 17px;
+    font-size: 15px;
     color: #03a4ff;
-    text-transform: uppercase;
+    margin-top: 20px;
+    
 }
 
 .Code input:focus{
@@ -48,4 +49,22 @@
     font-weight: 800;
 
     border-radius: 5px;
+}
+
+.btn{
+    width: 40%;
+    padding: 10px;
+    border-radius: 5px;
+    background: #03a4ff;
+    margin: auto;
+    margin-top: 30px;
+    display: flex;
+    color: #ffffff;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 13px;
+    cursor: pointer;
+    border: none;
+    
 }

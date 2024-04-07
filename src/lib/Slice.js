@@ -33,6 +33,7 @@ const UserSlice = createSlice({
                 "tuesday": [],
                 "wednesday": []
             },
+            "movement": [],
             "block_user": false,
             "code": "",
             "date": null,

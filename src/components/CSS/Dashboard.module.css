@@ -154,6 +154,8 @@
 .btn p{
     font-size: 12px;
     color: #f7f7f7;
+    width: 100%;
+    text-align: center;
 }
 .btn:active{
     scale: 1.2;

@@ -16,11 +16,11 @@ export const useDatabase = () => {
 export const DataProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [absentLoading, setAbsentLoading] = useState(false);
-  const { data: session, status} = useSession();
+  const { data: session, status } = useSession();
   const [userData, setUser] = useState(null);
   const [err, setErr] = useState("");
   const [screens, setScreens] = useState(["Calendar"]);
-  const [onLines, setIsOnline] = useState(true)
+  const [onLines, setIsOnline] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -29,30 +29,25 @@ export const DataProvider = ({ children }) => {
     };
 
     // Add event listeners for online/offline status changes
-    window.addEventListener('online', handleOnlineStatusChange);
-    window.addEventListener('offline', handleOnlineStatusChange);
+    window.addEventListener("online", handleOnlineStatusChange);
+    window.addEventListener("offline", handleOnlineStatusChange);
 
     // Initial check for online status
     setIsOnline(navigator.onLine);
 
     // Remove event listeners when the component is unmounted
     return () => {
-      window.removeEventListener('online', handleOnlineStatusChange);
-      window.removeEventListener('offline', handleOnlineStatusChange);
+      window.removeEventListener("online", handleOnlineStatusChange);
+      window.removeEventListener("offline", handleOnlineStatusChange);
     };
   }, []);
 
   useEffect(() => {
     // setLoading(true)
 
-      if (session && session.user) {
-      
-
-          getUser(session?.user.code.slice(0, session?.user.code.lastIndexOf("-")));
-        }
-    
-  
-    
+    if (session && session.user) {
+      getUser(session?.user.code.slice(0, session?.user.code.lastIndexOf("-")));
+    }
   }, [session]);
 
   // lllllllllllllllllllllllllllllll
@@ -142,7 +137,7 @@ export const DataProvider = ({ children }) => {
     return targetDate.toISOString().split("T")[0];
   }
 
-  const setAttendance = async (day, user=session?.user) => {
+  const setAttendance = async (day, user = session?.user) => {
     const week = getCurrentWeek();
     const time = getCurrentMilitaryTime();
     const date = getAbsentDate(day, week);
@@ -287,51 +282,50 @@ export const DataProvider = ({ children }) => {
       });
   };
 
-  const preSign = async (userData) => {
-    try {
-      setErr("");
-      if (isGeolocationAvailable && isGeolocationEnabled) {
-        if (userData && coords) {
-          const userlat = coords.latitude;
-          const userlon = coords.longitude;
-          const schoollat = parseFloat(userData?.coordinates.latitude);
-          const schoollon = parseFloat(userData?.coordinates.longitude);
-
-          const distance = calculateDistance(
-            userlat,
-            userlon,
-            schoollat,
-            schoollon
-          );
-
-          if (
-            distance.toFixed(2) * 1000 <
-            parseInt(userData?.coordinates.distance)
-          ) {
-            // Automatically sign for days with null attendance:
-            const days = [
-              "monday",
-              "tuesday",
-              "wednesday",
-              "thursday",
-              "friday",
-            ];
-            for (const day of days) {
-              // Use a "for...of" loop to ensure complete iteration
-              if (userData?.attendance && userData?.attendance[day] === null) {
-                // Stricter null check
-                await setAttendance(day); // Await each attendance setting
-              }
-            }
-          }
-        }
+  const signMovement = (code, reason) => {
+    const data = {
+      initial: session?.user.initial,
+      last_name: session?.user.last_name,
+      date: getCurrentDate(),
+      code,
+      day: getCurrentDayOfWeek(),
+      reason,
+      week: getCurrentWeek(),
+    };
+    setLoading(true)
+    fetch("/api/movement-register/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        key: userData?.key,
+        id: session?.user.code,
+        data,
+      }),
+    }).then(data => data ? data.json() : null)
+    .then(data => {
+      if(data === "Already Signed!"){
+        setErr("Already Signed!")
+        setLoading(false)
       }
-    } catch (error) {
-      console.error("Error during pre-signing:", error); // Handle potential errors
-    }
+     else if(data === "Invalid"){
+        setErr("Invalid Code")
+        setLoading(false)
+      }
+
+      else if (data === "User Updated") {
+        setErr("Successfully Signed!")
+        setLoading(false)
+      }
+      else {
+        setErr("Oops Please Retry!")
+        setLoading(false)
+      }
+    })
   };
 
-  const signRegister = (code, user=session?.user) => {
+  const signRegister = (code, user = session?.user) => {
     setErr(""); // Reset any previous error
 
     if (isGeolocationAvailable && isGeolocationEnabled) {
@@ -394,7 +388,8 @@ export const DataProvider = ({ children }) => {
     userData,
     absentLoading,
     onLines,
-    getUser
+    getUser,
+    signMovement,
   };
 
   return <Database.Provider value={value}>{children}</Database.Provider>;

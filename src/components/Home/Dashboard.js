@@ -15,10 +15,11 @@ import Meetings from './Meetings/Meetings'
 import { useSelector } from 'react-redux'
 import Feedback from './Feedback'
 import FaceRecognition from './FaceRecognition'
+import Movement from './Movement'
 
 export default function Dashboard() {
     const {screens, setScreens, getCurrentMilitaryTime, userData, onLines,loading} = useDatabase()
-    const {data:session} = useSession()
+    const {data:session, status} = useSession()
     const userDa = useSelector(state => state.User.value)
     const [meetings, setMeetings] = useState([])
     useEffect(() => {
@@ -58,7 +59,7 @@ export default function Dashboard() {
     //   }, [history]);
     
 
-if(loading){
+if(status === "loading"){
     return <Loader/>
 }
 else if (!session) {
@@ -95,6 +96,8 @@ else if (!session) {
                 ? <Meetings/>
                 :screens[screens.length - 1] === "Feedback" 
                 ? <Feedback/>
+                :screens[screens.length - 1] === "Movement" 
+                ? <Movement/>
                 :
                 <>
                      {/* <div className={styles.schoolLogo}></div> */}
@@ -219,22 +222,19 @@ else if (!session) {
 
             <div className={styles.btn} onClick={() => {
                 
-                if(!screens.find(item => item === "Absent")){
-                    setScreens(prep => [...prep, "Absent"])
+                if(!screens.find(item => item === "Movement")){
+                    setScreens(prep => [...prep, "Movement"])
                  }
-                 else if(screens.includes("Absent")){
+                 else if(screens.includes("Movement")){
                      
-                     setScreens([...screens.filter(item => item !== "Absent"), "Absent"])
+                     setScreens([...screens.filter(item => item !== "Movement"), "Movement"])
                      
                  }
                  else {
                     return
                  }}}>
-                <svg className={styles.icon} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"  viewBox="0 0 16 16">
-  <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
-  <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8"/>
-</svg>
-                <p>Report Absent</p>
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="currentColor" d="M11 16.788q-.137 0-.213-.08q-.077-.081-.123-.195q-.316-.798-.726-1.38q-.41-.581-.82-1.121q-.52-.689-.915-1.389q-.395-.7-.395-1.738q0-1.323.935-2.258q.934-.935 2.257-.935t2.257.935q.935.935.935 2.258q0 1.038-.395 1.738t-.914 1.389q-.41.54-.82 1.122q-.411.581-.723 1.381q-.05.131-.127.202q-.076.071-.213.071Zm.003-4.846q.445 0 .75-.307q.305-.308.305-.753t-.308-.75t-.753-.305q-.445 0-.75.307q-.305.308-.305.753q0 .446.308.75t.753.305ZM11 20q-3.333 0-5.667-2.333Q3 15.335 3 12.003q0-1.666.626-3.121t1.713-2.543q1.088-1.087 2.542-1.713Q9.334 4 10.999 4q1.664 0 3.12.626q1.454.626 2.542 1.713q1.087 1.088 1.713 2.542Q19 10.335 19 12v1.412l2.037-2.062l.713.688l-3.25 3.25l-3.25-3.25l.713-.688L18 13.387V12q0-2.9-2.05-4.95T11 5Q8.1 5 6.05 7.05T4 12q.006 2.92 2.043 4.96Q8.081 19 11 19q1.406 0 2.588-.499q1.183-.5 2.172-1.386l.732.714q-1.129 1.027-2.54 1.599Q12.543 20 11 20Z"/></svg>
+                <p>Movement</p>
             </div>
 
             <div className={styles.btn} onClick={() => {
@@ -254,7 +254,7 @@ else if (!session) {
                 <svg className={styles.icon} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"  viewBox="0 0 16 16">
   <path d="M0 1.5A1.5 1.5 0 0 1 1.5 0h2A1.5 1.5 0 0 1 5 1.5v2A1.5 1.5 0 0 1 3.5 5h-2A1.5 1.5 0 0 1 0 3.5zM1.5 1a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5zM0 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm1 3v2a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2zm14-1V8a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2zM2 8.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0 4a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5"/>
 </svg>
-                <p>Menu</p>
+                <p>More</p>
             </div>
   
         </div>
