@@ -27,8 +27,6 @@ export async function POST(request) {
           date,
           email,
           first_name,
-          initial,
-          last_name,
           pause_register,
           persal,
           phone_number,

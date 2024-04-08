@@ -284,10 +284,11 @@ export const DataProvider = ({ children }) => {
 
   const signMovement = (code, reason) => {
     const data = {
-      initial: session?.user.initial,
-      last_name: session?.user.last_name,
+ 
       date: getCurrentDate(),
       code,
+      initial: session?.user.initial,
+      last_name: session?.user.last_name,
       day: getCurrentDayOfWeek(),
       reason,
       week: getCurrentWeek(),
