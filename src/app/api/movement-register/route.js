@@ -13,10 +13,10 @@ export async function POST(request) {
     const updated_user = getSchool.members.find(elem => elem.code === body.id)
 
     const movement = updated_user.movement || [];
-    if(!getSchool.movementCodes.find(item => item.code === body.data.code)){
+    if(!getSchool.movementCodes.find(item => item.code === body.data.movement_code)){
         return NextResponse.json("Invalid");
     }
-    else if(movement.find(elem => elem.code === body.data.code || elem.date === body.data.date)){
+    else if(movement.find(elem => elem.movement_code === body.data.movement_code || elem.date === body.data.date)){
         return NextResponse.json("Already Signed!");
     }
     else {
