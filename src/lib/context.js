@@ -284,16 +284,16 @@ export const DataProvider = ({ children }) => {
 
   const signMovement = (code, reason) => {
     const data = {
- 
       date: getCurrentDate(),
-      code,
+      code: session?.user.code,
+      movement_code: code,
       initial: session?.user.initial,
       last_name: session?.user.last_name,
       day: getCurrentDayOfWeek(),
       reason,
       week: getCurrentWeek(),
     };
-    setLoading(true)
+    setLoading(true);
     fetch("/api/movement-register/", {
       method: "POST",
       headers: {
@@ -304,26 +304,23 @@ export const DataProvider = ({ children }) => {
         id: session?.user.code,
         data,
       }),
-    }).then(data => data ? data.json() : null)
-    .then(data => {
-      if(data === "Already Signed!"){
-        setErr("Already Signed!")
-        setLoading(false)
-      }
-     else if(data === "Invalid"){
-        setErr("Invalid Code")
-        setLoading(false)
-      }
-
-      else if (data === "User Updated") {
-        setErr("Successfully Signed!")
-        setLoading(false)
-      }
-      else {
-        setErr("Oops Please Retry!")
-        setLoading(false)
-      }
     })
+      .then((data) => (data ? data.json() : null))
+      .then((data) => {
+        if (data === "Already Signed!") {
+          setErr("Already Signed!");
+          setLoading(false);
+        } else if (data === "Invalid") {
+          setErr("Invalid Code");
+          setLoading(false);
+        } else if (data === "User Updated") {
+          setErr("Successfully Signed!");
+          setLoading(false);
+        } else {
+          setErr("Oops Please Retry!");
+          setLoading(false);
+        }
+      });
   };
 
   const signRegister = (code, user = session?.user) => {
