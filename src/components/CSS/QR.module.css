@@ -67,7 +67,7 @@
 
 }
 .Video{
-    width: 100%;
+    width: min(600px, 95vw);
     height: 100%;
 
   
