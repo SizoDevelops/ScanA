@@ -14,10 +14,13 @@ body {
 }
 
 body {
-  background-color: #111115;
-  color: #fff;
+  background-color: #f3f3f3;
+  color: #111115;
 }
-
+.scan-region-highlight-svg,
+ .code-outline-highlight {
+    stroke: #03a4ff !important;
+}
 a {
   color: inherit;
   text-decoration: none;

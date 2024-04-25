@@ -118,15 +118,11 @@ else if (!session) {
 
         <div className={styles.contacts}>
             <div className={styles.holder}>
-                <div className={styles.image} style={{backgroundImage:"url(https://i.ibb.co/Wgw6bLq/mingcute-phone-fill.png)"}}>
-                {/* <Image src={phoneImage} fill alt="Image"/> */}
-                </div>
+            <svg className={styles.image} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 19 32"><g fill="currentColor"><path d="M1.5 32h16c.827 0 1.5-.673 1.5-1.5v-29c0-.827-.673-1.5-1.5-1.5h-16C.673 0 0 .673 0 1.5v29c0 .827.673 1.5 1.5 1.5zM1 1.5a.5.5 0 0 1 .5-.5h16a.5.5 0 0 1 .5.5v29a.5.5 0 0 1-.5.5h-16a.5.5 0 0 1-.5-.5v-29z"/><path d="M2.5 27h14a.5.5 0 0 0 .5-.5v-21a.5.5 0 0 0-.5-.5h-14a.5.5 0 0 0-.5.5v21a.5.5 0 0 0 .5.5zM3 6h13v20H3V6z"/><circle cx="10" cy="29" r="1"/><path d="M7.5 4h4a.5.5 0 0 0 0-1h-4a.5.5 0 0 0 0 1z"/></g></svg>
                 <p>{userDa?.phone_number || "Not Provided"}</p>
             </div>
             <div className={styles.holder}>
-                <div className={styles.image} style={{backgroundImage:"url(https://i.ibb.co/C8gwzSp/mdi-email.png)"}}>
-                {/* <Image src={emailImage} fill alt="Image"/> */}
-                </div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M21 9v9a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V9c0-1.11.6-2.08 1.5-2.6l8-4.62l8 4.62c.9.52 1.5 1.49 1.5 2.6M3.72 7.47l7.78 5.03l7.78-5.03l-7.78-4.54l-7.78 4.54m7.78 6.24L3.13 8.28C3.05 8.5 3 8.75 3 9v9a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2V9c0-.25-.05-.5-.13-.72l-8.37 5.43Z"/></svg>
                 <p>{userDa?.email}</p>
             </div>
         </div>
@@ -141,10 +137,8 @@ else if (!session) {
                 }
                 
                
-            }} style={screens.length  > 1 ? {opacity: "1"} : {opacity: "0.2"}}>
-                <div className={styles.icon} style={{backgroundImage:"url(https://i.ibb.co/wCsH3yk/pajamas-go-back.png)"}}>
-                 {/* <Image src={attendImage} fill alt="Image"/>  */}
-                </div>
+            }} style={screens.length  > 1 ? {opacity: "1"} : {opacity: "0.4"}}>
+               <svg className={styles.icon} xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27"><path fill="currentColor" d="m4 10l-.707.707L2.586 10l.707-.707zm17 8a1 1 0 1 1-2 0zM8.293 15.707l-5-5l1.414-1.414l5 5zm-5-6.414l5-5l1.414 1.414l-5 5zM4 9h10v2H4zm17 7v2h-2v-2zm-7-7a7 7 0 0 1 7 7h-2a5 5 0 0 0-5-5z"/></svg>
                 <p>Back</p>
             </div> 
 

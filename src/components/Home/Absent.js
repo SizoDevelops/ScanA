@@ -4,7 +4,7 @@ import styles from "../CSS/Absent.module.css"
 import { useDatabase } from '@/lib/context'
 import { updateAttendance } from '@/lib/Slice'
 import { useDispatch } from 'react-redux'
-export default function Absent() {
+export default function Absent() { 
     const {err, setErr, markAbsent,   absentLoading, getCurrentWeek} = useDatabase()
     const [reason, setReason] = useState("")
     const [display, setDisplay] = useState("none")

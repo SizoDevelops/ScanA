@@ -1,5 +1,6 @@
 .Code{
     height: 350px;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -54,15 +55,24 @@
     border-radius: 5px;
 }
 .try{
-    height: 350px;
+   
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
-
+    height: 100%;
     position: relative;
+    line-height: 0;
+
 }
+.Video{
+    width: 100%;
+    height: 100%;
+
+  
+}
+
 @media(min-width: 455px){
     .try{display:none}
 }

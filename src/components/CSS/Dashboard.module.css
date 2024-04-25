@@ -16,7 +16,7 @@
     padding: 0;
     margin-right: 30px;
     font-size: 14px;
-    color: #949599;
+    color: #111115;
 }
 
 .dashProfile{
@@ -33,14 +33,14 @@
 
 .greeting h1{
     font-size: min(40px, 9.5vw);
-    color: #e0e0e0;
+    color: #111115;
 }
 
 
 .greeting p{
     font-size: 13px;
     margin: 10px;
-    color: #949599;
+    color: #111115;
 }
 
 .calendarHolder{
@@ -84,17 +84,19 @@
 
 .contacts{
     width: 100%;
-    background-color: #18181a;
+    background-color: #03a4ff;
     padding: 10px;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
+    position: relative;
+    z-index: 2;
 } 
 
 .holder p{
     font-size: 11px;
     margin-left: 20px;
-    color: #7e8183;
+    color: #fff;
 
 }
 
@@ -103,15 +105,19 @@
     display: inline-flex;
     align-items: center;
 }
-.buttons{
+.buttons {
     width: 100%;
-    background-color: #18181a;
-    border-radius: 5px;
     display: inline-flex;
     align-items: center;
     margin-top: 20px;
     height: 150px;
     justify-content: space-evenly;
+    gap: 5px;
+}
+.buttons div{
+    background-color: #03a4ff;
+    border-radius: 5px;
+    width: min(170px, 30vw);
 }
 .notify{
     position: absolute;
@@ -179,7 +185,7 @@
     align-items: center;
     font-size: 10px;
     text-align: center;
-    color: #7e8183;
+    color: #111115;
 }
 
 .footer p{

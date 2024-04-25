@@ -47,24 +47,24 @@
     border-bottom: 1px solid #03a4ff;
     padding-bottom: 10px;
    text-align: center;
-   color: #fff;
+   color: #111115;
 }
 
 .container label{
     font-size: 12px;
-    color: #85868b
+    color: #111115
 }
 
 .Main p{
     font-size: 10px;
-    color: #707070;
+    color: #111115;
     margin-bottom: 10px;
 }
 
 .submit{
     padding: 10px;
     border: 1px solid #03a4ff;
-    background: #03a3ff2f;
+    background: #03a4ff;
     width: 30%;
     margin-bottom: 20px;
     cursor: pointer;
