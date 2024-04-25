@@ -16,6 +16,7 @@ import { useSelector } from 'react-redux'
 import Feedback from './Feedback'
 import FaceRecognition from './FaceRecognition'
 import Movement from './Movement'
+import Logo from './Logo'
 
 export default function Dashboard() {
     const {screens, setScreens, getCurrentMilitaryTime, userData, onLines,loading} = useDatabase()
@@ -70,7 +71,7 @@ else if (!session) {
     <div className={styles.dashboardCont}>
         <header className={styles.header}>
             <p>Dashboard</p>
-            <div className={styles.dashProfile} onClick={signOut}></div>
+            <Logo bgColor={"#0099F1"} widthV={381} heightV={50} width={50} height={60}/>
         </header>
 
         <div className={styles.greeting}>
@@ -155,7 +156,7 @@ else if (!session) {
                    return
                 }
             }}>
-               <svg className={styles.icon}xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"  viewBox="0 0 16 16">
+               <svg className={styles.icon}xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#fff"  viewBox="0 0 16 16">
   <path d="M0 .5A.5.5 0 0 1 .5 0h3a.5.5 0 0 1 0 1H1v2.5a.5.5 0 0 1-1 0zm12 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V1h-2.5a.5.5 0 0 1-.5-.5M.5 12a.5.5 0 0 1 .5.5V15h2.5a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H15v-2.5a.5.5 0 0 1 .5-.5M4 4h1v1H4z"/>
   <path d="M7 2H2v5h5zM3 3h3v3H3zm2 8H4v1h1z"/>
   <path d="M7 9H2v5h5zm-4 1h3v3H3zm8-6h1v1h-1z"/>
@@ -180,7 +181,7 @@ else if (!session) {
                     return
                  }
             }}>
-<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"  viewBox="0 0 16 16">
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fff"  viewBox="0 0 16 16">
   <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4z"/>
   <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5m0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
 </svg>
@@ -227,7 +228,7 @@ else if (!session) {
                  else {
                     return
                  }}}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="currentColor" d="M11 16.788q-.137 0-.213-.08q-.077-.081-.123-.195q-.316-.798-.726-1.38q-.41-.581-.82-1.121q-.52-.689-.915-1.389q-.395-.7-.395-1.738q0-1.323.935-2.258q.934-.935 2.257-.935t2.257.935q.935.935.935 2.258q0 1.038-.395 1.738t-.914 1.389q-.41.54-.82 1.122q-.411.581-.723 1.381q-.05.131-.127.202q-.076.071-.213.071Zm.003-4.846q.445 0 .75-.307q.305-.308.305-.753t-.308-.75t-.753-.305q-.445 0-.75.307q-.305.308-.305.753q0 .446.308.75t.753.305ZM11 20q-3.333 0-5.667-2.333Q3 15.335 3 12.003q0-1.666.626-3.121t1.713-2.543q1.088-1.087 2.542-1.713Q9.334 4 10.999 4q1.664 0 3.12.626q1.454.626 2.542 1.713q1.087 1.088 1.713 2.542Q19 10.335 19 12v1.412l2.037-2.062l.713.688l-3.25 3.25l-3.25-3.25l.713-.688L18 13.387V12q0-2.9-2.05-4.95T11 5Q8.1 5 6.05 7.05T4 12q.006 2.92 2.043 4.96Q8.081 19 11 19q1.406 0 2.588-.499q1.183-.5 2.172-1.386l.732.714q-1.129 1.027-2.54 1.599Q12.543 20 11 20Z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="#fff" d="M11 16.788q-.137 0-.213-.08q-.077-.081-.123-.195q-.316-.798-.726-1.38q-.41-.581-.82-1.121q-.52-.689-.915-1.389q-.395-.7-.395-1.738q0-1.323.935-2.258q.934-.935 2.257-.935t2.257.935q.935.935.935 2.258q0 1.038-.395 1.738t-.914 1.389q-.41.54-.82 1.122q-.411.581-.723 1.381q-.05.131-.127.202q-.076.071-.213.071Zm.003-4.846q.445 0 .75-.307q.305-.308.305-.753t-.308-.75t-.753-.305q-.445 0-.75.307q-.305.308-.305.753q0 .446.308.75t.753.305ZM11 20q-3.333 0-5.667-2.333Q3 15.335 3 12.003q0-1.666.626-3.121t1.713-2.543q1.088-1.087 2.542-1.713Q9.334 4 10.999 4q1.664 0 3.12.626q1.454.626 2.542 1.713q1.087 1.088 1.713 2.542Q19 10.335 19 12v1.412l2.037-2.062l.713.688l-3.25 3.25l-3.25-3.25l.713-.688L18 13.387V12q0-2.9-2.05-4.95T11 5Q8.1 5 6.05 7.05T4 12q.006 2.92 2.043 4.96Q8.081 19 11 19q1.406 0 2.588-.499q1.183-.5 2.172-1.386l.732.714q-1.129 1.027-2.54 1.599Q12.543 20 11 20Z"/></svg>
                 <p>Movement</p>
             </div>
 

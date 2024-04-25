@@ -16,6 +16,7 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 20px;
+    color: #fff;
 }
 
 .btn{
@@ -25,9 +26,9 @@
     align-items: center;
     width: 80px;
     height: 80px;
-    background: #3b3b3b3f;
+    background: #03a4ff;
     border-radius: 5px;
-    border: 1px solid #8d8d8d;
+
     font-size: 12px;
     gap: 10px;
     position: relative;
