@@ -12,14 +12,14 @@
     min-height: 150px;
     display: flex; 
     flex-direction: column;
-    background: #3b3b3b3f;
+    background: #03a4ff;
     border-radius: 5px;
-    border: 1px solid #8d8d8d;
+    border: 1px solid #ffffff;
     font-size: 12px;
     gap: 10px;
     position: relative;
     user-select: none;
-    color: #cac9c9;
+    color: #fff;
     overflow-y: hidden;
     margin-bottom: 5px;
 }
@@ -49,7 +49,7 @@
 }
 .des{
     width: 100%;
-    border-top: 1px solid #414141;
+    border-top: 1px solid #cfcfcf;
     padding-top: 5px;
     padding-left: 5px;
     line-height: 15px;
