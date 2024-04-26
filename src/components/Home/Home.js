@@ -26,7 +26,7 @@ else return (
       <div className={styles.image}>
          <Image alt='ScanA Hero Image' src={"/images/headerImage.svg"} fill/>
       </div>
-      <Logo bgColor={"#0099F1"} widthV={381} heightV={120} width={220} height={130}/>
+      <Logo bgColor={"#0099F1"} widthV={381} heightV={120} width={180} height={100}/>
       <p className={styles.bodyParagraph}><span>Seamless</span> and <span>Effortless</span> attendance tracking</p>
       <div className={styles.loginBtn} onClick={signIn}>
         Login
