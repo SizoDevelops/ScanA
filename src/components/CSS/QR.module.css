@@ -65,15 +65,16 @@
     position: relative;
     line-height: 0;
     background-color: #111115 !important;
-    position: relative;
-  
+    overflow: hidden;
 }
 .Video{
-    width: auto;
-    height: auto;
-    max-height: 100%;
-    max-width: 100%;
+    width: 100%;
 }
+.Video::after {
+    padding-top: 56.25%; /* Adjust based on video aspect ratio */
+    display: block;
+    content: "";
+  }
 
 @media(min-width: 455px){
     .try{display:none}
