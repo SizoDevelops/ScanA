@@ -67,9 +67,7 @@
     background-color: #111115 !important;
 }
 .Video{
-    width: min(500px, 95vw);
-    height: 100%;
-
+    overflow: auto;
   
 }
 

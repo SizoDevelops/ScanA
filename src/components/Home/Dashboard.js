@@ -60,7 +60,7 @@ export default function Dashboard() {
     //   }, [history]);
     
 
-if(status === "loading"){
+if(status === "loading" || loading){
     return <Loader/>
 }
 else if (!session) {

@@ -24,7 +24,7 @@ export default function QR(checkQR) {
         highlightScanRegion: true,
         highlightCodeOutline: true,
         preferredCamera: "environment",
-        maxScansPerSecond: 1
+       
         
     });
     scanner.start()
@@ -57,7 +57,7 @@ export default function QR(checkQR) {
   return (
     <div className={styles.Code}>
       <div  className={styles.try}>
-        <video id='qr-video' className={styles.Video} disablePictureInPicture></video>
+        <video width="300" height="300" id='qr-video' className={styles.Video}></video>
       </div>
   
         <span className={styles.scanner} style={{  display: display}}>{err}</span>

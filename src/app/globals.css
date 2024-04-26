@@ -20,7 +20,10 @@ body {
 .scan-region-highlight-svg,
  .code-outline-highlight {
     stroke: #03a4ff !important;
+
 }
+
+
 a {
   color: inherit;
   text-decoration: none;
