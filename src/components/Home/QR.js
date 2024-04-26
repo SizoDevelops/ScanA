@@ -19,11 +19,12 @@ export default function QR(checkQR) {
       const scanner = new QrScanner(document.getElementById("qr-video"), result => signRegister(result.data), {
         onDecodeError: error => {
           setSupport("Video not supported, Enter code.");
-          setErr("");
+        
         },
         highlightScanRegion: true,
         highlightCodeOutline: true,
         preferredCamera: "environment",
+        maxScansPerSecond: 1
         
     });
     scanner.start()
@@ -42,8 +43,12 @@ export default function QR(checkQR) {
     useEffect(() => {
       if(err !== ""){
         setDisplay("flex")
+        document.getElementById("qr-video").pause()
       }
-      else setDisplay('none')
+      else {
+        setDisplay('none')
+      document.getElementById("qr-video").play()
+    }
     }, [err])
 
 
