@@ -6,7 +6,7 @@ import Calendar from './Calender'
 import Code from './Code'
 import QR from './QR'
 
-import { getSession, signOut, useSession } from 'next-auth/react'
+import { getSession,  useSession } from 'next-auth/react'
 import { useDatabase } from '@/lib/context'
 import Loader from './Loader'
 import Absent from './Absent'
@@ -37,28 +37,6 @@ export default function Dashboard() {
       }
      
     }, [userData,  onLines])
-
-    
-    // useEffect(() => {
-    //     const handleBackButton = (event) => {
-    //       // Your custom logic here
-     
-    //       // Uncomment the line below to allow the default back button behavior
-    //     //   history.goBack();
-    
-    //       // Prevent the default back button behavior
-    //       event.preventDefault();
-    //     };
-    
-    //     // Add event listener for the popstate event (back/forward button press)
-    //     window.addEventListener('beforeunload', handleBackButton);
-    
-    //     // Cleanup the event listener when the component unmounts
-    //     return () => {
-    //       window.removeEventListener('beforeunload', handleBackButton);
-    //     };
-    //   }, [history]);
-    
 
 if(status === "loading" || loading){
     return <Loader/>

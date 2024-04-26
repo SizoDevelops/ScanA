@@ -1,0 +1,57 @@
+.cont {
+    width: min(500px, 98vw);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 5px;
+}
+
+.image{
+    width: min(426px, 97vw);
+    height: 303px;
+    position: relative;
+    margin-top: 30px;
+}
+
+.bodyParagraph{
+    font-weight: 900;
+    font-size: 38px;
+    color: #111115;
+}
+
+.bodyParagraph span{
+    color: #03a4ff;
+}
+
+.loginBtn{
+    margin-top: 30px;
+    background-color: #03a4ff;
+    color: #ffffff;
+    padding: 10px 90px;
+    border-radius: 100px;
+    -webkit-border-radius: 100px;
+    -moz-border-radius: 100px;
+    -ms-border-radius: 100px;
+    -o-border-radius: 100px;
+    cursor: pointer;
+}
+
+.loginBtn:active{
+    background: #4b4b52;
+    outline: 1px solid #fff;
+}
+
+.CTAParagraph{
+    margin-top: 30px;
+    align-self: flex-start;
+}
+
+.cont a{
+    color: #03a4ff;
+    text-decoration: underline;
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 30px;
+}

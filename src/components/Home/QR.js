@@ -24,7 +24,7 @@ export default function QR(checkQR) {
         highlightScanRegion: true,
         highlightCodeOutline: true,
         preferredCamera: "environment",
-       
+       maxScansPerSecond: 5
         
     });
     scanner.start()
