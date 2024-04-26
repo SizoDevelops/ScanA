@@ -166,7 +166,8 @@
     text-align: center;
 }
 .btn:active{
-    scale: 1.2;
+    background: #4b4b52;
+    outline: 1px solid #fff;
 }
 
 .image{
