@@ -65,10 +65,11 @@
     position: relative;
     line-height: 0;
     background-color: #111115 !important;
+    position: relative;
 }
 .Video{
-    overflow: auto;
-  
+    width: 100%;
+    height: auto;
 }
 
 @media(min-width: 455px){
