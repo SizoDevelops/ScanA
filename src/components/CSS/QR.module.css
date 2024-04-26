@@ -64,7 +64,7 @@
     height: 100%;
     position: relative;
     line-height: 0;
-
+    background-color: #111115 !important;
 }
 .Video{
     width: min(500px, 95vw);

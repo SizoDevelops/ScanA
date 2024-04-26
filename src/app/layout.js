@@ -18,7 +18,7 @@ export const metadata = {
   },
   description: APP_DESCRIPTION,
   manifest: "/manifest.json",
-  themeColor: "#ffffff",
+  themeColor: "#f8f8f8",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -50,7 +50,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-    <meta name="theme-color" content="#FFFFFF"/>
+    <meta name="theme-color" content="#f8f8f8"/>
       <Providers>
           <body className={inter.className}>{children}</body>
       </Providers>
