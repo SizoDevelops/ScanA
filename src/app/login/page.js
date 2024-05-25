@@ -9,15 +9,12 @@ import { useDatabase } from '@/lib/context';
 
 export default function Page() {
   const searchParams = useSearchParams()
-  const url = searchParams.get("callbackUrl")
-  const parsedUrl = new URL(url)
-  const newUrl = new URLSearchParams(parsedUrl.search)
   const { err, setErr} = useDatabase()
   const [submitting, setSubmitting] = useState(false)
-  const schoolCode = newUrl.get('code')
-  const userCode = newUrl.get('usercode')
+  const schoolCode = searchParams.get("code")
+  const userCode = searchParams.get('usercode')
   const [display, setDisplay] = useState("none")
-  const [school_code, setSchooCode] = useState(schoolCode)
+  const [school_code, setSchooCode] = useState(schoolCode ? schoolCode : "")
   const [code, setCode] = useState(userCode ? userCode : "")
   const [password, setPassword] = useState("")
   const router = useRouter()

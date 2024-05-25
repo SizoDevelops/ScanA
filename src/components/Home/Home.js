@@ -13,7 +13,7 @@ export default function Home() {
   // Get User Session 
   const {data:session, status} = useSession()
 
-  // Check if laoding
+  // Check if loading
   if(status === "loading"){
     return <Loader/>
   }

@@ -16,7 +16,7 @@ const handler = NextAuth({
       },
       async authorize(credentials, req) {
         try {
-          let res = await fetch(process.env.NEXTAUTH_URL + "/api/login", {
+          let res = await fetch(process.env.NEXTAUTH_URL + "/api/login-user", {
             method: "POST",
             cache: 'no-cache',
             headers: {
