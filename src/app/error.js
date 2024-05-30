@@ -1,8 +1,16 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 
 import Image from "next/image";
+import { redirect } from "next/navigation";
 export default function Error({ error, reset }) {
+  useEffect(() => {
+    const hasTouch = "maxTouchPoints" in navigator && navigator.maxTouchPoints > 0;
+  
+    if(!hasTouch){
+      redirect("https://dashboard.scana.co.za")
+    }
+  }, [])
   return (
     <html>
       <body className={"container"}>

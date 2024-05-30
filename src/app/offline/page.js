@@ -1,8 +1,19 @@
-import React from 'react'
+"use client"
+import React, { useEffect } from 'react'
 import styles from "@/components/CSS/error.module.css"
 import Image from 'next/image'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 export default function Page() {
+
+  useEffect(() => {
+    const hasTouch = "maxTouchPoints" in navigator && navigator.maxTouchPoints > 0;
+  
+    if(!hasTouch){
+      redirect("https://dashboard.scana.co.za")
+    }
+  }, [])
+
   return (
    <div className={styles.container}>
       <div className={styles.cloud}>

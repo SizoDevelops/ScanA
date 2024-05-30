@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import styles from '../../components/CSS/Login.module.css'
 import { signIn, useSession } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { redirect, useRouter, useSearchParams } from 'next/navigation';
 import { useDatabase } from '@/lib/context';
 
 
@@ -23,16 +23,29 @@ export default function Page() {
   const {data: session} = useSession()
 
   useEffect(() => {
+    const hasTouch = "maxTouchPoints" in navigator && navigator.maxTouchPoints > 0;
+  
+    if(!hasTouch){
+      redirect("https://dashboard.scana.co.za")
+    }
+  }, [])
+
+  useEffect(() => {
     if(session && session?.user){
       router.push("/")
     }
   },[session])
+
+
+
   useEffect(() => {
     if(err !== ""){
       setDisplay("flex")
     }
     else setDisplay('none')
   }, [err])
+
+
   useEffect(() => {
     setErr("")
     if(window){
