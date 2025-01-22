@@ -1,13 +1,12 @@
-import { Deta } from 'deta';
+import { getUserCollection } from '@/lib/databaseFunctions';
+
 import { NextResponse } from 'next/server';
 
-const deta = Deta(process.env.DETA_PROJECT_KEY)
-const base = deta.Base("schools_db")
 
 export async function POST(request) {
     try {
         const body = await request.json()
-        const db = await base.get(body.key)
+        const db = await getUserCollection(body.key)
         const faces = db?.user_faces || [];
 
         if(body.methods === "update"){

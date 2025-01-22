@@ -50,7 +50,7 @@ export default function Feedback() {
                 })
             }).then(() => {
                     setDisplay("flex")
-                    setErr("Thank you for your time!")
+                    setErr("Thank you for the feedback!")
                  let time = setTimeout(() => {
                     setErr("")
                     setDisplay("none")

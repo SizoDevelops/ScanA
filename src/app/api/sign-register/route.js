@@ -1,14 +1,13 @@
-import { Deta } from 'deta'
+import { getUserCollection, updateCollectionMembers } from '@/lib/databaseFunctions';
+
 import { NextResponse } from 'next/server';
 
-const deta = Deta(process.env.DETA_PROJECT_KEY)
-const db = deta.Base("schools_db")
 
 export async function POST(request) {
    try{
     const body = await request.json();
 
-    const getSchool = await db.get(body.key)
+    const getSchool = await getUserCollection(body.key)
     // Find the member that has the ID
     const updated_user = getSchool.members.find(elem => elem.code === body.id)
 
@@ -90,7 +89,7 @@ export async function POST(request) {
 
     // ReAdd the member with the updated keys
     const newM = members.concat([updated_user])
-    const updateUser = await  db.update({members: newM}, body.key)
+    const updateUser = await  updateCollectionMembers(body.key, newM)
 
     return NextResponse.json(updateUser)
    }catch(error){

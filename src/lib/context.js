@@ -47,6 +47,7 @@ export const DataProvider = ({ children }) => {
 
     if (session && session.user) {
       getUser(session?.user.code.slice(0, session?.user.code.lastIndexOf("-")));
+      
     }
   }, [session]);
 
@@ -253,6 +254,7 @@ export const DataProvider = ({ children }) => {
   // ..............
   // ..............
   const getUser = async (data) => {
+    
     await fetch("api/get-school", {
       method: "POST",
       headers: {
@@ -278,7 +280,7 @@ export const DataProvider = ({ children }) => {
       })
       .catch((err) => {
         setLoading(false);
-        throw new Error("Offline");
+       
       });
   };
 

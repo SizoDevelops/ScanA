@@ -1,8 +1,8 @@
-import { Deta } from "deta";
+
+import { getUserCollection, updateCollectionMembers } from "@/lib/databaseFunctions";
 import { NextResponse } from "next/server";
 
-const deta = Deta(process.env.DETA_PROJECT_KEY);
-const db = deta.Base("schools_db");
+
 
 export async function POST(request) {
   try{
@@ -31,7 +31,7 @@ export async function POST(request) {
     return targetDate.toISOString().split("T")[0];
   }
   const week = getCurrentWeek()
-  const getSchool = await db.get(body.key);
+  const getSchool = await getUserCollection(body.key);
   const updated_user = getSchool.members.find((elem) => elem.code === body.id);
 
   let errors = []; // Array to collect any errors encountered
@@ -63,7 +63,7 @@ export async function POST(request) {
 
   const members = getSchool.members.filter((item) => item.code !== body.id);
   const newMembers = [...members, updated_user];
-  const updateUser = await db.update({ members: newMembers }, body.key);
+  const updateUser = await updateCollectionMembers(body.key, newMembers);
 
   if (errors.length > 0) {
     // Handle errors, e.g., return a response with the errors array

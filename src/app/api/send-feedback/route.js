@@ -1,18 +1,17 @@
-import { Deta } from 'deta';
+import { getFeedbackCollection, setFeedbackCollection } from '@/lib/databaseFunctions';
 import { NextResponse } from 'next/server';
-
-const deta = Deta(process.env.DETA_PROJECT_KEY)
-const base = deta.Base("scana_feedback")
 
 export async function POST(request) {
     try {
         const body = await request.json()
-        let item = await base.fetch({key: body.id})
-        if(item.count > 0){
+
+        let item = await getFeedbackCollection(body.id)
+
+        if(item){
             return NextResponse.json({error: "Feedback Duplicted!"},{status: 500})
         }
         else {
-            await base.put(body.feedback, body.id)
+            await setFeedbackCollection(body.id, body.feedback)
             return NextResponse.json({data: "Success"}, {status: 200})
         }
     } catch (error) {

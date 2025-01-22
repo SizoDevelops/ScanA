@@ -1,21 +1,18 @@
 import { signJwtAccessToken } from "@/lib/jwt";
 import { NextResponse } from "next/server";
 import * as bcrypt from "bcrypt";
-import { Deta } from "deta";
 
-const deta = Deta(process.env.DETA_PROJECT_KEY);
-const db = deta.Base("schools_db");
+import { getUserCollection, updateCollectionMembers } from "@/lib/databaseFunctions";
 
 export async function POST(request) {
   try {
     const body = await request.json();
 
-    const user = await db.fetch({
-      school_code: body.school_code,
-    });
+    const user = await getUserCollection(body.school_code)
 
-    if (user.count > 0) {
-      const result = user.items[0].members.find(
+
+    if (user) {
+      const result = user.members.find(
         (item) => item.code === body.code
       );
       if (
@@ -45,8 +42,9 @@ export async function POST(request) {
         };
 
         return NextResponse.json(resultUser);
+
       } else if (result && !result.password) {
-        const users = user.items[0].members.filter(
+        const users = user.members.filter(
           (item) => item.id !== result.id
         );
 
@@ -54,7 +52,7 @@ export async function POST(request) {
 
         users.push(result);
 
-        const s = await db.update({ members: users }, user.items[0].key);
+        const s = await updateCollectionMembers(user.school_code, users);
         const {
           date,
           email,

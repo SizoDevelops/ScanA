@@ -10,10 +10,11 @@ export default function Page() {
   useEffect(() => {
     const hasTouch = "maxTouchPoints" in navigator && navigator.maxTouchPoints > 0;
   
-    if(!hasTouch){
-      redirect("https://dashboard.scana.co.za")
-    }
+    // if(!hasTouch){
+    //   redirect("https://dashboard.scana.co.za")
+    // }
   }, [])
+
   return (
     <div className={styles.main}>
       <Home/>
