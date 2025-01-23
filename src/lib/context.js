@@ -144,7 +144,7 @@ export const DataProvider = ({ children }) => {
     const date = getAbsentDate(day, week);
 
     const data = {
-      key: userData?.key,
+      key: session?.user.code.slice(0, session?.user.code.lastIndexOf("-")),
       id: user?.code,
       current_day: day,
       attend: {
@@ -187,7 +187,7 @@ export const DataProvider = ({ children }) => {
     const day = getCurrentDayOfWeek();
     setAbsentLoading(true);
     const data = {
-      key: userData?.key,
+      key: session?.user.code.slice(0, session?.user.code.lastIndexOf("-")),
       id: session?.user.code,
       current_day: day,
       days: days,
@@ -205,12 +205,15 @@ export const DataProvider = ({ children }) => {
       .then((res) => res.json())
       .then((data) => {
         setAbsentLoading(false);
-        if (data === null) {
+        if (data.includes("success")) {
           setErr("Successfully Submitted");
         } else if (data.includes("Already Signed")) {
           setErr("Already Signed");
         } else if (data.includes("Not Available On Sunday!")) {
           setErr("Opps!! Not available on sunday.");
+        }
+        else{
+          setErr("Opps!! Something went wrong.");
         }
       });
     dispatch(updateAttendance(data));

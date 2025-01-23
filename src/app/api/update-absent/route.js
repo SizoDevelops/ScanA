@@ -69,9 +69,9 @@ export async function POST(request) {
     // Handle errors, e.g., return a response with the errors array
     return NextResponse.json(errors);
   } else {
-    return NextResponse.json(updateUser);
+    return NextResponse.json(["success"]);
   }
   }catch(error){
-    return NextResponse.json({ error: "An error occurred." }, { status: 500 });
+    console.log(error)
   }
 }
