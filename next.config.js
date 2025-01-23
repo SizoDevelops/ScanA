@@ -15,6 +15,9 @@ const withPWA = require("@ducanh2912/next-pwa").default({
       missingSuspenseWithCSRBailout: false,
       
     },
+    eslint: {
+      dirs: ['app','src'], // Only run ESLint on the 'pages' and 'utils' directories during production builds (next build)
+    },
   
   });
  
