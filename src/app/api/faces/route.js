@@ -1,4 +1,4 @@
-import { getUserCollection } from '@/lib/databaseFunctions';
+import { getUserCollection, updateFaces } from '@/lib/databaseFunctions';
 
 import { NextResponse } from 'next/server';
 
@@ -10,13 +10,11 @@ export async function POST(request) {
         const faces = db?.user_faces || [];
 
         if(body.methods === "update"){
-           
-      
 
             // Push the compressed data to the faces array
             if(!faces.find(elem => elem.id === body.faceRecord.id)){
                     faces.push(body.faceRecord);
-                    await base.update({user_faces: faces}, body.key);
+                    await updateFaces(body.key, faces);
                     return NextResponse.json(faces)
             }
             else {
@@ -28,7 +26,7 @@ export async function POST(request) {
         }
         else if(body.methods === "delete"){
             const newFaces = faces.filter(items => items.id !== body.faceRecord.id)
-            let s =  await base.update({user_faces: newFaces}, body.key);
+            let s = await updateFaces(body.key, faces);
             return NextResponse.json("Face Deleted Successfully")
         }
         else {

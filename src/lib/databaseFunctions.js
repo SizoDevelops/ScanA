@@ -53,6 +53,19 @@ export const updateCollectionMembers = async (key, data) => {
     }
 }
 
+export const updateFaces = async (key, data) => {
+    
+    const updatedUser = await  updateDoc(doc(db, "users", key), {user_faces: data})
+
+    if(updatedUser){
+        return updatedUser
+    }
+
+    else{
+        return null
+    }
+}
+
 export const getFeedbackCollection = async (key) => {
     const user = await getDoc(doc(db, "feedback", key))
 
