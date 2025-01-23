@@ -6,6 +6,11 @@ import styles from "@/components/CSS/FaceRecognition.module.css";
 import { useDatabase } from "@/lib/context";
 import { useSelector } from "react-redux";
 import ErrorModal from "./ErrorModal";
+import * as tf from "@tensorflow/tfjs";
+
+
+tf.setBackend("webgl");
+
 
 // Face recognition configuration
 const faceRecognitionConfig = {
@@ -117,7 +122,7 @@ export default function FaceRecognition() {
   const [mediaStream, setMediaStream] = useState(null);
   const { userData, getUser, signRegister } = useDatabase();
   const user = useSelector((state) => state.User.value);
-  const faces = userData.user_faces;
+  const faces = userData?.user_faces || [];
 
   //  Camera Start
   const webCamStart = async () => {
@@ -324,7 +329,7 @@ export default function FaceRecognition() {
       )}in`
     );
 
-    await faceRecognition.tf.browser.draw(
+    await faceRecognition.tf.browser.toPixels(
       currentFace.face.tensor,
       canvasRef.current
     );
@@ -340,7 +345,9 @@ export default function FaceRecognition() {
     );
     currentFace.record = db[res.index] || null;
 
-    if (currentFace.record && !db.find((elem) => elem.id === user.code) && res.similarity < recognitionSettings.threshold) {
+    console.log(currentFace);
+
+    if (!currentFace.record && !db.find((elem) => elem.id === user.code) && res.similarity < recognitionSettings.threshold) {
       setOutcome({
         type: "New",
         name: `${user?.first_name} ${user?.last_name}`,
@@ -415,8 +422,7 @@ export default function FaceRecognition() {
       .catch((e) => {
         console.log(e);
       });
-    // await indexDb.save(rec);
-    console.log("known face records:", userData.user_faces.length + 1);
+ 
   }
   // Delete Faces
 

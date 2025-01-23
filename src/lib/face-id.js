@@ -5201,7 +5201,7 @@ var z4 = { importFetch: () => Ek() };
 var Pw;
 var Ow = class {
   constructor() {
-    this.util = $k(), this.textEncoder = new this.util.TextEncoder();
+    this.util = $k(), this.textEncoder = new TextEncoder();
   }
   fetch(e, t10) {
     return A().global.fetch != null ? A().global.fetch(e, t10) : (Pw == null && (Pw = z4.importFetch()), Pw(e, t10));
