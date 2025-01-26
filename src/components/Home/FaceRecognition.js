@@ -68,8 +68,9 @@ const recognitionStatus = {
 const faceRecognition = new Human.Human(faceRecognitionConfig);
 
 faceRecognition.env.perfadd = false;
-faceRecognition.draw.options.font = 'small-caps 13px "Lato"';
+faceRecognition.draw.options.font = 'small-caps 0px "Lato"';
 faceRecognition.draw.options.lineHeight = 20;
+
 
 // Current Identified Face
 const currentFace = { face: null, record: null };
@@ -124,6 +125,10 @@ export default function FaceRecognition() {
   const user = useSelector((state) => state.User.value);
   const faces = userData?.user_faces || [];
 
+
+
+
+
   //  Camera Start
   const webCamStart = async () => {
     let videoConfig = {
@@ -167,23 +172,7 @@ export default function FaceRecognition() {
       requestAnimationFrame(detectVideo);
     }
   };
-  function drawValidationTests() {
-    let y = 32;
-    for (const [key, val] of Object.entries(recognitionStatus)) {
-      let el = document.getElementById(`ok-${key}`);
-      if (!el) {
-        el = document.createElement("div");
-        el.id = `ok-${key}`;
-        el.innerText = key;
-        el.className = styles.Okay;
-        okContainerRef.current.appendChild(el);
-      }
-      if (typeof val.status === "boolean")
-        el.style.background = val.status ? "lightgreen" : "lightcoral";
-      const status = val.status ? "ok" : "fail";
-      el.innerText = `${key}: ${val.val === 0 ? status : val.val}`;
-    }
-  }
+
 
   // Validate Face and Video
   const validationLoop = async () => {
@@ -207,30 +196,6 @@ export default function FaceRecognition() {
         (gesture) => gesture.gesture
       );
 
-      // if (
-      //   gestures.includes("blink left eye") ||
-      //   gestures.includes("blink right eye")
-      // ) {
-      //   blinking.start = faceRecognition.now();
-      // }
-      // if (
-      //   blinking.start > 0 &&
-      //   !gestures.includes("blink left eye") &&
-      //   !gestures.includes("blink right eye")
-      // ) {
-      //   blinking.end = faceRecognition.now();
-      // }
-
-      // recognitionStatus.blinkDetected.status =
-      //   recognitionStatus.blinkDetected.status ||
-      //   (Math.abs(blinking.end - blinking.start) >
-      //     recognitionSettings.blinkMin &&
-      //     Math.abs(blinking.end - blinking.start) <
-      //       recognitionSettings.blinkMax);
-
-      // if (recognitionStatus.blinkDetected.status && blinking.time === 0) {
-      //   blinking.time = Math.trunc(blinking.end - blinking.start);
-      // }
       recognitionStatus.facingCenter.status =
         gestures.includes("facing center");
       recognitionStatus.lookingCenter.status =
@@ -319,24 +284,19 @@ export default function FaceRecognition() {
     if (!currentFace?.face?.tensor || !currentFace?.face?.embedding)
       return false;
 
-    console.log("face record", currentFace.face);
-
-    console.log(
-      `detected face: ${currentFace.face.gender} ${
-        currentFace.face.age || 0
-      }y distance ${100 * (currentFace.face.distance || 0)}cm/${Math.round(
-        (100 * (currentFace.face.distance || 0)) / 2.54
-      )}in`
-    );
 
     await faceRecognition.tf.browser.toPixels(
       currentFace.face.tensor,
       canvasRef.current
     );
     const db = faces;
-    const descriptors = db
+    var descriptors;
+
+    if(db.length > 0) {
+      descriptors = db
       .map((rec) => rec.descriptor)
       .filter((desc) => desc.length > 0);
+    }
 
     const res = faceRecognition.match.find(
       currentFace.face.embedding,
@@ -344,8 +304,6 @@ export default function FaceRecognition() {
       recognitionThresholds
     );
     currentFace.record = db[res.index] || null;
-
-    console.log(currentFace);
 
     if (!currentFace.record && !db.find((elem) => elem.id === user.code) && res.similarity < recognitionSettings.threshold) {
       setOutcome({
@@ -360,17 +318,9 @@ export default function FaceRecognition() {
 
       return false;
     } else if (currentFace.record && currentFace.record.id === user.code && res.similarity > recognitionSettings.threshold) {
-      console.log(
-        `best match: ${currentFace.record.name} | id: ${
-          currentFace.record.id
-        } | similarity: ${Math.round(1000 * res.similarity) / 10}%`
-      );
-      console.log(res);
-      okContainerRef.current.style.display = "none";
-      // retryButtonRef.current.style.display = "block"
-      // sourceCanvasRef.current.style.display = '';
-      // sourceCanvasRef.current.getContext('2d')?.putImageData(currentFace.record.image, 0, 0);
 
+      okContainerRef.current.style.display = "none";
+  
       await signRegister(userData.attendance[getCurrentDayOfWeek()]);
       setOutcome({ type: "Success", name: currentFace.record.name });
 
@@ -393,9 +343,7 @@ export default function FaceRecognition() {
 
   // Save Faces to DB
   async function saveRecords() {
-    // const image = canvasRef.current
-    //   .getContext("2d")
-    //   ?.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
+
     const rec = {
       id: user?.code,
       name: `${user?.first_name} ${user?.last_name}`,
@@ -428,17 +376,7 @@ export default function FaceRecognition() {
 
   async function deleteRecord() {
     if (currentFace.record && currentFace.record.id > 0) {
-      // await fetch("/api/faces", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json"
-      //   },
-      //   body: JSON.stringify({
-      //     key: userData.school_code,
-      //     faceRecord: rec,
-      //     method: "delete"
-      //   })
-      // })
+
     }
   }
 

@@ -144,7 +144,7 @@ export const DataProvider = ({ children }) => {
     const date = getAbsentDate(day, week);
 
     const data = {
-      key: session?.user.code.slice(0, session?.user.code.lastIndexOf("-")),
+      key: user?.code.slice(0, user?.code.lastIndexOf("-")),
       id: user?.code,
       current_day: day,
       attend: {
@@ -161,7 +161,7 @@ export const DataProvider = ({ children }) => {
       },
     };
 
-    if (session?.user.code && userData?.key) {
+    if (session?.user.code && userData?.school_code) {
       await fetch("/api/sign-register", {
         method: "POST",
         cache: "no-cache",
@@ -287,47 +287,7 @@ export const DataProvider = ({ children }) => {
       });
   };
 
-  const signMovement = (code, reason) => {
-    const data = {
-      date: getCurrentDate(),
-      code: session?.user.code,
-      movement_code: code,
-      initial: session?.user.initial,
-      last_name: session?.user.last_name,
-      day: getCurrentDayOfWeek(),
-      reason,
-      week: getCurrentWeek(),
-    };
-    setLoading(true);
-    fetch("/api/movement-register/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        key: userData?.key,
-        id: session?.user.code,
-        data,
-      }),
-    })
-      .then((data) => (data ? data.json() : null))
-      .then((data) => {
-        if (data === "Already Signed!") {
-          setErr("Already Signed!");
-          setLoading(false);
-        } else if (data === "Invalid") {
-          setErr("Invalid Code");
-          setLoading(false);
-        } else if (data === "User Updated") {
-          setErr("Successfully Signed!");
-          setLoading(false);
-        } else {
-          setErr("Oops Please Retry!");
-          setLoading(false);
-        }
-      });
-  };
-
+ 
   const signRegister = (code, user = session?.user) => {
     setErr(""); // Reset any previous error
 
@@ -373,7 +333,7 @@ export const DataProvider = ({ children }) => {
         }
       }
     } else {
-      setErr("Please Allow Location Access");
+      setErr("Location Access Denied");
     }
   };
 
@@ -392,7 +352,7 @@ export const DataProvider = ({ children }) => {
     absentLoading,
     onLines,
     getUser,
-    signMovement,
+   
   };
 
   return <Database.Provider value={value}>{children}</Database.Provider>;
