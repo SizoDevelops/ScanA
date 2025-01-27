@@ -4,11 +4,12 @@ import styles from "../CSS/Absent.module.css"
 import { useDatabase } from '@/lib/context'
 import { updateAttendance } from '@/lib/Slice'
 import { useDispatch } from 'react-redux'
+import { PopUp } from './Modal'
 export default function Absent() { 
     const {err, setErr, markAbsent,   absentLoading, getCurrentWeek} = useDatabase()
     const [reason, setReason] = useState("")
     const [display, setDisplay] = useState("none")
-    const [daysArray, setDays] = useState(["monday", "tuesday", "wednesday", "thurday", "friday"])
+   
     const [daysAbsent, setAbsent] = useState([])
     const dispatch = useDispatch()
 
@@ -16,9 +17,9 @@ export default function Absent() {
 
     useEffect(() => {
      
-        setDays(["monday", "tuesday", "wednesday", "thurday", "friday"])
         if(err !== ""){
           setDisplay("flex")
+         
         }
         else setDisplay('none')
       }, [err])
@@ -127,7 +128,8 @@ export default function Absent() {
             <button type="submit" className={styles.submit} disabled={absentLoading ? true : false} onClick={() => {
                
             }}>{ absentLoading ? "Sending..." : "Send Request"}</button>
-            <span className={styles.scanner} style={{  display: display }}>{err}</span>
+            
+            <PopUp display={display} err={err} onclick={() => setErr("")} />
         </form>
       )
 }

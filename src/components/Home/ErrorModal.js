@@ -3,22 +3,17 @@ import { useDatabase } from "@/lib/context";
 import React, { useRef } from "react";
 
 import styles from "@/components/CSS/FaceRecognition.module.css";
+import moment from "moment";
+
+
+
 function getCurrentDayOfWeek() {
-  const daysOfWeek = [
-    "sunday",
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-  ];
-  const today = new Date();
-  const dayOfWeek = today.getDay();
-  const currentDay = daysOfWeek[dayOfWeek];
-  return currentDay;
-  // return "saturday"
-}
+      const today = moment();
+      return today.format('dddd').toLowerCase();
+    }
+
+
+    
 export default function ErrorModal({outcome, setOutcome, user, faces, saveRecords, currentFace}){
     const nameInputRef = useRef(null);
     const { screens, setScreens, signRegister, err, getUser, userData } =

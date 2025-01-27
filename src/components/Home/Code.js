@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useGeolocated } from 'react-geolocated'
 import { useDatabase } from '@/lib/context'
 import { useRouter } from 'next/navigation'
+import { PopUp } from './Modal'
 export default function Code() {
   const [code, setCode] = useState("")
   const [display, setDisplay] = useState("none")
@@ -41,7 +42,7 @@ export default function Code() {
         
         <input type="text" placeholder={"R3DW"} value={code} onChange={e => setCode(e.target.value.toUpperCase().replace("SCNA-", ""))} />
         <p>Enter just the 4 letters after the dash(-)</p>
-        <span className={styles.scanner} style={{  display: display}}>{err}</span>
+        <PopUp display={display} err={err} onclick={() => setErr("")} />
     </div>
   )
 }

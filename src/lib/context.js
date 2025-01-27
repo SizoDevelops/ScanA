@@ -4,6 +4,7 @@ import { signOut, useSession } from "next-auth/react";
 import { useGeolocated } from "react-geolocated";
 import { useDispatch } from "react-redux";
 import { updateAttendance, userReducer } from "./Slice";
+import moment from "moment";
 
 const { createContext, useContext, useState, useEffect } = require("react");
 
@@ -63,79 +64,42 @@ export const DataProvider = ({ children }) => {
       watchPosition: true,
     });
 
-  function getCurrentWeek() {
-    const today = new Date();
-    const firstDayOfYear = new Date(today.getFullYear(), 0, 1);
-    const daysSinceFirstDay = Math.floor(
-      (today - firstDayOfYear) / (24 * 60 * 60 * 1000)
-    );
-    const currentWeek = Math.ceil((daysSinceFirstDay + 1) / 7);
-    return currentWeek;
-  }
+    function getCurrentDayOfWeek() {
+      const today = moment();
+      return today.format('dddd').toLowerCase();
+    }
 
-  function getCurrentDayOfWeek() {
-    const daysOfWeek = [
-      "sunday",
-      "monday",
-      "tuesday",
-      "wednesday",
-      "thursday",
-      "friday",
-      "saturday",
-    ];
-    const today = new Date();
-    const dayOfWeek = today.getDay();
-    const currentDay = daysOfWeek[dayOfWeek];
-    return currentDay;
-    // return "saturday"
-  }
 
-  function getCurrentDate() {
-    const today = new Date();
-    const day = String(today.getDate()).padStart(2, "0"); // Get the day and pad with leading zeros if necessary
-    const month = String(today.getMonth() + 1).padStart(2, "0"); // Get the month (months are 0-based) and pad with leading zeros if necessary
-    const year = today.getFullYear(); // Get the year
+    function getCurrentWeek() {
+      const today = moment();
+      return today.week();
+    }
 
-    return `${year}-${month}-${day}`;
-  }
+
+    function getCurrentDate() {
+      return moment().format('YYYY-MM-DD');
+    }
+
+
   function getCurrentMilitaryTime() {
-    const now = new Date();
-    const gmtPlus2Time = new Date(now.getTime() + 2 * 60 * 60 * 1000); // Add 2 hours for GMT+2
-    const hours = gmtPlus2Time.getUTCHours().toString().padStart(2, "0"); // Ensure 2 digits
-    const minutes = gmtPlus2Time.getUTCMinutes().toString().padStart(2, "0"); // Ensure 2 digits
-
-    return { hours, minutes };
-  }
+  const gmtPlus2Time = moment().utcOffset(2);
+  return {
+    hours: gmtPlus2Time.format('HH'),
+    minutes: gmtPlus2Time.format('mm')
+  };
+}
 
   // lllllll
 
   function getAbsentDate(dayName, weekNumber) {
-    const dayNames = [
-      "sunday",
-      "monday",
-      "tuesday",
-      "wednesday",
-      "thursday",
-      "friday",
-      "saturday",
-    ];
-
-    const currentYear = new Date().getFullYear();
-    const firstDayOfYear = new Date(Date.UTC(currentYear, 0, 1));
-    const dayIndex = dayNames.indexOf(dayName.toLowerCase());
-
-    // Calculate the first day of the specified weekday in week 1, starting with Monday
-    const daysToFirstWeek = (dayIndex - firstDayOfYear.getDay() + 7) % 7;
-    const firstDayOfWeekOne = new Date(
-      firstDayOfYear.getTime() + daysToFirstWeek * 24 * 60 * 60 * 1000
-    );
-
-    // Adjust for the desired week number
-    const targetDate = new Date(
-      firstDayOfWeekOne.getTime() + (weekNumber - 1) * 7 * 24 * 60 * 60 * 1000
-    );
-
-    return targetDate.toISOString().split("T")[0];
+    const currentYear = moment().year();
+    const firstDayOfYear = moment([currentYear, 0, 1]);
+    const dayIndex = moment().day(dayName.toLowerCase());
+  
+    const firstDayOfWeekOne = firstDayOfYear.isoWeekday(dayIndex.isoWeekday());
+    const targetDate = firstDayOfWeekOne.add(weekNumber - 1, 'weeks');
+  
+    return targetDate.format('YYYY-MM-DD');
   }
 
   const setAttendance = async (day, user = session?.user) => {
@@ -185,6 +149,7 @@ export const DataProvider = ({ children }) => {
 
   const markAbsent = async (reason, days) => {
     const day = getCurrentDayOfWeek();
+    console.log(getAbsentDate(day, getCurrentWeek()));
     setAbsentLoading(true);
     const data = {
       key: session?.user.code.slice(0, session?.user.code.lastIndexOf("-")),
