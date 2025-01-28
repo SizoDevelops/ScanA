@@ -310,7 +310,7 @@ export default function FaceRecognition() {
 
       okContainerRef.current.style.display = "none";
   
-      await signRegister(userData.attendance[getCurrentDayOfWeek()]);
+      signRegister(userData?.attendance[getCurrentDayOfWeek()]);
       setOutcome({ type: "Success", name: currentFace.record.name });
 
       return true;
