@@ -7,6 +7,7 @@ import { useDatabase } from "@/lib/context";
 import { useSelector } from "react-redux";
 import ErrorModal from "./ErrorModal";
 import * as tf from "@tensorflow/tfjs";
+import moment from "moment";
 
 
 tf.setBackend("webgl");
@@ -79,22 +80,10 @@ const blinking = {
   time: 0,
   end: 0,
 };
-function getCurrentDayOfWeek() {
-  const daysOfWeek = [
-    "sunday",
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-  ];
-  const today = new Date();
-  const dayOfWeek = today.getDay();
-  const currentDay = daysOfWeek[dayOfWeek];
-  return currentDay;
-  // return "saturday"
-}
+ function getCurrentDayOfWeek() {
+      const today = moment();
+      return today.format('dddd').toLowerCase();
+    }
 const allOk = () =>
   recognitionStatus.faceCount.status &&
   recognitionStatus.faceSize.status &&
@@ -327,11 +316,6 @@ export default function FaceRecognition() {
       return true;
     } else if(currentFace.record && currentFace.record.id !== user.code && res.similarity > recognitionSettings.threshold) {
       setOutcome({ type: "Fail", name: currentFace.record.name });
-      console.log(
-        "This is " +
-          currentFace.record.name +
-          `| similarity: ${Math.round(1000 * res.similarity) / 10}%`
-      );
       okContainerRef.current.style.display = "none";
       return false;
     }

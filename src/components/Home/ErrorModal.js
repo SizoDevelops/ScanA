@@ -42,7 +42,7 @@ export default function ErrorModal({outcome, setOutcome, user, faces, saveRecord
             <div
               onClick={() => {
                 getUser(userData.school_code);
-                if (screens.length > 1 && err !== "") {
+                if (screens.length > 1) {
                   setOutcome({});
                   screens.pop();
                   setScreens([...screens]);
