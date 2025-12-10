@@ -4,95 +4,61 @@ import { NextResponse } from 'next/server';
 
 
 export async function POST(request) {
-   try{
+  try {
     const body = await request.json();
+    const { action } = body; // 'signin' or 'signout'
 
-    const getSchool = await getUserCollection(body.key)
-    // Find the member that has the ID
-    const updated_user = getSchool.members.find(elem => elem.code === body.id)
+    const getSchool = await getUserCollection(body.key);
+    const updated_user = getSchool.members.find(elem => elem.code === body.id);
 
-  if(body.current_day === 'monday'){
-    if(Array.isArray(updated_user.attendance.monday)){
-   
-         if(!updated_user.attendance.monday.find(item => item.date === body.attend.date)){
-                     updated_user.attendance.monday.push(body.attend)
-            }
-            else{
-              return NextResponse.json("Already Signed")
-            }
-   }
-  else {
-   updated_user.attendance.monday = new Array(body.attend)
-  }
+    if (!updated_user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
+    const dayKey = body.current_day;
+    const dayAttendance = updated_user.attendance[dayKey];
 
-    if(body.current_day === 'tuesday'){
-        if(Array.isArray(updated_user.attendance.tuesday)){
-            if(!updated_user.attendance.tuesday.find(item => item.date === body.attend.date)){
-                updated_user.attendance.tuesday.push(body.attend)
-            }
-            else{
-              return NextResponse.json("Already Signed")
-            }
-            
-       }
-      else {
-       updated_user.attendance.tuesday = new Array(body.attend)
+    if (action === 'signin') {
+      // Sign In Logic
+      if (Array.isArray(dayAttendance)) {
+        if (!dayAttendance.find(item => item.date === body.attend.date)) {
+          dayAttendance.push(body.attend);
+        } else {
+          return NextResponse.json("Already Signed");
+        }
+      } else {
+        updated_user.attendance[dayKey] = [body.attend];
       }
-    }
-    if(body.current_day === 'wednesday'){
-        if(Array.isArray(updated_user.attendance.wednesday)){
-            
-             if(!updated_user.attendance.wednesday.find(item => item.date === body.attend.date)){
-                updated_user.attendance.wednesday.push(body.attend)
-            }
-            else{
-              return NextResponse.json("Already Signed")
-            }
-       }
-      else {
-       updated_user.attendance.wednesday = new Array(body.attend)
+    } else if (action === 'signout') {
+      // Sign Out Logic
+      if (!Array.isArray(dayAttendance)) {
+        return NextResponse.json("No sign-in record found");
       }
-    }
-    if(body.current_day === 'thursday'){
-        if(Array.isArray(updated_user.attendance.thursday)){
-           
-            if(!updated_user.attendance.thursday.find(item => item.date === body.attend.date)){
-                 updated_user.attendance.thursday.push(body.attend)
-            }
-            else{
-              return NextResponse.json("Already Signed")
-            }
-       }
-      else {
-       updated_user.attendance.thursday = new Array(body.attend)
+
+      const attendanceRecord = dayAttendance.find(item => item.date === body.attend.date);
+      
+      if (!attendanceRecord) {
+        return NextResponse.json("No sign-in record found for this date");
       }
-    }
-    if(body.current_day === 'friday'){
-        if(Array.isArray(updated_user.attendance.friday)){
-           
-            if(!updated_user.attendance.friday.find(item => item.date === body.attend.date)){
-                 updated_user.attendance.friday.push(body.attend)
-            }
-            else{
-              return NextResponse.json("Already Signed")
-            }
-       }
-      else {
-       updated_user.attendance.friday = new Array(body.attend)
+
+      if (attendanceRecord.timeout !== null) {
+        return NextResponse.json("Already signed out");
       }
+
+      attendanceRecord.timein = attendanceRecord.timein;
+      attendanceRecord.timeout = body.attend.timeout;
+    } else {
+      return NextResponse.json({ error: "Invalid action" }, { status: 400 });
     }
-   // Remove the original member
-    const members = getSchool.members.filter(item => item.code !== body.id)
 
+    // Update database
+    const members = getSchool.members.filter(item => item.code !== body.id);
+    const newM = members.concat([updated_user]);
+    const updateUser = await updateCollectionMembers(body.key, newM);
 
-    // ReAdd the member with the updated keys
-    const newM = members.concat([updated_user])
-    const updateUser = await  updateCollectionMembers(body.key, newM)
-
-    return NextResponse.json(updateUser)
-   }catch(error){
+    return NextResponse.json(updateUser);
+  } catch (error) {
+    console.error("Attendance error:", error);
     return NextResponse.json({ error: "An error occurred." }, { status: 500 });
-   }
   }
+}

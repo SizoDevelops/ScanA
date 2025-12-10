@@ -102,7 +102,7 @@ function isFaceCentered(detection, videoWidth, videoHeight) {
   return offsetX < 0.2 && offsetY < 0.2;
 }
 
-export default function FaceRecognition() {
+export default function FaceRecognitionOut() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [outcome, setOutcome] = useState({ type: "", name: "" });
@@ -393,11 +393,12 @@ export default function FaceRecognition() {
         okContainerRef.current.style.display = "none";
       }
       if (userData?.attendance && userData.attendance[getCurrentDayOfWeek()]) {
-        signRegister(userData.attendance[getCurrentDayOfWeek()], "signin");
+        signRegister(userData.attendance[getCurrentDayOfWeek()], "signout");
       }
       setOutcome({ type: "Success", name: currentFace.record.name });
       setLoadingStatus("Success!");
       return true;
+      
     } else if (
       currentFace.record &&
       currentFace.record.id !== user?.code &&

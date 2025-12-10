@@ -102,7 +102,7 @@ export const DataProvider = ({ children }) => {
     return targetDate.format('YYYY-MM-DD');
   }
 
-  const setAttendance = async (day, user = session?.user) => {
+  const setAttendance = async (day,action, user = session?.user) => {
     const week = getCurrentWeek();
     const time = getCurrentMilitaryTime();
     const date = getAbsentDate(day, week);
@@ -111,13 +111,11 @@ export const DataProvider = ({ children }) => {
       key: user?.code.slice(0, user?.code.lastIndexOf("-")),
       id: user?.code,
       current_day: day,
+      action: action,
       attend: {
         week: week,
-        timein:
-          time.hours <= 7
-            ? `${time.hours}:${time.minutes}`
-            : `7:${time.minutes}`,
-        timeout: "14:40",
+        timein: action === "signin" ? `${time.hours}:${time.minutes}` : null,
+        timeout: action === "signout" ? `${time.hours}:${time.minutes}` : null,
         initial: user?.initial,
         absent: false,
         date: date,
@@ -253,54 +251,110 @@ export const DataProvider = ({ children }) => {
   };
 
  
-  const signRegister = (code, user = session?.user) => {
-    setErr(""); // Reset any previous error
+  const signRegister = async (code, action, user = session?.user) => {
+  setErr(""); // Reset any previous error
+  
+  // Validate action parameter
+  if (!action || !['signin', 'signout'].includes(action)) {
+    setErr("Invalid action.");
+    return;
+  }
 
-    if (isGeolocationAvailable && isGeolocationEnabled) {
-      if (userData && coords) {
-        const userlat = coords.latitude;
-        const userlon = coords.longitude;
-        const schoollat = parseFloat(userData?.coordinates.latitude);
-        const schoollon = parseFloat(userData?.coordinates.longitude);
+  // Check if geolocation is available and enabled
+  if (!isGeolocationAvailable) {
+    setErr("Geolocation is not supported by your browser");
+    return;
+  }
 
-        const distance = calculateDistance(
-          userlat,
-          userlon,
-          schoollat,
-          schoollon
-        );
+  if (!isGeolocationEnabled) {
+    setErr("Location Access Denied. Please enable location services.");
+    return;
+  }
 
-        if (
-          distance.toFixed(2) * 1000 <
-          parseInt(userData?.coordinates.distance)
-        ) {
-          // Handle any explicit code input for the current day:
-          if (getCurrentDayOfWeek() in userData?.attendance && code !== null) {
-            const expectedCode =
-              userData?.attendance[getCurrentDayOfWeek()].toUpperCase();
-            if (code.toUpperCase() === expectedCode) {
-              setAttendance(getCurrentDayOfWeek(), user); // Set attendance if code matches
-            } else {
-              setErr("Invalid Code");
-            }
-          } else {
-            if (
-              getCurrentDayOfWeek() === "saturday" ||
-              getCurrentDayOfWeek() === "sunday"
-            ) {
-              setErr("Not available on weekends");
-            } else {
-              setErr("No codes for this week.");
-            }
-          }
-        } else {
-          setErr("You are out of range.");
-        }
-      }
-    } else {
-      setErr("Location Access Denied");
+  // Validate required data
+  if (!userData) {
+    setErr("User data not loaded");
+    return;
+  }
+
+  if (!coords) {
+    setErr("Location not available. Please wait...");
+    return;
+  }
+
+  if (!user) {
+    setErr("User session not found");
+    return;
+  }
+
+  try {
+    // Get user and school coordinates
+    const userlat = coords.latitude;
+    const userlon = coords.longitude;
+    const schoollat = parseFloat(userData?.coordinates?.latitude);
+    const schoollon = parseFloat(userData?.coordinates?.longitude);
+
+    // Validate coordinates
+    if (isNaN(schoollat) || isNaN(schoollon)) {
+      setErr("Invalid coordinates");
+      return;
     }
-  };
+
+    // Calculate distance
+    const distance = calculateDistance(userlat, userlon, schoollat, schoollon);
+    const distanceInMeters = distance * 1000;
+    const allowedDistance = parseInt(userData?.coordinates?.distance);
+
+    // Check if within range
+    if (distanceInMeters >= allowedDistance) {
+      setErr(`You are out of range. Distance: ${distanceInMeters.toFixed(0)}m (Max: ${allowedDistance}m)`);
+      return;
+    }
+
+    const currentDay = getCurrentDayOfWeek();
+
+    // Check for weekends
+    if (currentDay === "saturday" || currentDay === "sunday") {
+      setErr("Not available on weekends");
+      return;
+    }
+
+    // Check if attendance is configured for current day
+    if (!(currentDay in userData?.attendance)) {
+      setErr("No attendance configured for today");
+      return;
+    }
+
+    const expectedCode = userData?.attendance[currentDay];
+
+    // Validate expected code exists
+    if (!expectedCode) {
+      setErr("No code set for today");
+      return;
+    }
+
+    // For sign-in, validate the code
+    if (action === 'signin') {
+      if (code === null || code === undefined || code === "") {
+        setErr("Please enter the attendance code");
+        return;
+      }
+
+      if (code.toUpperCase() !== expectedCode.toUpperCase()) {
+        setErr("Invalid Code");
+        return;
+      }
+    }
+
+    // For sign-out, code validation is not required
+    // Call attendance function with action
+    await setAttendance(currentDay, action, user);
+
+  } catch (error) {
+    console.error("Sign register error:", error);
+    setErr("An error occurred. Please try again.");
+  }
+};
 
   const value = {
     loading,

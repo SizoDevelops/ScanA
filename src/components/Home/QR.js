@@ -22,7 +22,7 @@ export default function QR(checkQR) {
         if (result.data.includes("SCNA-")){
           
           setSupport("Checking..")
-          signRegister(result.data)
+          signRegister(result.data, "signin")
           
         }
         scanner.stop()

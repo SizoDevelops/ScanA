@@ -13,7 +13,7 @@ export default function Code() {
   useEffect(() => {
     if(code.length >= 4){
 
-        signRegister("SCNA-" + code)
+        signRegister("SCNA-" + code, "signin")
       
       
       setCode("")

@@ -1,23 +1,27 @@
-
-"use client"
-import Dashboard from '@/components/Home/Dashboard'
-import React, { useEffect } from 'react'
-import styles from "@/app/page.module.css"
-import Home from '@/components/Home/Home'
-import { redirect } from 'next/navigation'
+"use client";
+import Dashboard from "@/components/Home/Dashboard";
+import React, { useEffect } from "react";
+import styles from "@/app/page.module.css";
+import Home from "@/components/Home/Home";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+  const router = useRouter();
   useEffect(() => {
-    const hasTouch = "maxTouchPoints" in navigator && navigator.maxTouchPoints > 0;
-  
-    // if(!hasTouch){
-    //   redirect("https://dashboard.scana.co.za")
+    const hasTouch =
+      "maxTouchPoints" in navigator && navigator.maxTouchPoints > 0;
+    const isMobileUA = /Mobi|Android|iPhone|iPad|iPod/i.test(
+      navigator.userAgent
+    );
+
+    // if ((!hasTouch, !isMobileUA)) {
+    //   window.location.href = "https://dashboard.scana.co.za"
     // }
-  }, [])
+  }, []);
 
   return (
     <div className={styles.main}>
-      <Home/>
+      <Home />
     </div>
-  )
+  );
 }
