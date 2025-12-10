@@ -5,12 +5,16 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 export default function Error({ error, reset }) {
   useEffect(() => {
-    const hasTouch = "maxTouchPoints" in navigator && navigator.maxTouchPoints > 0;
+      const hasTouch =
+        "maxTouchPoints" in navigator && navigator.maxTouchPoints > 0;
+      const isMobileUA = /Mobi|Android|iPhone|iPad|iPod/i.test(
+        navigator.userAgent
+      );
   
-    if(!hasTouch){
-      redirect("https://dashboard.scana.co.za")
-    }
-  }, [])
+      if ((!hasTouch, !isMobileUA)) {
+        window.location.href = "https://dashboard.scana.co.za"
+      }
+    }, []);
   return (
     <html>
       <body className={"container"}>

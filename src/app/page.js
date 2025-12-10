@@ -6,7 +6,7 @@ import Home from "@/components/Home/Home";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
-  const router = useRouter();
+  
   useEffect(() => {
     const hasTouch =
       "maxTouchPoints" in navigator && navigator.maxTouchPoints > 0;
@@ -14,9 +14,9 @@ export default function Page() {
       navigator.userAgent
     );
 
-    // if ((!hasTouch, !isMobileUA)) {
-    //   window.location.href = "https://dashboard.scana.co.za"
-    // }
+    if ((!hasTouch, !isMobileUA)) {
+      window.location.href = "https://dashboard.scana.co.za"
+    }
   }, []);
 
   return (
