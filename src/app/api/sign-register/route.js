@@ -47,6 +47,7 @@ export async function POST(request) {
 
       attendanceRecord.timein = attendanceRecord.timein;
       attendanceRecord.timeout = body.attend.timeout;
+      attendanceRecord.absent = false;
     } else {
       return NextResponse.json({ error: "Invalid action" }, { status: 400 });
     }
