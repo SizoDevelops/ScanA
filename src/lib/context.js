@@ -117,7 +117,7 @@ export const DataProvider = ({ children }) => {
         timein: action === "signin" ? `${time.hours}:${time.minutes}` : null,
         timeout: action === "signout" ? `${time.hours}:${time.minutes}` : null,
         initial: user?.initial,
-        absent: false,
+        absent: action === "signin" ? false : true,
         date: date,
         day: day,
       },

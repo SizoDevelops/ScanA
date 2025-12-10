@@ -5,9 +5,20 @@ import styles from '../../components/CSS/Login.module.css'
 import { signIn, useSession } from 'next-auth/react';
 import { redirect, useRouter, useSearchParams } from 'next/navigation';
 import { useDatabase } from '@/lib/context';
+import { Suspense } from "react";
+import Loader from '@/components/Home/Loader';
 
 
 export default function Page() {
+  return (
+    <Suspense fallback={<Loader/>}>
+      <Login />
+    </Suspense>
+  )
+}
+
+
+const Login = () => {
   const searchParams = useSearchParams()
   const { err, setErr} = useDatabase()
   const [submitting, setSubmitting] = useState(false)
@@ -100,4 +111,4 @@ export default function Page() {
 <p>Contact your admin if you forgot your password.</p>
     </div>
   )
-}
+};
