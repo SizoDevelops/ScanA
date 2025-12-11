@@ -38,10 +38,10 @@ const humanConfig = {
 
 // Face recognition settings - STRICT
 const recognitionSettings = {
-  minConfidence: 0.8,
-  minSize: 150,
+  minConfidence: 0.7,
+  minSize: 80,
   maxTime: 30000,
-  threshold: 0.65,
+  threshold: 0.55,
   maxFaces: 1,
   distanceMin: 0.3,
   distanceMax: 1,
@@ -86,9 +86,7 @@ const allOk = () =>
   recognitionStatus.antispoofCheck.status &&
   recognitionStatus.livenessCheck.status &&
   recognitionStatus.distance.status &&
-  recognitionStatus.descriptor.status &&
-  recognitionStatus.age.status &&
-  recognitionStatus.gender.status;
+  recognitionStatus.descriptor.status
 
 // Cosine similarity
 function cosineSimilarity(a, b) {
@@ -391,7 +389,7 @@ export default function FaceRecognitionOut() {
       const checksCount = Object.values(recognitionStatus).filter(
         (s) => s.status === true
       ).length;
-      const totalChecks = 10;
+      const totalChecks = 8;
       const progress = checksCount / totalChecks;
 
       if (progress < 0.3) {
@@ -588,7 +586,7 @@ export default function FaceRecognitionOut() {
         const passedChecks = Object.values(recognitionStatus).filter(
           (s) => s.status === true
         ).length;
-        setLoadingStatus(`Validating... (${passedChecks}/10 checks)`);
+        setLoadingStatus(`Validating... (${passedChecks}/8 checks)`);
       } else if (recognitionStatus.faceCount.val === 0) {
         setLoadingStatus("No face detected");
       } else if (recognitionStatus.faceCount.val > 1) {
