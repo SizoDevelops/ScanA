@@ -60,8 +60,6 @@ const recognitionStatus = {
   antispoofCheck: { status: false, val: 0 },
   livenessCheck: { status: false, val: 0 },
   distance: { status: false, val: 0 },
-  age: { status: false, val: 0 },
-  gender: { status: false, val: 0 },
   timeout: { status: true, val: 0 },
   descriptor: { status: false, val: 0 },
   elapsedMs: { status: undefined, val: 0 },
@@ -575,13 +573,6 @@ export default function FaceRecognition() {
         recognitionStatus.descriptor.val = face.embedding?.length || 0;
         recognitionStatus.descriptor.status =
           recognitionStatus.descriptor.val > 0;
-
-        recognitionStatus.age.val = face.age || 0;
-        recognitionStatus.age.status = recognitionStatus.age.val > 0;
-
-        recognitionStatus.gender.val = face.genderScore || 0;
-        recognitionStatus.gender.status =
-          recognitionStatus.gender.val >= recognitionSettings.minConfidence;
 
         const passedChecks = Object.values(recognitionStatus).filter(
           (s) => s.status === true
