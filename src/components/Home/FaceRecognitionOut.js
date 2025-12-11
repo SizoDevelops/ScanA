@@ -39,12 +39,12 @@ const humanConfig = {
 // Face recognition settings - STRICT
 const recognitionSettings = {
   minConfidence: 0.8,
-  minSize: 250,
+  minSize: 150,
   maxTime: 30000,
   threshold: 0.65,
   maxFaces: 1,
   distanceMin: 0.3,
-  distanceMax: 0.6,
+  distanceMax: 1,
   minSimilarityScore: 0.65,
   requireMultipleSamples: 3,
   antispoofThreshold: 0.7,
