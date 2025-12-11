@@ -6,17 +6,17 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 export default function Page() {
 
-  useEffect(() => {
-      const hasTouch =
-        "maxTouchPoints" in navigator && navigator.maxTouchPoints > 0;
-      const isMobileUA = /Mobi|Android|iPhone|iPad|iPod/i.test(
-        navigator.userAgent
-      );
+  // useEffect(() => {
+  //     const hasTouch =
+  //       "maxTouchPoints" in navigator && navigator.maxTouchPoints > 0;
+  //     const isMobileUA = /Mobi|Android|iPhone|iPad|iPod/i.test(
+  //       navigator.userAgent
+  //     );
   
-      if ((!hasTouch, !isMobileUA)) {
-        window.location.href = "https://dashboard.scana.co.za"
-      }
-    }, []);
+  //     if ((!hasTouch, !isMobileUA)) {
+  //       window.location.href = "https://dashboard.scana.co.za"
+  //     }
+  //   }, []);
 
   return (
    <div className={styles.container}>

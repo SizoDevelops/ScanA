@@ -10,7 +10,7 @@ export async function POST(request) {
         const faces = db?.user_faces || [];
 
         if(body.methods === "update"){
-
+            console.log(body.faceRecord)
             // Push the compressed data to the faces array
             if(!faces.find(elem => elem.id === body.faceRecord.id)){
                     faces.push(body.faceRecord);
@@ -34,6 +34,6 @@ export async function POST(request) {
         }
        
     } catch (error) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        return NextResponse.json(error);
     }
 }

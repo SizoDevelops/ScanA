@@ -84,7 +84,7 @@ export default function ErrorModal({outcome, setOutcome, user, faces, saveRecord
                     item.id === nameInputRef.current.value.trim().toUpperCase()
                 );
                 if (code && code.name === currentFace.record.name) {
-                  await signRegister(userData.attendance[getCurrentDayOfWeek()], {
+                  await signRegister(userData.attendance[getCurrentDayOfWeek()],"signin", {
                     code: nameInputRef.current.value.toUpperCase().trim(),
                     initial: currentFace.record.initial,
                   });
@@ -131,7 +131,7 @@ export default function ErrorModal({outcome, setOutcome, user, faces, saveRecord
                   nameInputRef.current.value.trim().toUpperCase() === user.code
                 ) {
                   await saveRecords();
-                  await signRegister(userData.attendance[getCurrentDayOfWeek()]);
+                  await signRegister(userData.attendance[getCurrentDayOfWeek()], "signin");
                   setOutcome({ type: "Success", name: outcome.name });
   
                   // if (screens.length > 1) {
@@ -160,7 +160,7 @@ export default function ErrorModal({outcome, setOutcome, user, faces, saveRecord
                 <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
               </svg>
             </i>
-            <h2>User not registered</h2>
+            <h2>{outcome.name}</h2>
             <p>{`Hello new user please log in to your own profile to register a face.`}</p>
             <div
               onClick={async () => {

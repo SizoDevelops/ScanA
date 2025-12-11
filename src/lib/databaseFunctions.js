@@ -54,16 +54,17 @@ export const updateCollectionMembers = async (key, data) => {
 }
 
 export const updateFaces = async (key, data) => {
-    
-    const updatedUser = await  updateDoc(doc(db, "users", key), {user_faces: data})
-
-    if(updatedUser){
+    try{
+       const updatedUser = await  updateDoc(doc(db, "users", key), {user_faces: data})
+       if(updatedUser){
         return updatedUser
+     }
     }
-
-    else{
+    catch(e){
+        console.log(e)
         return null
     }
+    
 }
 
 export const getFeedbackCollection = async (key) => {

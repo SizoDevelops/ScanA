@@ -14,9 +14,9 @@ export default function Page() {
       navigator.userAgent
     );
 
-    if ((!hasTouch, !isMobileUA)) {
-      window.location.href = "https://dashboard.scana.co.za"
-    }
+    // if ((!hasTouch, !isMobileUA)) {
+    //   window.location.href = "https://dashboard.scana.co.za"
+    // }
   }, []);
 
   return (
