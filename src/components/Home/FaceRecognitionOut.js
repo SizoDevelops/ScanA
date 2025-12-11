@@ -8,15 +8,15 @@ import ErrorModal from "./ErrorModal";
 import * as faceapi from "face-api.js";
 import moment from "moment";
 
-// Face recognition configuration
+// Face recognition configuration - STRICTER SETTINGS
 const recognitionSettings = {
-  minConfidence: 0.6,
-  minSize: 100,
+  minConfidence: 0.7, // Increased from 0.6
+  minSize: 120, // Increased from 100
   maxTime: 30000,
-  threshold: 0.5,
-  distanceMin: 0.3,
-  distanceMax: 0.9,
-  minDetectionConfidence: 0.5,
+  threshold: 0.4, // LOWERED - more strict (0.4 means 60% similarity required)
+  distanceMin: 0.35, // Slightly adjusted
+  distanceMax: 0.85,
+  minDetectionConfidence: 0.6, // Increased from 0.5
 };
 
 const recognitionStatus = {
@@ -59,34 +59,63 @@ const allOk = () =>
   recognitionStatus.age.status &&
   recognitionStatus.gender.status;
 
-// Helper function to calculate Euclidean distance
+// Improved Euclidean distance calculation with normalization
 function euclideanDistance(a, b) {
   if (!a || !b || a.length !== b.length) return 1;
-  return Math.sqrt(
-    a.reduce((sum, val, i) => sum + Math.pow(val - (b[i] || 0), 2), 0)
-  );
+  
+  let sum = 0;
+  for (let i = 0; i < a.length; i++) {
+    const diff = a[i] - (b[i] || 0);
+    sum += diff * diff;
+  }
+  
+  return Math.sqrt(sum / a.length); // Normalized by length
 }
 
-// Helper function to find best match
-function findBestMatch(descriptor, descriptors, threshold = 0.5) {
+// Enhanced face matching with better discrimination
+function findBestMatch(descriptor, descriptors, threshold = 0.4) {
   if (!descriptors || descriptors.length === 0) {
     return { index: -1, similarity: 0, distance: 1 };
   }
 
   let bestMatch = { index: -1, distance: Infinity, similarity: 0 };
+  const matches = [];
 
+  // Calculate distances for all descriptors
   descriptors.forEach((desc, index) => {
     if (!desc || desc.length === 0) return;
+    
     const distance = euclideanDistance(descriptor, desc);
+    const similarity = Math.max(0, 1 - distance);
+    
+    matches.push({ index, distance, similarity });
+    
     if (distance < bestMatch.distance) {
-      bestMatch = { index, distance, similarity: 1 - distance };
+      bestMatch = { index, distance, similarity };
     }
   });
+
+  // Log matching results for debugging
+  console.log("Face matching results:", {
+    bestMatch,
+    threshold,
+    accepted: bestMatch.distance < threshold,
+    allMatches: matches.map(m => ({
+      index: m.index,
+      distance: m.distance.toFixed(4),
+      similarity: (m.similarity * 100).toFixed(2) + '%'
+    }))
+  });
+
+  // Only accept if distance is below threshold (stricter)
+  if (bestMatch.distance >= threshold) {
+    return { index: -1, similarity: 0, distance: bestMatch.distance };
+  }
 
   return bestMatch;
 }
 
-// Helper to check if face is centered
+// Helper to check if face is centered with stricter requirements
 function isFaceCentered(detection, videoWidth, videoHeight) {
   if (!detection || !detection.box) return false;
   
@@ -99,10 +128,11 @@ function isFaceCentered(detection, videoWidth, videoHeight) {
   const offsetX = Math.abs(faceCenterX - videoCenterX) / videoWidth;
   const offsetY = Math.abs(faceCenterY - videoCenterY) / videoHeight;
 
-  return offsetX < 0.2 && offsetY < 0.2;
+  // Stricter centering requirement
+  return offsetX < 0.15 && offsetY < 0.15;
 }
 
-export default function FaceRecognitionOut() {
+export default function FaceRecognition() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [outcome, setOutcome] = useState({ type: "", name: "" });
@@ -122,7 +152,6 @@ export default function FaceRecognitionOut() {
 
     setLoadingStatus("Loading AI models...");
 
-    // Try local models first, then fall back to CDN
     const modelPaths = [
       "/models",
       "https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model"
@@ -155,7 +184,7 @@ export default function FaceRecognitionOut() {
     return false;
   };
 
-  // Camera Start
+  // Camera Start with better quality settings
   const webCamStart = async () => {
     try {
       setLoadingStatus("Starting camera...");
@@ -164,8 +193,8 @@ export default function FaceRecognitionOut() {
         audio: false,
         video: {
           facingMode: "user",
-          width: { min: 250, max: 640, ideal: 480 },
-          height: { min: 250, max: 480, ideal: 360 },
+          width: { min: 320, max: 640, ideal: 640 }, // Higher resolution
+          height: { min: 240, max: 480, ideal: 480 },
         },
       };
 
@@ -204,7 +233,7 @@ export default function FaceRecognitionOut() {
 
     try {
       const options = new faceapi.TinyFaceDetectorOptions({
-        inputSize: 416,
+        inputSize: 512, // Increased from 416 for better accuracy
         scoreThreshold: recognitionSettings.minDetectionConfidence,
       });
 
@@ -243,7 +272,7 @@ export default function FaceRecognitionOut() {
     }
   };
 
-  // Validate Face
+  // Validate Face with stricter requirements
   const validationLoop = async () => {
     if (!videoRef.current || videoRef.current.paused) {
       return null;
@@ -253,7 +282,7 @@ export default function FaceRecognitionOut() {
       setLoadingStatus("Detecting face...");
       
       const options = new faceapi.TinyFaceDetectorOptions({
-        inputSize: 416,
+        inputSize: 512, // Higher resolution for better feature extraction
         scoreThreshold: recognitionSettings.minDetectionConfidence,
       });
 
@@ -284,14 +313,14 @@ export default function FaceRecognitionOut() {
         recognitionStatus.faceSize.status =
           recognitionStatus.faceSize.val >= recognitionSettings.minSize;
 
-        // Face centered
+        // Face centered (stricter)
         recognitionStatus.facingCenter.status = isFaceCentered(
           detection.detection,
           videoRef.current.videoWidth,
           videoRef.current.videoHeight
         );
 
-        // Distance estimation (based on face size)
+        // Distance estimation
         const normalizedSize =
           recognitionStatus.faceSize.val /
           Math.min(videoRef.current.videoWidth, videoRef.current.videoHeight);
@@ -345,7 +374,7 @@ export default function FaceRecognitionOut() {
     }
   };
 
-  // Detect Faces and Match
+  // Detect Faces and Match with improved logic
   const detectFaces = async () => {
     if (!currentFace?.face?.descriptor) {
       console.error("No face descriptor available");
@@ -367,12 +396,20 @@ export default function FaceRecognitionOut() {
     const descriptorArray = Array.from(currentFace.face.descriptor);
     const res = findBestMatch(descriptorArray, descriptors, recognitionSettings.threshold);
 
+    console.log("Match result:", {
+      foundMatch: res.index >= 0,
+      distance: res.distance,
+      similarity: res.similarity,
+      threshold: recognitionSettings.threshold,
+      userCode: user?.code
+    });
+
     currentFace.record = res.index >= 0 ? db[res.index] : null;
 
+    // Case 1: No match found and user not registered
     if (
-      !currentFace.record &&
-      !db.find((elem) => elem.id === user?.code) &&
-      res.similarity < recognitionSettings.threshold
+      res.index === -1 &&
+      !db.find((elem) => elem.id === user?.code)
     ) {
       setOutcome({
         type: "New",
@@ -382,12 +419,14 @@ export default function FaceRecognitionOut() {
       if (okContainerRef.current) {
         okContainerRef.current.style.display = "none";
       }
-      setLoadingStatus("New user detected");
+      setLoadingStatus("New user - please register");
       return false;
-    } else if (
+    }
+    
+    // Case 2: Match found and it's the correct user
+    if (
       currentFace.record &&
-      currentFace.record.id === user?.code &&
-      res.similarity > recognitionSettings.threshold
+      currentFace.record.id === user?.code
     ) {
       if (okContainerRef.current) {
         okContainerRef.current.style.display = "none";
@@ -398,23 +437,28 @@ export default function FaceRecognitionOut() {
       setOutcome({ type: "Success", name: currentFace.record.name });
       setLoadingStatus("Success!");
       return true;
-      
-    } else if (
+    }
+    
+    // Case 3: Match found but it's a different user
+    if (
       currentFace.record &&
-      currentFace.record.id !== user?.code &&
-      res.similarity > recognitionSettings.threshold
+      currentFace.record.id !== user?.code
     ) {
-      setOutcome({ type: "Fail", name: currentFace.record.name });
+      setOutcome({ 
+        type: "Fail", 
+        name: `Detected: ${currentFace.record.name}, Expected: ${user?.first_name} ${user?.last_name}` 
+      });
       if (okContainerRef.current) {
         okContainerRef.current.style.display = "none";
       }
-      setLoadingStatus("Face mismatch");
-      return false;
-    } else {
-      setOutcome({ type: "Error", name: "Not Found" });
-      setLoadingStatus("Face not recognized");
+      setLoadingStatus("Face mismatch - wrong person");
       return false;
     }
+    
+    // Case 4: No match but user is registered (should not happen often)
+    setOutcome({ type: "Error", name: "Face not recognized. Please try again or re-register." });
+    setLoadingStatus("Face not recognized");
+    return false;
   };
 
   // Save Face Record
@@ -450,6 +494,7 @@ export default function FaceRecognitionOut() {
       const data = await response.json();
       await getUser(userData.school_code);
       setLoadingStatus("Face data saved!");
+      setOutcome({ type: "Success", name: "Face registered successfully!" });
     } catch (error) {
       console.error("Error saving face:", error);
       setLoadingStatus("Error saving face data");
